@@ -1,6 +1,6 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { User } from "./user.entity";
 import { IsNotEmpty } from "class-validator";
+import { User } from "src/user/entities/user.entity";
 
 @Entity()
 export class Role {

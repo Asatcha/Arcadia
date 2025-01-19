@@ -1,6 +1,7 @@
+import { Exclude } from "class-transformer";
 import { IsEmail, IsNotEmpty, MaxLength } from "class-validator";
+import { Role } from "src/auth/entities/role.entity";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, Unique } from "typeorm";
-import { Role } from "./role.entity";
 
 @Entity()
 @Unique(['email'])
@@ -16,6 +17,7 @@ export class User {
 
     @Column()
     @IsNotEmpty()
+    @Exclude()
     password: string;
 
     @Column()
