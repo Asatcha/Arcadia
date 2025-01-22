@@ -1,10 +1,7 @@
-import { Exclude } from 'class-transformer';
-import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
-import { Role } from 'src/auth/entities/role.entity';
+import { IsNotEmpty, MaxLength } from 'class-validator';
 import {
   Column,
   Entity,
-  ManyToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
