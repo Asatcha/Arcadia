@@ -22,7 +22,7 @@ export class AnimalService {
   ) {}
 
   async create(animalDto: AnimalDto) {
-    const { name, age, status, breedId, animalImage } = animalDto;
+    const { name, birthDate, status, breedId, animalImage } = animalDto;
 
     const breed = await this.breedRepo.findOneBy({ id: breedId });
     if (!breed) {
@@ -36,7 +36,7 @@ export class AnimalService {
 
     const animal = this.animalRepo.create({
       name,
-      age,
+      birthDate,
       status,
       breed,
       animalImage: createdAnimalImage,

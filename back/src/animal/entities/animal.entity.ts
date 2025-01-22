@@ -1,4 +1,4 @@
-import { IsNotEmpty, MaxLength } from 'class-validator';
+import { IsDate, IsNotEmpty, MaxLength } from 'class-validator';
 import {
   Column,
   Entity,
@@ -28,7 +28,8 @@ export class Animal {
 
   @Column()
   @IsNotEmpty()
-  age: number;
+  @IsDate()
+  birthDate: Date;
 
   @ManyToOne(() => Breed, (breed) => breed.animals)
   breed: Breed;
