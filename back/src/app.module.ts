@@ -7,6 +7,7 @@ import { TypeOrmConfigService } from './typeorm-config.service';
 import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
 import { AnimalModule } from './animal/animal.module';
+import { VetModule } from './vet/vet.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { AnimalModule } from './animal/animal.module';
     UserModule,
     HabitatModule,
     AnimalModule,
+    VetModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],

@@ -4,12 +4,14 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { Breed } from './breed.entity';
 import { AnimalImage } from './animal-image.entity';
+import { VetReport } from 'src/vet/entities/vet-report.entity';
 
 @Entity()
 @Unique(['name'])
@@ -37,4 +39,7 @@ export class Animal {
   @OneToOne(() => AnimalImage, (image) => image.animal, { cascade: true })
   @JoinColumn()
   animalImage: AnimalImage;
+
+  @OneToMany(() => VetReport, (vetReport) => vetReport.animal)
+  vetReports: VetReport[];
 }
