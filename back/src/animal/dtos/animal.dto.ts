@@ -1,6 +1,6 @@
 export class AnimalDto {
   name: string;
-  age: number;
+  birthDate: Date;
   status: string;
   breedId: number;
   animalImage: Buffer;
