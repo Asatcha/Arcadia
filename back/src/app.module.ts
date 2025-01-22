@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { TypeOrmConfigService } from './typeorm-config.service';
 import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
+import { AnimalModule } from './animal/animal.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { HabitatModule } from './habitat/habitat.module';
     AuthModule,
     UserModule,
     HabitatModule,
+    AnimalModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],
