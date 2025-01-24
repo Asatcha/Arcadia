@@ -16,8 +16,8 @@ export class VetController {
 
   // localhost:3000/vet/animal/:id
   @Get('animal/:id')
-  findAllByAnimal() {
-    return this.vetService.findAllByAnimal();
+  findAllByAnimal(@Param('id') id: string) {
+    return this.vetService.findAllByAnimal(+id);
   }
 
   // localhost:3000/vet/:id

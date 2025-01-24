@@ -4,10 +4,11 @@ import { VetController } from './vet.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VetReport } from './entities/vet-report.entity';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
+import { Animal } from 'src/animal/entities/animal.entity';
 
 @Module({
   controllers: [VetController],
   providers: [VetService],
-  imports: [TypeOrmModule.forFeature([VetReport, Habitat])],
+  imports: [TypeOrmModule.forFeature([VetReport, Habitat, Animal])],
 })
 export class VetModule {}

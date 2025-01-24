@@ -6,6 +6,7 @@ import { CreateVetReportDto } from './dtos/create-vet-report.dto';
 import { UpdateVetReportDto } from './dtos/update-vet-report.dto';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
 import { UpdateHabitatCommentsDto } from './dtos/update-habitat-comments.dto copy';
+import { Animal } from 'src/animal/entities/animal.entity';
 
 @Injectable()
 export class VetService {
@@ -14,6 +15,8 @@ export class VetService {
     private readonly vetReportRepo: Repository<VetReport>,
     @InjectRepository(Habitat)
     private readonly habitatRepo: Repository<Habitat>,
+    @InjectRepository(Animal)
+    private readonly animalRepo: Repository<Animal>,
   ) {}
 
   async create(createVetReportDto: CreateVetReportDto) {
@@ -35,8 +38,9 @@ export class VetService {
     };
   }
 
-  async findAllByAnimal() {
-    const vetReports = await this.vetReportRepo.find();
+  async findAllByAnimal(id: number) {
+    const animal = await this.animalRepo.findOneBy({ id });
+    const vetReports = await this.vetReportRepo.findBy({ animal });
 
     return {
       vetReports: vetReports,
