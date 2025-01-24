@@ -1,6 +1,6 @@
 import { IsDate, IsNotEmpty } from 'class-validator';
 import { Animal } from 'src/animal/entities/animal.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from 'typeorm';
 
 @Entity()
 export class VetReport {
@@ -23,6 +23,6 @@ export class VetReport {
   @Column()
   details?: string;
 
-  @OneToOne(() => Animal, (animal) => animal.vetReports)
+  @ManyToOne(() => Animal, (animal) => animal.vetReports)
   animal: Animal;
 }
