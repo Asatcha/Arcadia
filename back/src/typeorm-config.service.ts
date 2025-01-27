@@ -13,7 +13,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       username: 'nestuser',
       password: 'nestpassword',
       database: 'arcadiadb',
-      entities: [User, Role],
+      entities: ['dist/**/entities/*.entity{.ts,.js}'],
       synchronize: true,
     };
   }
