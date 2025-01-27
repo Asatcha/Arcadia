@@ -85,6 +85,7 @@ export class AnimalService {
     }
 
     const updatedAnimal = Object.assign(animal, updatedAnimalDto);
+    
     await this.animalRepo.save(updatedAnimal);
 
     return {
