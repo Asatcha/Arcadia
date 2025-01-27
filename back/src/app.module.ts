@@ -8,6 +8,7 @@ import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
 import { AnimalModule } from './animal/animal.module';
 import { VetModule } from './vet/vet.module';
+import { EmployeeModule } from './employee/employee.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { VetModule } from './vet/vet.module';
     HabitatModule,
     AnimalModule,
     VetModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],

@@ -12,6 +12,7 @@ import {
 import { Breed } from './breed.entity';
 import { AnimalImage } from './animal-image.entity';
 import { VetReport } from 'src/vet/entities/vet-report.entity';
+import { FoodReport } from 'src/employee/entities/food-report.entity';
 
 @Entity()
 @Unique(['name'])
@@ -42,4 +43,7 @@ export class Animal {
 
   @OneToMany(() => VetReport, (vetReport) => vetReport.animal)
   vetReports: VetReport[];
+
+  @OneToMany(() => FoodReport, (foodReport) => foodReport.animal)
+  foodReports: FoodReport[];
 }
