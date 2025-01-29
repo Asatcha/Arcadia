@@ -31,7 +31,7 @@ export class ServiceController {
   // localhost:3000/service/:id
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
-    return this.serviceService.update(+id, UpdateHabitatDto);
+    return this.serviceService.update(+id, updateServiceDto);
   }
 
   // localhost:3000/service/:id
