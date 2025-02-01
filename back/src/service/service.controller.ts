@@ -6,7 +6,7 @@ import { UpdateHabitatDto } from 'src/habitat/dtos/update-habitat.dto';
 
 
 // localhost:3000/service
-@Controller('Service')
+@Controller('service')
 export class ServiceController {
   constructor(private readonly serviceService: ServiceService) {}
 
