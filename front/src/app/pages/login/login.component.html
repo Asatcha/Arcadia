@@ -1,0 +1,32 @@
+<div class="login-container">
+  <form [formGroup]="loginForm" (ngSubmit)="login()">
+    <div class="login-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="email" placeholder="abc@arcadia.com" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-icon matPrefix>lock</mat-icon>
+        <mat-label>Entrez votre mot de passe</mat-label>
+        <input
+          matInput
+          formControlName="password"
+          [type]="hide() ? 'password' : 'text'"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()"
+        >
+          <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <button mat-raised-button (click)="login()">Connexion</button>
+  </form>
+</div>
