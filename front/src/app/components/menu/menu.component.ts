@@ -10,4 +10,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './menu.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MenuComponent {}
+export class MenuComponent {
+  menu = [
+    { label: 'Accueil', link: '/home' },
+    { label: 'Les services', link: '/service' },
+    { label: 'Les habitats', link: '/habitat' },
+    { label: 'Connexion', link: '/login' },
+    { label: 'Contact', link: '/contact' },
+  ];
+}
