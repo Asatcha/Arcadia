@@ -2,14 +2,30 @@ html,
 body {
   margin: 0;
   padding: 0;
-  font-family: "Roboto", sans-serif;
+  font-family: "Helvetica Neue", sans-serif;
   height: auto;
 }
 
 body {
   display: flex;
   flex-flow: column;
+  margin: 0;
+  padding: 1rem;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+h1 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.button-title {
+  width: 100% !important;
+  border-radius: 0.5rem !important;
+  justify-content: flex-start !important;
+}
+
+.button-title .no-click {
+  cursor: default !important;
+}

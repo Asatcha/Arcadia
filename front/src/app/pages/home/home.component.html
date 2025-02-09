@@ -1,0 +1,75 @@
+<p class="description">
+  Arcadia est un zoo situé en France près de la forêt de Brocéliande, en
+  bretagne depuis 1960. Ils possèdent tout un panel d’animaux, réparti par
+  habitat (savane, jungle, marais) et font extrêmement attention à leurs santés.
+  Chaque jour, plusieurs vétérinaires viennent afin d’effectuer les contrôles
+  sur chaque animal avant l’ouverture du zoo afin de s’assurer que tout se passe
+  bien, de même, toute la nourriture donnée est calculée afin d’avoir le bon
+  grammage (le bon grammage est précisé dans le rapport du vétérinaire). Le zoo,
+  se porte très bien financièrement, les animaux sont heureux. Cela fait la
+  fierté de son directeur, José, qui a de grandes ambitions.
+</p>
+
+<button class="button-title" mat-raised-button (click)="goTo('/habitat')">
+  Découvrir nos habitats et leurs habitants
+</button>
+
+<div class="habitat-images">
+  <div
+    class="habitat-item"
+    (click)="goTo('/animal')"
+    *ngFor="let habitat of habitats"
+  >
+    <img [src]="habitat.imageUrl" [alt]="habitat.label" />
+    <h2>{{ habitat.label }}</h2>
+  </div>
+</div>
+
+<button class="button-title" mat-raised-button (click)="goTo('/service')">
+  Découvrir nos services
+</button>
+
+<div class="services">
+  <div class="service-item" *ngFor="let service of services">
+    <img
+      [src]="service.imageUrl"
+      [alt]="service.label"
+      class="rectangle-image"
+    />
+    <div class="rectangle-text">
+      <h2>Restauration</h2>
+      <p>blablabla</p>
+    </div>
+  </div>
+</div>
+
+<button class="button-title no-click" mat-raised-button>
+  Ce qu'en pensent nos visiteurs
+</button>
+
+<div class="ratings">
+  <div *ngFor="let rating of ratings" class="rating-item">
+    <mat-card appearance="outlined">
+      <mat-card-title>
+        <div>
+          <mat-icon
+            *ngFor="let i of [0, 1, 2, 3, 4]"
+            class="star-icon"
+            [class.filled]="i < rating.stars"
+          >
+            star
+          </mat-icon>
+        </div>
+      </mat-card-title>
+      <mat-card-title>{{ rating.name }}</mat-card-title>
+      <mat-card-content>
+        <p>{{ rating.comment }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<button mat-raised-button (click)="openRatingDialog()">
+  <mat-icon>edit_note</mat-icon>
+  Laisser un avis
+</button>
