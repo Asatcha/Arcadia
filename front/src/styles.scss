@@ -26,6 +26,19 @@ h1 {
   justify-content: flex-start !important;
 }
 
-.button-title .no-click {
+.button-fit {
+    display: flex;
+    justify-content: center;
+    
+    button {
+      width: fit-content;
+    }
+  }
+
+.no-click {
   cursor: default !important;
+}
+
+.mat-mdc-tab-body-content {
+  overflow: hidden !important;
 }
