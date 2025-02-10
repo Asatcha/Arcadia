@@ -37,18 +37,13 @@ export class UserService {
 
     await this.userRepo.save(newUser);
 
-    return {
-      message: 'Utilisateur créé.',
-      user: plainToInstance(User, newUser),
-    };
+    return plainToInstance(User, newUser);
   }
 
   async findAll() {
-    const users = await this.userRepo.find();
+    const users = await this.userRepo.find({ relations: ['role']});
 
-    return {
-      users: plainToInstance(User, users),
-    }
+    return plainToInstance(User, users);;
   }
 
   async findOne(id: number) {
@@ -58,10 +53,7 @@ export class UserService {
       throw new NotFoundException(`Utilisateur avec l'id ${id} non trouvé.`);
     }
 
-    return {
-      message: 'Utilisateur trouvé.',
-      user: plainToInstance(User, user),
-    };
+    return plainToInstance(User, user);
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
@@ -75,10 +67,7 @@ export class UserService {
 
     await this.userRepo.save(updatedUser);
 
-    return {
-      message: 'Utilisateur modifié.',
-      user: plainToInstance(User, updatedUser),
-    };
+    return plainToInstance(User, updatedUser);
   }
 
   async delete(id: number) {
@@ -88,10 +77,8 @@ export class UserService {
       throw new NotFoundException(`Utilisateur avec l'id ${id} non trouvé.`);
     }
 
-    await this.userRepo.remove(user);
+    const deletedUser = await this.userRepo.remove(user);
 
-    return {
-      message: `Utilisateur ${user.firstName} ${user.lastName} supprimé avec succès.`,
-    };
+    return plainToInstance(User, deletedUser);
   }
 }
