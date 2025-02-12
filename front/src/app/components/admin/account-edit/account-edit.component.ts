@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   OnInit,
+  output,
   signal,
 } from '@angular/core';
 import {
@@ -57,9 +59,9 @@ import { User } from '../../../shared/user.model';
 export class AccountEditComponent implements OnInit {
   private fb = inject(FormBuilder).nonNullable;
   private adminService = inject(AdminService);
-  user!: User;
-  users!: User[];
-  userEmails!: string[];
+  users = input.required<User[]>();
+  userEmails = input.required<string[]>();
+  reloadUsers = output<void>();
   filteredUserEmails$!: Observable<string[]>;
   isLoading$ = signal(true);
   readonly panelOpenState$ = signal(false);
@@ -76,7 +78,7 @@ export class AccountEditComponent implements OnInit {
   email = this.editForm.get('email') as FormControl<string>;
 
   ngOnInit() {
-    this.loadAllUsers();
+    this.loadEmailFilter();
   }
 
   displayFn(email: string): string {
@@ -86,34 +88,22 @@ export class AccountEditComponent implements OnInit {
   private _filter(email: string): string[] {
     const filterValue = email.toLowerCase();
 
-    return this.userEmails.filter((email) =>
+    return this.userEmails().filter((email) =>
       email.toLocaleLowerCase().includes(filterValue)
     );
   }
 
-  loadAllUsers() {
-    this.adminService.findAllUsers().subscribe({
-      next: (users) => {
-        this.users = users;
-        this.userEmails = users.map((user) => user.email);
-
-        this.filteredUserEmails$ = this.editForm
-          .get('email')!
-          .valueChanges.pipe(
-            startWith(''),
-            map((email) => {
-              return email ? this._filter(email) : this.userEmails.slice();
-            })
-          );
-      },
-      error: (err) => {
-        console.error('Erreur :', err);
-      },
-    });
+  loadEmailFilter() {
+    this.filteredUserEmails$ = this.editForm.get('email')!.valueChanges.pipe(
+      startWith(''),
+      map((email) => {
+        return email ? this._filter(email) : this.userEmails().slice();
+      })
+    );
   }
 
   findUserByEmail(email: string) {
-    const user = this.users.find(
+    const user = this.users().find(
       (user) => user.email.toLowerCase() === email.toLowerCase()
     );
 
@@ -135,7 +125,7 @@ export class AccountEditComponent implements OnInit {
   onResetButton(stepper: MatStepper) {
     stepper.reset();
     this.editForm.reset();
-    this.loadAllUsers();
+    this.loadEmailFilter();
   }
 
   updateUserById() {
@@ -164,6 +154,7 @@ export class AccountEditComponent implements OnInit {
     this.adminService.updateUser(userId, updatedUser).subscribe({
       next: () => {
         this.isLoading$.set(false);
+        this.reloadUsers.emit();
       },
       error: (err) => {
         console.error('Erreur lors de la mise à jour :', err);
