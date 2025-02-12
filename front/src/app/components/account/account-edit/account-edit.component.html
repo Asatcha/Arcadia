@@ -1,0 +1,129 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState$.set(true)"
+    (closed)="panelOpenState$.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Modifier un compte utilisateur</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-stepper linear #stepper>
+      <mat-step
+        [stepControl]="editForm.controls.email"
+        errorMessage="Email obligatoire."
+      >
+        <ng-template matStepLabel>Email de l'utilisateur</ng-template>
+        <form>
+          <mat-form-field appearance="fill">
+            <mat-icon matPrefix>mail</mat-icon>
+            <mat-label>Email</mat-label>
+            <input
+              type="text"
+              matInput
+              [formControl]="email"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              @for (email of filteredUserEmails$ | async; track email) {
+              <mat-option [value]="email">{{ email }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+
+        <button
+          (click)="findUserByEmail(editForm.controls.email.value)"
+          [disabled]="editForm.controls.email.invalid"
+          mat-button
+          matStepperNext
+        >
+          Suivant
+        </button>
+      </mat-step>
+
+      <mat-step [stepControl]="editForm">
+        <ng-template matStepLabel>Modifier l'utilisateur</ng-template>
+
+        <div class="account-container">
+          <form class="form" [formGroup]="editForm">
+            <div class="account-form">
+              <mat-form-field appearance="fill">
+                <mat-icon matPrefix>person</mat-icon>
+                <mat-label>First Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Darius"
+                  formControlName="firstName"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-icon matPrefix>person</mat-icon>
+                <mat-label>Last Name</mat-label>
+                <input
+                  matInput
+                  placeholder="Sharifi"
+                  formControlName="lastName"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-icon matPrefix>mail</mat-icon>
+                <mat-label>Email</mat-label>
+                <input
+                  matInput
+                  placeholder="darius.sharifi@hotmail.fr"
+                  formControlName="email"
+                />
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-icon matPrefix>lock</mat-icon>
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  placeholder="0123456789"
+                  formControlName="password"
+                />
+              </mat-form-field>
+
+              <mat-radio-group aria-label="Role" formControlName="roleId">
+                <mat-label>Rôle :</mat-label>
+
+                <div class="radio-buttons">
+                  <mat-radio-button [value]="2">Employé</mat-radio-button>
+                  <mat-radio-button [value]="3">Vétérinaire</mat-radio-button>
+                </div>
+              </mat-radio-group>
+            </div>
+
+            <div class="buttons">
+              <button (click)="onBackButton()" mat-button matStepperPrevious>
+                Retour
+              </button>
+              <button (click)="updateUserById()" mat-button matStepperNext>
+                Mettre à jour
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Terminé</ng-template>
+
+        @if (isLoading$()) {
+        <div class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+        } @else {
+        <p>Utilisateur modifié.</p>
+        <div>
+          <button mat-button (click)="onResetButton(stepper)">
+            Modifier un autre utilisateur
+          </button>
+        </div>
+        }
+      </mat-step>
+    </mat-stepper>
+  </mat-expansion-panel>
+</mat-accordion>

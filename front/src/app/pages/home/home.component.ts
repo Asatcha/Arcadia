@@ -25,8 +25,8 @@ export class HomeComponent {
   ];
 
   services = [
-    { label: 'Restauration', description: 'blablabla', imageUrl: 'jungle.jpg' },
-    { label: 'Savane', description: 'blablabla', imageUrl: 'savane.jpg' },
+    { label: 'Restauration', description: 'blablabla', imageUrl: 'restaurant.jpg' },
+    { label: 'Petit train', description: 'blablabla', imageUrl: 'train.png' },
     { label: 'Marais', description: 'blablabla', imageUrl: 'marais.jpg' },
   ];
 

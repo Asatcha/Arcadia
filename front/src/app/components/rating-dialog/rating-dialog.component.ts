@@ -36,7 +36,6 @@ import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    MatSnackBarModule,
     TextFieldModule,
   ],
   templateUrl: './rating-dialog.component.html',
@@ -68,10 +67,10 @@ export class RatingDialogComponent {
   }
 
   submit() {
-    return console.log(this.ratingForm.value);
-    if (this.ratingForm.valid) {
-      this.data.close(this.ratingForm.value);
-    }
+    console.log(this.ratingForm.value);
+    // if (this.ratingForm.valid) {
+    //   this.data.close(this.ratingForm.value);
+    // }
   }
 
   setRating(star: number): void {

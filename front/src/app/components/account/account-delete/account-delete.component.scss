@@ -1,0 +1,45 @@
+:host {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+
+  mat-accordion {
+    width: 100%;
+
+    mat-form-field {
+      width: 25vw;
+    }
+
+    form {
+      display: flex;
+      flex-flow: column;
+      gap: 1rem;
+      padding: 1.5rem;
+
+      .account-form {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+        min-width: 30vw;
+        width: fit-content;
+
+        mat-radio-group {
+          display: flex;
+          flex-flow: row;
+          align-items: center;
+          gap: 1rem;
+
+          .radio-buttons {
+            display: flex;
+            flex: 1 1 auto;
+            flex-flow: row;
+            justify-content: space-around;
+            gap: 1rem;
+          }
+        }
+      }
+    }
+  }
+}

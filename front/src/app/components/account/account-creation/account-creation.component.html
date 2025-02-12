@@ -1,0 +1,60 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Créer un compte utilisateur</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="account-container">
+      <form [formGroup]="accountForm" (ngSubmit)="submit()">
+        <div class="account-form">
+          <mat-form-field appearance="fill">
+            <mat-label>Prénom</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input
+              matInput
+              formControlName="firstName"
+              placeholder="Jean-Eudes"
+            />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Nom</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="lastName" placeholder="Dupont" />
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-icon matPrefix>mail</mat-icon>
+            <mat-label>Email</mat-label>
+            <input
+              matInput
+              formControlName="email"
+              placeholder="abc@arcadia.com"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-icon matPrefix>lock</mat-icon>
+            <mat-label>Entrez un mot de passe</mat-label>
+            <input matInput formControlName="password" />
+          </mat-form-field>
+
+          <mat-radio-group aria-label="Role" formControlName="roleId">
+            <mat-label>Rôle :</mat-label>
+
+            <div class="radio-buttons">
+              <mat-radio-button value="2">Employé</mat-radio-button>
+              <mat-radio-button value="3">Vétérinaire</mat-radio-button>
+            </div>
+          </mat-radio-group>
+        </div>
+
+        <div class="button-fit">
+          <button mat-raised-button type="submit">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
