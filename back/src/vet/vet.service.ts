@@ -20,13 +20,13 @@ export class VetService {
   ) {}
 
   async create(createVetReportDto: CreateVetReportDto) {
-    const { food, foodWeight, details } = createVetReportDto;
+    const { food, foodWeight, status } = createVetReportDto;
     const today = new Date();
 
     const newVetReport = this.vetReportRepo.create({
       food,
       foodWeight,
-      details,
+      status,
       date: today,
     });
 
@@ -66,13 +66,14 @@ export class VetService {
     };
   }
 
-  async updateHabitat(id: number, updateHabitatCommentsDto: UpdateHabitatCommentsDto) {
+  async updateHabitat(
+    id: number,
+    updateHabitatCommentsDto: UpdateHabitatCommentsDto,
+  ) {
     const habitat = await this.habitatRepo.findOneBy({ id });
 
     if (!habitat) {
-      throw new NotFoundException(
-        `Habitat ${habitat.name} non trouvé.`,
-      );
+      throw new NotFoundException(`Habitat ${habitat.name} non trouvé.`);
     }
 
     const updatedHabitat = { ...habitat, ...updateHabitatCommentsDto };
@@ -80,7 +81,7 @@ export class VetService {
     await this.habitatRepo.save(updatedHabitat);
 
     return {
-      message: 'Commentaires de l\'habitat modifiés.',
+      message: "Commentaires de l'habitat modifiés.",
       habitat: updatedHabitat,
     };
   }

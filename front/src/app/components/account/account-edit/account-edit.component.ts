@@ -26,7 +26,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { User } from '../../../shared/user.model';
+import { User } from '../../../models/user.model';
 import { AdminService } from '../../../services/admin.service';
 
 @Component({

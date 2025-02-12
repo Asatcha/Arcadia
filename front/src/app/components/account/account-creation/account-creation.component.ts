@@ -47,7 +47,7 @@ export class AccountCreationComponent {
     lastName: ['', [Validators.required, Validators.maxLength(20)]],
     email: ['', [Validators.required, Validators.email]],
     password: ['', [Validators.required, Validators.minLength(8)]],
-    roleId: [null, [Validators.required, Validators.minLength(8)]],
+    roleId: [null, [Validators.required]],
   });
 
   submit() {

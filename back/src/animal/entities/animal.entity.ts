@@ -13,6 +13,7 @@ import { Breed } from './breed.entity';
 import { AnimalImage } from './animal-image.entity';
 import { VetReport } from 'src/vet/entities/vet-report.entity';
 import { FoodReport } from 'src/employee/entities/food-report.entity';
+import { Habitat } from 'src/habitat/entities/habitat.entity';
 
 @Entity()
 @Unique(['name'])
@@ -21,13 +22,9 @@ export class Animal {
   id: number;
 
   @Column()
+  @MaxLength(20)
   @IsNotEmpty()
   name: string;
-
-  @Column()
-  @MaxLength(1000)
-  @IsNotEmpty()
-  status: string;
 
   @Column()
   @IsNotEmpty()
@@ -46,4 +43,7 @@ export class Animal {
 
   @OneToMany(() => FoodReport, (foodReport) => foodReport.animal)
   foodReports: FoodReport[];
+
+  @ManyToOne(() => Habitat, (habitat) => habitat.animals)
+  habitat: Habitat;
 }

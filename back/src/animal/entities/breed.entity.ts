@@ -10,7 +10,7 @@ export class Breed {
   @Column()
   @MaxLength(30)
   @IsNotEmpty()
-  breed: string;
+  name: string;
 
   @OneToMany(() => Animal, (animal) => animal.breed)
   animals: Animal[];

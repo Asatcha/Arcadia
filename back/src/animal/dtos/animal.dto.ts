@@ -3,5 +3,6 @@ export class AnimalDto {
   birthDate: Date;
   status: string;
   breedId: number;
+  habitatId: number;
   animalImage: Buffer;
 }
