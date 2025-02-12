@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { User } from '../../shared/user.model';
+import { User } from '../../models/user.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AccountCreationComponent } from '../../components/account/account-creation/account-creation.component';
 import { AccountEditComponent } from '../../components/account/account-edit/account-edit.component';

@@ -37,7 +37,6 @@ export class AnimalService {
     const animal = this.animalRepo.create({
       name,
       birthDate,
-      status,
       breed,
       animalImage: createdAnimalImage,
     });

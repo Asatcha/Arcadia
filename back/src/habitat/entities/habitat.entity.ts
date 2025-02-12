@@ -3,11 +3,13 @@ import {
   Column,
   Entity,
   JoinColumn,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
   Unique,
 } from 'typeorm';
 import { HabitatImage } from './habitat-image.entity';
+import { Animal } from 'src/animal/entities/animal.entity';
 
 @Entity()
 @Unique(['name'])
@@ -27,6 +29,9 @@ export class Habitat {
   @MaxLength(1000)
   @IsNotEmpty()
   comments: string;
+
+  @OneToMany(() => Animal, (animal) => animal.habitat)
+  animals: Animal[];
 
   @OneToOne(() => HabitatImage, (image) => image.habitat, { cascade: true })
   @JoinColumn()
