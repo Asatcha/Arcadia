@@ -29,7 +29,6 @@ import { AdminService } from '../../../services/admin.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatButtonModule,
     MatRadioModule,
     MatExpansionModule,
   ],

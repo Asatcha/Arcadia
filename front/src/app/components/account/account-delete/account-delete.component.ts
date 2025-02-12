@@ -30,7 +30,6 @@ import { AdminService } from '../../../services/admin.service';
   selector: 'arcadia-account-delete',
   imports: [
     CommonModule,
-    MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
