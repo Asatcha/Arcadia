@@ -39,6 +39,13 @@ h1 {
   cursor: default !important;
 }
 
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
 .mat-mdc-tab-body-content {
   overflow: hidden !important;
 }
