@@ -26,7 +26,6 @@ import { AdminService } from '../../../services/admin.service';
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,

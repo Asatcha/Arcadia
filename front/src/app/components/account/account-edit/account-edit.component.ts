@@ -22,7 +22,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
-import { AsyncPipe } from '@angular/common';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -32,6 +32,7 @@ import { AdminService } from '../../../services/admin.service';
 @Component({
   selector: 'arcadia-account-edit',
   imports: [
+    CommonModule,
     MatButtonModule,
     MatIconModule,
     ReactiveFormsModule,
