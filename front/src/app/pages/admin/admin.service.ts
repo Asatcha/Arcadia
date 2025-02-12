@@ -67,4 +67,23 @@ export class AdminService {
       })
     );
   }
+
+  deleteUserById(id: number): Observable<User> {
+    return this.http.delete<User>(`/user/${id}`).pipe(
+      tap(() => {
+        this.snackBar.open('Compte supprimé avec succès !', 'Fermer', {
+          duration: this.snackBarDuration,
+          panelClass: ['success-snackbar'],
+        });
+      }),
+      catchError((err) => {
+        console.error(`Erreur lors de la suppression de l'utilisateur avec l'ID ${id} :`, err);
+        this.snackBar.open('Échec de la suppression du compte.', 'Fermer', {
+          duration: this.snackBarDuration,
+          panelClass: ['error-snackbar'],
+        });
+        return throwError(() => err);
+      })
+    );
+  }
 }

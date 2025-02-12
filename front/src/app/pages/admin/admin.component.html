@@ -5,12 +5,19 @@
       <mat-spinner></mat-spinner>
     </div>
     } @else {
-    <arcadia-account-creation></arcadia-account-creation>
+    <arcadia-account-creation
+      (reloadUsers)="loadAllUsers()"
+    ></arcadia-account-creation>
     <arcadia-account-edit
       [users]="users$()"
       [userEmails]="userEmails$()"
       (reloadUsers)="loadAllUsers()"
     ></arcadia-account-edit>
+    <arcadia-account-delete
+      [users]="users$()"
+      [userEmails]="userEmails$()"
+      (reloadUsers)="loadAllUsers()"
+    ></arcadia-account-delete>
     }
   </mat-tab>
   <mat-tab label="Animaux"> Content 2 </mat-tab>

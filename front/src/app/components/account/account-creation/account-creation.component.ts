@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  output,
   signal,
 } from '@angular/core';
 import {
@@ -29,7 +30,6 @@ import { AdminService } from '../../../pages/admin/admin.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatIconModule,
     MatButtonModule,
     MatRadioModule,
     MatExpansionModule,
@@ -39,6 +39,7 @@ import { AdminService } from '../../../pages/admin/admin.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountCreationComponent {
+  reloadUsers = output<void>();
   private fb = inject(FormBuilder);
   private adminService = inject(AdminService);
   readonly panelOpenState = signal(false);
@@ -53,13 +54,13 @@ export class AccountCreationComponent {
 
   submit() {
     this.adminService.createUser(this.accountForm.value).subscribe({
-      next: (createdUser) => {
-        // TODO: récupérer token
+      next: () => {
+        this.accountForm.reset();
+        this.reloadUsers.emit();
       },
       error: (err) => {
         console.error('Erreur :', err);
       },
     });
-    this.accountForm.reset();
   }
 }

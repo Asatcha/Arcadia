@@ -104,7 +104,7 @@ export class AccountEditComponent implements OnInit {
 
   findUserByEmail(email: string) {
     const user = this.users().find(
-      (user) => user.email.toLowerCase() === email.toLowerCase()
+      (user) => user.email.toLocaleLowerCase() === email.toLocaleLowerCase()
     );
 
     if (user) {
