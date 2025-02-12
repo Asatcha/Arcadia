@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { IsDate, IsNotEmpty, MaxLength } from 'class-validator';
 import { Animal } from 'src/animal/entities/animal.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from 'typeorm';
 
@@ -6,6 +6,11 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from 'typ
 export class VetReport {
   @PrimaryGeneratedColumn()
   id: number;
+  
+  @Column()
+  @MaxLength(1000)
+  @IsNotEmpty()
+  status: string;
 
   @Column()
   @IsDate()
@@ -19,9 +24,6 @@ export class VetReport {
   @Column()
   @IsNotEmpty()
   foodWeight: number;
-
-  @Column()
-  details?: string;
 
   @ManyToOne(() => Animal, (animal) => animal.vetReports)
   animal: Animal;

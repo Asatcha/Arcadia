@@ -7,12 +7,12 @@ import {
   signal,
 } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { AdminService } from './admin.service';
-import { User } from '../../shared/user.model';
+import { User } from '../../models/user.model';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AccountCreationComponent } from '../../components/account/account-creation/account-creation.component';
 import { AccountEditComponent } from '../../components/account/account-edit/account-edit.component';
 import { AccountDeleteComponent } from '../../components/account/account-delete/account-delete.component';
+import { AdminService } from '../../services/admin.service';
 
 @Component({
   selector: 'arcadia-admin',

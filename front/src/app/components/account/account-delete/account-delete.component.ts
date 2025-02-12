@@ -19,20 +19,18 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { map, Observable, startWith } from 'rxjs';
-import { User } from '../../../shared/user.model';
+import { User } from '../../../models/user.model';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { AdminService } from '../../../pages/admin/admin.service';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'arcadia-account-delete',
   imports: [
     CommonModule,
-    MatButtonModule,
     MatIconModule,
-    CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
