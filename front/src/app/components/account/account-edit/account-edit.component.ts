@@ -26,8 +26,8 @@ import { AsyncPipe } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { AdminService } from '../../../pages/admin/admin.service';
 import { User } from '../../../shared/user.model';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'arcadia-account-edit',

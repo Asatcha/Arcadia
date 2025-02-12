@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { AdminService } from '../../../pages/admin/admin.service';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'arcadia-account-creation',
