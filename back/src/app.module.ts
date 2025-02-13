@@ -3,13 +3,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { TypeOrmConfigService } from './typeorm-config.service';
 import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
 import { AnimalModule } from './animal/animal.module';
 import { VetModule } from './vet/vet.module';
 import { EmployeeModule } from './employee/employee.module';
 import { ServiceModule } from './service/service.module';
+import { TypeOrmConfigService } from './config/typeorm-config.service';
 
 @Module({
   imports: [

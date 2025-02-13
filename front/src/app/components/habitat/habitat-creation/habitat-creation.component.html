@@ -1,0 +1,76 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Créer un habitat</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="habitat-container">
+      <form [formGroup]="habitatForm" (ngSubmit)="submit()">
+        <div class="habitat-form">
+          <mat-form-field appearance="fill">
+            <mat-label>Nom</mat-label>
+            <mat-icon matPrefix>house</mat-icon>
+            <input matInput formControlName="name" placeholder="Gribouille" />
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-icon matPrefix>description</mat-icon>
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="10"
+              formControlName="description"
+            ></textarea>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-icon matPrefix>comment</mat-icon>
+            <mat-label>Commentaires</mat-label>
+            <textarea
+              matInput
+              cdkTextareaAutosize
+              #autosize="cdkTextareaAutosize"
+              cdkAutosizeMinRows="2"
+              cdkAutosizeMaxRows="10"
+              formControlName="comments"
+            ></textarea>
+          </mat-form-field>
+
+          <div class="button-fit">
+            <button
+              mat-raised-button
+              [ngClass]="{ selected: selectedFile }"
+              (click)="fileInput.click()"
+            >
+              <mat-icon>image</mat-icon>
+              {{ selectedFile ? "Image sélectionnée" : "Ajouter une image" }}
+            </button>
+          </div>
+
+          <input
+            type="file"
+            #fileInput
+            (change)="onFileSelected(fileInput)"
+            accept="image/*"
+            hidden
+          />
+        </div>
+
+        <div class="button-fit">
+          <button
+            [disabled]="habitatForm.invalid"
+            mat-raised-button
+            type="submit"
+          >
+            Créer
+          </button>
+        </div>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>
