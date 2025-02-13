@@ -18,10 +18,12 @@ export class Habitat {
   id: number;
 
   @Column()
+  @MaxLength(20)
   @IsNotEmpty()
   name: string;
 
   @Column()
+  @MaxLength(1000)
   @IsNotEmpty()
   description: string;
 

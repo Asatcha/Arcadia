@@ -13,6 +13,7 @@ import { AccountCreationComponent } from '../../components/account/account-creat
 import { AccountEditComponent } from '../../components/account/account-edit/account-edit.component';
 import { AccountDeleteComponent } from '../../components/account/account-delete/account-delete.component';
 import { AdminService } from '../../services/admin.service';
+import { HabitatCreationComponent } from '../../components/habitat/habitat-creation/habitat-creation.component';
 
 @Component({
   selector: 'arcadia-admin',
@@ -23,6 +24,7 @@ import { AdminService } from '../../services/admin.service';
     AccountCreationComponent,
     AccountEditComponent,
     AccountDeleteComponent,
+    HabitatCreationComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -32,7 +34,8 @@ export class AdminComponent implements OnInit {
   private adminService = inject(AdminService);
   users$ = signal<User[]>([]);
   userEmails$ = signal<string[]>([]);
-  isLoading$ = signal(true);
+  isLoadingUsers$ = signal(true);
+  isLoadingHabitats$ = signal(false);
 
   ngOnInit() {
     this.loadAllUsers();
@@ -43,7 +46,7 @@ export class AdminComponent implements OnInit {
       next: (users) => {
         this.users$.set(users);
         this.userEmails$.set(users.map((user) => user.email));
-        this.isLoading$.set(false);
+        this.isLoadingUsers$.set(false);
       },
       error: (err) => {
         console.error('Erreur :', err);

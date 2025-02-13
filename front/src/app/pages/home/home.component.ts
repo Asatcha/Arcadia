@@ -1,11 +1,19 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { RatingDialogComponent } from '../../components/rating-dialog/rating-dialog.component';
+import { HabitatService } from '../../services/habitat.service';
+import { Habitat } from '../../models/habitat.model';
 
 @Component({
   selector: 'arcadia-home',
@@ -14,8 +22,12 @@ import { RatingDialogComponent } from '../../components/rating-dialog/rating-dia
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private router = inject(Router);
+  private habitatService = inject(HabitatService);
+  habitats$ = signal<Habitat[]>([]);
+  isLoadingHabitats$ = signal(true);
+
   dialog = inject(MatDialog);
 
   habitats = [
@@ -25,7 +37,11 @@ export class HomeComponent {
   ];
 
   services = [
-    { label: 'Restauration', description: 'blablabla', imageUrl: 'restaurant.jpg' },
+    {
+      label: 'Restauration',
+      description: 'blablabla',
+      imageUrl: 'restaurant.jpg',
+    },
     { label: 'Petit train', description: 'blablabla', imageUrl: 'train.png' },
     { label: 'Marais', description: 'blablabla', imageUrl: 'marais.jpg' },
   ];
@@ -50,6 +66,19 @@ export class HomeComponent {
         'Superbe ! Ce zoo est ombragé, agréable avec des enfants et intéressant',
     },
   ];
+
+  ngOnInit() {
+    this.habitatService.findAllHabitats().subscribe({
+      next: (habitats) => {
+        this.habitats$.set(habitats);
+        this.isLoadingHabitats$.set(false);
+        console.log(this.habitats$());
+      },
+      error: (err) => {
+        console.error('Erreur :', err);
+      },
+    });
+  }
 
   goTo(route: string) {
     this.router.navigate([route]);
