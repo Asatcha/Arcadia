@@ -72,10 +72,6 @@ export class HomeComponent implements OnInit {
       next: (habitats) => {
         this.habitats$.set(habitats);
         this.isLoadingHabitats$.set(false);
-        console.log(this.habitats$());
-      },
-      error: (err) => {
-        console.error('Erreur :', err);
       },
     });
   }

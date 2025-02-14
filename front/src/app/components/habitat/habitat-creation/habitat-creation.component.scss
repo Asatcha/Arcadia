@@ -29,13 +29,6 @@
           gap: 1rem;
           min-width: 30vw;
           width: fit-content;
-
-          .selected {
-            background-color: #4caf50 !important;
-            color: white !important;
-            border: 2px solid #388e3c;
-            transition: all 0.3s ease;
-          }
         }
       }
     }

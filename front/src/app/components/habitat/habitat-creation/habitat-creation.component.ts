@@ -96,7 +96,6 @@ export class HabitatCreationComponent {
         this.reloadHabitats.emit();
         this.habitatForm.reset();
       },
-      error: (err) => console.error('Erreur lors de la création :', err),
     });
     
     this.selectedFile = null;

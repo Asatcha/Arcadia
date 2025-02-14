@@ -25,24 +25,13 @@
   Découvrir nos habitats et leurs habitants
 </button>
 
-<!-- <div class="habitat-images">
+<div class="habitat-images">
+  @for (habitat of habitats$(); track habitat) {
   <div class="habitat-item" (click)="goTo('/habitat')">
-    @for (habitat of habitats$(); track habitat) {
     <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
     <h2>{{ habitat.name }}</h2>
-    }
   </div>
-</div> -->
-
-<div class="habitat-images">
-  <div
-    class="habitat-item"
-    (click)="goTo('/habitat')"
-    *ngFor="let habitat of habitats"
-  >
-    <img [src]="habitat.imageUrl" [alt]="habitat.label" />
-    <h2>{{ habitat.label }}</h2>
-  </div>
+  }
 </div>
 
 <button class="button-title" mat-raised-button (click)="goTo('/service')">

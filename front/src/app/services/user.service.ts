@@ -7,7 +7,7 @@ import { User } from '../models/user.model';
 @Injectable({
   providedIn: 'root',
 })
-export class AdminService {
+export class UserService {
   private snackBar = inject(MatSnackBar);
   private http = inject(HttpClient);
   private readonly snackBarDuration = 5000;
@@ -43,13 +43,18 @@ export class AdminService {
   findOneUserById(id: number): Observable<User> {
     return this.http.get<User>(`/user/${id}`).pipe(
       catchError((err) => {
-        console.error(`Erreur lors de la récupération de l'utilisateur avec l'ID ${id} :`, err);
+        console.error(
+          `Erreur lors de la récupération de l'utilisateur avec l'ID ${id} :`,
+          err
+        );
         return throwError(() => err);
       })
     );
   }
-  
-  updateUser(id: number, user: Partial<User>): Observable<User> {
+
+  updateUserById(user: Partial<User>): Observable<User> {
+    const id = user.id;
+
     return this.http.patch<User>(`/user/${id}`, user).pipe(
       tap(() => {
         this.snackBar.open('Compte mis à jour avec succès !', 'Fermer', {
@@ -58,7 +63,10 @@ export class AdminService {
         });
       }),
       catchError((err) => {
-        console.error(`Erreur lors de la mise à jour de l'utilisateur avec l'ID ${id} :`, err);
+        console.error(
+          `Erreur lors de la mise à jour de l'utilisateur avec l'ID ${id} :`,
+          err
+        );
         this.snackBar.open('Échec de la mise à jour du compte.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
@@ -77,7 +85,10 @@ export class AdminService {
         });
       }),
       catchError((err) => {
-        console.error(`Erreur lors de la suppression de l'utilisateur avec l'ID ${id} :`, err);
+        console.error(
+          `Erreur lors de la suppression de l'utilisateur avec l'ID ${id} :`,
+          err
+        );
         this.snackBar.open('Échec de la suppression du compte.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],

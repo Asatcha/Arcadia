@@ -4,6 +4,7 @@ export interface Habitat extends Base {
   name: string;
   description: string;
   comments?: string;
-  habitatImage: File;
-  habitatImageUrl: string;
+  habitatImage?: File;
+  habitatImageId?: number;
+  habitatImageUrl?: string;
 }
