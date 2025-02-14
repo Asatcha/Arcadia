@@ -1,6 +1,7 @@
 export class HabitatDto {
     name: string;
     description: string;
-    comments: string;
-    habitatImage: Buffer;
+    comments?: string;
+    habitatImage?: File;
+    habitatImageUrl?: string;
 }

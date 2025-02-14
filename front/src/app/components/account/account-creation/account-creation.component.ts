@@ -18,7 +18,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { AdminService } from '../../../services/admin.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'arcadia-account-creation',
@@ -39,7 +39,7 @@ import { AdminService } from '../../../services/admin.service';
 export class AccountCreationComponent {
   reloadUsers = output<void>();
   private fb = inject(FormBuilder);
-  private adminService = inject(AdminService);
+  private userService = inject(UserService);
   readonly panelOpenState = signal(false);
 
   accountForm: FormGroup = this.fb.group({
@@ -51,13 +51,10 @@ export class AccountCreationComponent {
   });
 
   submit() {
-    this.adminService.createUser(this.accountForm.value).subscribe({
+    this.userService.createUser(this.accountForm.value).subscribe({
       next: () => {
         this.accountForm.reset();
         this.reloadUsers.emit();
-      },
-      error: (err) => {
-        console.error('Erreur :', err);
       },
     });
   }

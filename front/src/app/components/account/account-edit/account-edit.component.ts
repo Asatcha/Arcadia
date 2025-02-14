@@ -3,9 +3,11 @@ import {
   Component,
   inject,
   input,
+  OnChanges,
   OnInit,
   output,
   signal,
+  SimpleChanges,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -27,7 +29,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { User } from '../../../models/user.model';
-import { AdminService } from '../../../services/admin.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'arcadia-account-edit',
@@ -56,9 +58,9 @@ import { AdminService } from '../../../services/admin.service';
   styleUrl: './account-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountEditComponent implements OnInit {
+export class AccountEditComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder).nonNullable;
-  private adminService = inject(AdminService);
+  private userService = inject(UserService);
   users = input.required<User[]>();
   userEmails = input.required<string[]>();
   reloadUsers = output<void>();
@@ -81,12 +83,18 @@ export class AccountEditComponent implements OnInit {
     this.loadEmailFilter();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['users'] || changes['userEmails']) {
+      this.loadEmailFilter();
+    }
+  }
+
   displayFn(email: string): string {
     return email;
   }
 
   private _filter(email: string): string[] {
-    const filterValue = email.toLowerCase();
+    const filterValue = email.toLocaleLowerCase();
 
     return this.userEmails().filter((email) =>
       email.toLocaleLowerCase().includes(filterValue)
@@ -141,6 +149,7 @@ export class AccountEditComponent implements OnInit {
     }
 
     const updatedUser: Partial<User> = {
+      id: formData.id,
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
@@ -151,14 +160,10 @@ export class AccountEditComponent implements OnInit {
       updatedUser.password = formData.password;
     }
 
-    this.adminService.updateUser(userId, updatedUser).subscribe({
+    this.userService.updateUserById(updatedUser).subscribe({
       next: () => {
         this.isLoading$.set(false);
         this.reloadUsers.emit();
-      },
-      error: (err) => {
-        console.error('Erreur lors de la mise à jour :', err);
-        this.isLoading$.set(false);
       },
     });
   }

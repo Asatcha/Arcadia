@@ -24,7 +24,7 @@ $gap: 2rem;
 
   .habitat-images {
     display: flex;
-    flex-flow: row;
+    flex-flow: row wrap;
     justify-content: space-evenly;
     gap: $gap;
 

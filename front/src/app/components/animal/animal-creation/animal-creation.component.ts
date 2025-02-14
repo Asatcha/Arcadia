@@ -36,7 +36,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     MatDatepickerModule,
   ],
   providers: [provideNativeDateAdapter()],
-
   templateUrl: './animal-creation.component.html',
   styleUrl: './animal-creation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,20 +53,7 @@ export class AnimalCreationComponent {
     breedId: [0, [Validators.required, Validators.minLength(8)]],
   });
 
-  breed = [
-    
-  ]
+  breed = [];
 
-  submit() {
-    console.log(this.animalForm.value)
-    // this.animalService.createAnimal(this.animalForm.value).subscribe({
-    //   next: () => {
-    //     this.animalForm.reset();
-    //     this.reloadAnimals.emit();
-    //   },
-    //   error: (err) => {
-    //     console.error('Erreur :', err);
-    //   },
-    // });
-  }
+  submit() {}
 }

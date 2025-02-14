@@ -7,15 +7,16 @@
   bien, de même, toute la nourriture donnée est calculée afin d’avoir le bon
   grammage (le bon grammage est précisé dans le rapport du vétérinaire). Le zoo,
   se porte très bien financièrement, les animaux sont heureux. Cela fait la
-  fierté de son directeur, José, qui a de grandes ambitions. Arcadia est un zoo situé en France près de la forêt de Brocéliande, en
-  bretagne depuis 1960. Ils possèdent tout un panel d’animaux, réparti par
-  habitat (savane, jungle, marais) et font extrêmement attention à leurs santés.
-  Chaque jour, plusieurs vétérinaires viennent afin d’effectuer les contrôles
-  sur chaque animal avant l’ouverture du zoo afin de s’assurer que tout se passe
-  bien, de même, toute la nourriture donnée est calculée afin d’avoir le bon
-  grammage (le bon grammage est précisé dans le rapport du vétérinaire). Le zoo,
-  se porte très bien financièrement, les animaux sont heureux. Cela fait la
-  fierté de son directeur, José, qui a de grandes ambitions.
+  fierté de son directeur, José, qui a de grandes ambitions. Arcadia est un zoo
+  situé en France près de la forêt de Brocéliande, en bretagne depuis 1960. Ils
+  possèdent tout un panel d’animaux, réparti par habitat (savane, jungle,
+  marais) et font extrêmement attention à leurs santés. Chaque jour, plusieurs
+  vétérinaires viennent afin d’effectuer les contrôles sur chaque animal avant
+  l’ouverture du zoo afin de s’assurer que tout se passe bien, de même, toute la
+  nourriture donnée est calculée afin d’avoir le bon grammage (le bon grammage
+  est précisé dans le rapport du vétérinaire). Le zoo, se porte très bien
+  financièrement, les animaux sont heureux. Cela fait la fierté de son
+  directeur, José, qui a de grandes ambitions.
 </p>
 
 <img src="leopard.jpg" class="background-img" />
@@ -25,14 +26,12 @@
 </button>
 
 <div class="habitat-images">
-  <div
-    class="habitat-item"
-    (click)="goTo('/animal')"
-    *ngFor="let habitat of habitats"
-  >
-    <img [src]="habitat.imageUrl" [alt]="habitat.label" />
-    <h2>{{ habitat.label }}</h2>
+  @for (habitat of habitats$(); track habitat) {
+  <div class="habitat-item" (click)="goTo('/habitat')">
+    <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
+    <h2>{{ habitat.name }}</h2>
   </div>
+  }
 </div>
 
 <button class="button-title" mat-raised-button (click)="goTo('/service')">

@@ -4,9 +4,11 @@ import {
   Component,
   inject,
   input,
+  OnChanges,
   OnInit,
   output,
   signal,
+  SimpleChanges,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -21,10 +23,9 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { map, Observable, startWith } from 'rxjs';
 import { User } from '../../../models/user.model';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { AdminService } from '../../../services/admin.service';
+import { UserService } from '../../../services/user.service';
 
 @Component({
   selector: 'arcadia-account-delete',
@@ -35,21 +36,20 @@ import { AdminService } from '../../../services/admin.service';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatRadioModule,
     MatExpansionModule,
-    AsyncPipe,
     MatAutocompleteModule,
+    AsyncPipe,
   ],
   templateUrl: './account-delete.component.html',
   styleUrl: './account-delete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AccountDeleteComponent implements OnInit {
+export class AccountDeleteComponent implements OnInit, OnChanges {
   users = input.required<User[]>();
   userEmails = input.required<string[]>();
   reloadUsers = output<void>();
   private fb = inject(FormBuilder);
-  private adminService = inject(AdminService);
+  private userService = inject(UserService);
   filteredUserEmails$!: Observable<string[]>;
   readonly panelOpenState = signal(false);
 
@@ -62,6 +62,12 @@ export class AccountDeleteComponent implements OnInit {
 
   ngOnInit() {
     this.loadEmailFilter();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['users'] || changes['userEmails']) {
+      this.loadEmailFilter();
+    }
   }
 
   loadEmailFilter() {
@@ -78,7 +84,7 @@ export class AccountDeleteComponent implements OnInit {
   }
 
   private _filter(email: string): string[] {
-    const filterValue = email.toLowerCase();
+    const filterValue = email.toLocaleLowerCase();
 
     return this.userEmails().filter((email) =>
       email.toLocaleLowerCase().includes(filterValue)
@@ -105,12 +111,11 @@ export class AccountDeleteComponent implements OnInit {
 
     this.deleteForm.patchValue({ id: user.id });
 
-    this.adminService.deleteUserById(user.id).subscribe({
+    this.userService.deleteUserById(user.id).subscribe({
       next: () => {
         this.deleteForm.reset();
         this.reloadUsers.emit();
       },
-      error: (err) => console.error('Erreur lors de la suppression :', err),
     });
   }
 }

@@ -7,19 +7,24 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Habitat } from './entities/habitat.entity';
 import { CreateHabitatDto } from './dtos/create-habitat.dto';
-import { UpdateHabitatDto } from './dtos/update-habitat.dto';
 import { HabitatImage } from './entities/habitat-image.entity';
-import { HabitatImageService } from './habitat-image.service';
+import { plainToInstance } from 'class-transformer';
+import { environment } from 'src/config/environment';
+import { existsSync, unlinkSync } from 'fs';
+import { join } from 'path';
+import { UPLOADS_FOLDER } from 'src/config/multer.config';
+import { UpdateHabitatDto } from './dtos/update-habitat.dto';
 
 @Injectable()
 export class HabitatService {
   constructor(
     @InjectRepository(Habitat) private habitatRepo: Repository<Habitat>,
-    private habitatImageService: HabitatImageService,
+    @InjectRepository(HabitatImage)
+    private habitatImageRepo: Repository<HabitatImage>,
   ) {}
 
-  async create(createdHabitatDto: CreateHabitatDto) {
-    const { name, description, comments, habitatImage } = createdHabitatDto;
+  async create(createHabitatDto: CreateHabitatDto, file: Express.Multer.File) {
+    const { name, description, comments } = createHabitatDto;
 
     const foundHabitat = await this.habitatRepo.findOneBy({ name });
 
@@ -27,87 +32,120 @@ export class HabitatService {
       throw new InternalServerErrorException('Habitat déjà existant.');
     }
 
-    let createdHabitatImage: HabitatImage;
-    if (habitatImage) {
-      createdHabitatImage =
-        await this.habitatImageService.saveImage(habitatImage);
+    const newHabitat = this.habitatRepo.create({ name, description, comments });
+
+    if (file) {
+      const createdHabitatImage = new HabitatImage();
+      createdHabitatImage.fileName = file.filename;
+      createdHabitatImage.habitat = newHabitat;
+
+      await this.habitatImageRepo.save(createdHabitatImage);
+      newHabitat.habitatImage = createdHabitatImage;
+      await this.habitatRepo.save(newHabitat);
     }
 
-    const newHabitat = this.habitatRepo.create({
-      name,
-      description,
-      comments,
-      habitatImage: createdHabitatImage,
-    });
-
-    await this.habitatRepo.save(newHabitat);
-
-    return {
-      message: 'Habitat créé.',
-      habitat: newHabitat,
-    };
+    return plainToInstance(Habitat, newHabitat);
   }
 
   async findAll() {
-    const habitats = await this.habitatRepo.find();
+    const habitats = await this.habitatRepo.find({
+      relations: ['habitatImage'],
+    });
 
-    return {
-      habitats: habitats,
-    };
+    return habitats.map((habitat) => ({
+      id: habitat.id,
+      name: habitat.name,
+      description: habitat.description,
+      comments: habitat.comments,
+      habitatImageUrl: habitat.habitatImage
+        ? `${environment.baseUrl}/uploads/habitat/${habitat.habitatImage.fileName}`
+        : null,
+      habitatImage: habitat.habitatImage,
+    }));
   }
 
-  async findOne(id: number) {
-    const habitat = await this.habitatRepo.findOneBy({ id });
+  async update(
+    id: number,
+    updateHabitatDto: UpdateHabitatDto,
+    file?: Express.Multer.File,
+  ): Promise<Habitat> {
+    const habitat = await this.habitatRepo.findOne({
+      where: { id },
+      relations: ['habitatImage'],
+    });
 
     if (!habitat) {
-      throw new NotFoundException(`Habitat ${habitat.name} non trouvé.`);
+      throw new NotFoundException('Habitat non trouvé');
     }
 
-    return {
-      message: 'Habitat trouvé.',
-      habitat: habitat,
-    };
-  }
+    habitat.name = updateHabitatDto.name ?? habitat.name;
+    habitat.description = updateHabitatDto.description ?? habitat.description;
+    habitat.comments = updateHabitatDto.comments ?? habitat.comments;
 
-  async update(id: number, updatedHabitatDto: UpdateHabitatDto) {
-    const habitat = await this.habitatRepo.findOneBy({ id });
-
-    if (!habitat) {
-      throw new NotFoundException(`Habitat ${habitat.name} non trouvé.`);
-    }
-
-    if (updatedHabitatDto.habitatImage) {
+    if (file) {
       if (habitat.habitatImage) {
-        await this.habitatImageService.deleteImage(habitat.habitatImage);
+        const oldFilePath = join(
+          UPLOADS_FOLDER,
+          'habitat',
+          habitat.habitatImage.fileName,
+        );
+        if (existsSync(oldFilePath)) {
+          try {
+            unlinkSync(oldFilePath);
+          } catch (error) {
+            console.error(
+              "Erreur lors de la suppression de l'ancienne image :",
+              error,
+            );
+          }
+        }
+
+        await this.habitatImageRepo.remove(habitat.habitatImage);
       }
 
-      const newImage = await this.habitatImageService.saveImage(
-        updatedHabitatDto.habitatImage,
-      );
-      habitat.habitatImage = newImage;
+      const newHabitatImage = new HabitatImage();
+      newHabitatImage.fileName = file.filename;
+      newHabitatImage.habitat = habitat;
+
+      await this.habitatImageRepo.save(newHabitatImage);
+
+      habitat.habitatImage = newHabitatImage;
     }
 
-    const updatedHabitat = Object.assign(habitat, updatedHabitatDto);
+    await this.habitatRepo.save(habitat);
 
-    await this.habitatRepo.save(updatedHabitat);
-
-    return {
-      message: 'Habitat modifié.',
-      habitat: updatedHabitat,
-    };
+    return plainToInstance(Habitat, habitat);
   }
 
-  async delete(id: number) {
-    const habitat = await this.habitatRepo.findOneBy({ id });
-
+  async delete(id: number): Promise<Habitat> {
+    const habitat = await this.habitatRepo.findOne({
+      where: { id },
+      relations: ['habitatImage'],
+    });
     if (!habitat) {
-      throw new NotFoundException(`Habitat ${id} non trouvé.`);
+      throw new NotFoundException('Habitat non trouvé');
     }
 
-    await this.habitatRepo.remove(habitat);
+    if (habitat.habitatImage) {
+      const filePath = join(
+        UPLOADS_FOLDER,
+        'habitat',
+        habitat.habitatImage.fileName,
+      );
+      if (existsSync(filePath)) {
+        try {
+          unlinkSync(filePath);
+        } catch (error) {
+          console.error(
+            'Erreur lors de la suppression du fichier image :',
+            error,
+          );
+        }
+      }
+    }
+    await this.habitatImageRepo.remove(habitat.habitatImage);
 
-    return {
-      message: `Habitat ${habitat.name} supprimé avec succès.`,
-    };
+    await this.habitatRepo.remove(habitat);
+    return habitat;
   }
 }
