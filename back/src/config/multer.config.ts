@@ -12,10 +12,10 @@ export const multerConfig = (folder: string) => ({
       mkdirSync(uploadPath, { recursive: true });
       cb(null, uploadPath);
     },
-    filename: (req, file, callback) => {
+    filename: (req, file, cb) => {
       const uuid = uuidv4();
       const extension = extname(file.originalname);
-      callback(null, `${uuid}${extension}`);
+      cb(null, `${uuid}${extension}`);
     },
   }),
 });

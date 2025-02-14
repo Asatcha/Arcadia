@@ -48,38 +48,20 @@ export class HabitatController {
     // return this.habitatService.findOne(+id);
   }
 
-  // Récupérer l'image du dossier uploads
-  @Get('image/:fileName')
-  getImage(
-    @Param('fileName') fileName: string,
-    @Res() res: Response,
-  ): StreamableFile {
-    const filePath = join(UPLOADS_FOLDER, 'habitat', fileName);
-
-    console.log('Tentative de récupération de l’image depuis :', filePath);
-
-    if (!existsSync(filePath)) {
-      throw new NotFoundException('Image non trouvée');
-    }
-
-    const fileStream = createReadStream(filePath);
-    res.set({
-      'Content-Type': 'image/*',
-      'Content-Disposition': `inline; filename="${fileName}"`,
-    });
-
-    return new StreamableFile(fileStream);
-  }
-
   // localhost:3000/habitat/:id
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateHabitatDto: UpdateHabitatDto) {
-    // return this.habitatService.update(+id, updateHabitatDto);
+  @UseInterceptors(FileInterceptor('habitatImage', multerConfig('habitat')))
+  update(
+    @Param('id') id: string,
+    @Body() updateHabitatDto: UpdateHabitatDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.habitatService.update(+id, updateHabitatDto, file);
   }
 
   // localhost:3000/habitat/:id
   @Delete(':id')
   delete(@Param('id') id: string) {
-    // return this.habitatService.delete(+id);
+    return this.habitatService.delete(+id);
   }
 }

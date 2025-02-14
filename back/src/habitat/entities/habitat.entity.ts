@@ -35,7 +35,8 @@ export class Habitat {
   @OneToMany(() => Animal, (animal) => animal.habitat)
   animals: Animal[];
 
-  @OneToOne(() => HabitatImage, (image) => image.habitat, { cascade: true })
+  // TODO: handle cascade delete
+  @OneToOne(() => HabitatImage, (image) => image.habitat, { cascade: true, onDelete: 'CASCADE', orphanedRowAction: 'delete' })
   @JoinColumn()
   habitatImage: HabitatImage;
 }
