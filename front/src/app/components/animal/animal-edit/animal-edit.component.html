@@ -1,0 +1,147 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState$.set(true)"
+    (closed)="panelOpenState$.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Modifier un animal</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-stepper linear #stepper>
+      <mat-step
+        [stepControl]="editForm.controls['name']"
+        errorMessage="Nom obligatoire."
+      >
+        <ng-template matStepLabel>Nom de l'animal</ng-template>
+        <form>
+          <mat-form-field class="mat-form-field-custom-width" appearance="fill">
+            <mat-icon matPrefix>cruelty_free</mat-icon>
+            <mat-label>Nom</mat-label>
+            <input
+              type="text"
+              matInput
+              [formControl]="name"
+              [matAutocomplete]="auto"
+            />
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+              @for (name of filteredAnimalNames$ | async; track name) {
+              <mat-option [value]="name">{{ name }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </form>
+
+        <button
+          (click)="findAnimalByName(editForm.controls['name'].value)"
+          [disabled]="editForm.controls['name'].invalid"
+          mat-button
+          matStepperNext
+        >
+          Suivant
+        </button>
+      </mat-step>
+
+      <mat-step [stepControl]="editForm">
+        <ng-template matStepLabel>Modifier l'animal</ng-template>
+        <div class="animal-container">
+          <form class="form" [formGroup]="editForm">
+            <div class="animal-form">
+              <mat-form-field appearance="fill">
+                <mat-label>Nom</mat-label>
+                <mat-icon matPrefix>cruelty_free</mat-icon>
+                <input
+                  matInput
+                  formControlName="name"
+                  placeholder="Gribouille"
+                />
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>Date de naissance</mat-label>
+                <input
+                  matInput
+                  formControlName="birthDate"
+                  [matDatepicker]="picker"
+                />
+                <mat-hint>JJ/MM/AAAA</mat-hint>
+                <mat-datepicker-toggle
+                  matIconPrefix
+                  [for]="picker"
+                ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Habitat</mat-label>
+                <mat-icon matPrefix>home</mat-icon>
+                <mat-select formControlName="habitatId">
+                  @for (habitat of habitats(); track habitat) {
+                  <mat-option [value]="habitat.id">
+                    {{ habitat.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="fill">
+                <mat-label>Race</mat-label>
+                <mat-icon matPrefix>pets</mat-icon>
+                <mat-select formControlName="breedId">
+                  @for (breed of breeds(); track breed) {
+                  <mat-option [value]="breed.id">
+                    {{ breed.name }}
+                  </mat-option>
+                  }
+                </mat-select>
+              </mat-form-field>
+
+              <div class="button-fit">
+                <button
+                  mat-raised-button
+                  [ngClass]="{ selected: selectedFile }"
+                  (click)="fileInput.click()"
+                >
+                  <mat-icon>image</mat-icon>
+                  {{ selectedFile ? "Image sélectionnée" : "Modifier l'image" }}
+                </button>
+              </div>
+
+              <input
+                type="file"
+                #fileInput
+                (change)="onFileSelected(fileInput)"
+                accept="image/*"
+                hidden
+              />
+            </div>
+
+            <div class="buttons">
+              <button (click)="onBackButton()" mat-button matStepperPrevious>
+                Retour
+              </button>
+              <button (click)="updateAnimalById()" mat-button matStepperNext>
+                Mettre à jour
+              </button>
+            </div>
+          </form>
+        </div>
+      </mat-step>
+
+      <mat-step>
+        <ng-template matStepLabel>Terminé</ng-template>
+
+        @if (isLoading$()) {
+        <div class="spinner-container">
+          <mat-spinner></mat-spinner>
+        </div>
+        } @else {
+        <p>Animal modifié.</p>
+        <div>
+          <button mat-button (click)="onResetButton(stepper)">
+            Modifier un autre animal
+          </button>
+        </div>
+        }
+      </mat-step>
+    </mat-stepper>
+  </mat-expansion-panel>
+</mat-accordion>

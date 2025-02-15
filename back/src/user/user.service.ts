@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/auth/entities/role.entity';
 import { plainToInstance } from 'class-transformer';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
     @InjectRepository(Role) private roleRepo: Repository<Role>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto | RegisterDto) {
     const { email, password, firstName, lastName, roleId } = createUserDto;
 
     const foundUser = await this.userRepo.findOneBy({ email });

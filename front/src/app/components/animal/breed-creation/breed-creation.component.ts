@@ -21,12 +21,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AnimalService } from '../../../services/animal.service';
 import { Breed } from '../../../models/breed.model';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { map, Observable, startWith } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'arcadia-breed-creation',
@@ -37,7 +35,6 @@ import { map, Observable, startWith } from 'rxjs';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule,
     MatExpansionModule,
   ],
   templateUrl: './breed-creation.component.html',

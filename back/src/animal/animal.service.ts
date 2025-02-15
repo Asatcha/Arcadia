@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnimalImage } from './entities/animal-image.entity';
 import { Repository } from 'typeorm';
@@ -10,6 +14,10 @@ import { environment } from 'src/config/environment';
 import { plainToInstance } from 'class-transformer';
 import { CreateAnimalDto } from './dtos/create-animal.dto';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
+import { UpdateAnimalDto } from './dtos/update-animal.dto';
+import { join } from 'path';
+import { UPLOADS_FOLDER } from 'src/config/multer.config';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class AnimalService {
@@ -68,48 +76,68 @@ export class AnimalService {
       ],
     });
 
-    return animals.map((animal) => ({
-      id: animal.id,
-      name: animal.name,
-      birthdate: animal.birthDate,
-      breed: animal.breed,
-      vetReports: animal.vetReports,
-      foodReports: animal.foodReports,
-      habitat: animal.habitat,
-      animalImageUrl: animal.animalImage
-        ? `${environment.baseUrl}/uploads/animal/${animal.animalImage.fileName}`
-        : null,
-      animalImage: animal.animalImage,
-    }));
+    return animals;
   }
 
-  // async update(id: number, updatedAnimalDto: UpdateAnimalDto) {
-  //   const animal = await this.animalRepo.findOneBy({ id });
+  async update(
+    id: number,
+    updateAnimalDto: UpdateAnimalDto,
+    file?: Express.Multer.File,
+  ): Promise<Animal> {
+    const animal = await this.animalRepo.findOne({
+      where: { id },
+      relations: [
+        'animalImage',
+        'breed',
+        'habitat',
+        'vetReports',
+        'foodReports',
+      ],
+    });
 
-  //   if (!animal) {
-  //     throw new NotFoundException(`Animal avec l'ID ${id} non trouvé.`);
-  //   }
+    if (!animal) {
+      throw new NotFoundException('Animal non trouvé');
+    }
 
-  //   if (updatedAnimalDto.animalImage) {
-  //     if (animal.animalImage) {
-  //       await this.animalImageService.deleteImage(animal.animalImage);
-  //     }
+    animal.name = updateAnimalDto.name ?? animal.name;
+    animal.birthDate = updateAnimalDto.birthDate ?? animal.birthDate;
+    animal.breed.id = updateAnimalDto.breedId ?? animal.breed.id;
+    animal.habitat.id = updateAnimalDto.habitatId ?? animal.habitat.id;
 
-  //     const newImage = await this.animalImageService.saveImage(
-  //       updatedAnimalDto.animalImage,
-  //     );
-  //     animal.animalImage = newImage;
-  //   }
+    if (file) {
+      if (animal.animalImage) {
+        const oldFilePath = join(
+          UPLOADS_FOLDER,
+          'animal',
+          animal.animalImage.fileName,
+        );
+        if (existsSync(oldFilePath)) {
+          try {
+            unlinkSync(oldFilePath);
+          } catch (error) {
+            console.error(
+              "Erreur lors de la suppression de l'ancienne image :",
+              error,
+            );
+          }
+        }
 
-  //   const updatedAnimal = Object.assign(animal, updatedAnimalDto);
+        await this.animalImageRepo.remove(animal.animalImage);
+      }
 
-  //   await this.animalRepo.save(updatedAnimal);
+      const newAnimalImage = new AnimalImage();
+      newAnimalImage.fileName = file.filename;
+      newAnimalImage.animal = animal;
 
-  //   return {
-  //     message: 'Animal modifié.',
-  //     animal: updatedAnimal,
-  //   };
-  // }
+      await this.animalImageRepo.save(newAnimalImage);
+
+      animal.animalImage = newAnimalImage;
+    }
+
+    await this.animalRepo.save(animal);
+
+    return plainToInstance(Animal, animal);
+  }
 
   // async delete(id: number) {
   //   const animal = await this.animalRepo.findOneBy({ id });

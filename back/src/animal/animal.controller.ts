@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -12,6 +13,7 @@ import { CreateAnimalDto } from './dtos/create-animal.dto';
 import { multerConfig } from 'src/config/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateBreedDto } from './dtos/create-breed.dto';
+import { UpdateAnimalDto } from './dtos/update-animal.dto';
 
 @Controller('animal')
 export class AnimalController {
@@ -38,16 +40,15 @@ export class AnimalController {
   findOne(@Param('id') id: string) {
     // return this.animalService.findOne(+id);
   }
-  
-  // // localhost:3000/animal/:id
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateAnimalDto: UpdateAnimalDto) {
-  //   return this.animalService.update(+id, updateAnimalDto);
-  // }
 
-  // // localhost:3000/animal/:id
-  // @Delete(':id')
-  // delete(@Param('id') id: string) {
-  //   return this.animalService.delete(+id);
-  // }
+  // localhost:3000/animal/:id
+  @Patch(':id')
+  @UseInterceptors(FileInterceptor('animalImage', multerConfig('animal')))
+  update(
+    @Param('id') id: string,
+    @Body() updateAnimalDto: UpdateAnimalDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.animalService.update(+id, updateAnimalDto, file);
+  }
 }

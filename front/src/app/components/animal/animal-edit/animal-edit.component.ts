@@ -1,14 +1,13 @@
+import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   inject,
   input,
-  OnChanges,
-  OnInit,
   output,
   signal,
   SimpleChanges,
-  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -17,25 +16,25 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { UserService } from '../../../services/user.service';
+import { AnimalService } from '../../../services/animal.service';
+import { Animal } from '../../../models/animal.model';
+import { map, Observable, startWith } from 'rxjs';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { Habitat } from '../../../models/habitat.model';
-import { HabitatService } from '../../../services/habitat.service';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { Breed } from '../../../models/breed.model';
+import { provideNativeDateAdapter } from '@angular/material/core';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
-  selector: 'arcadia-habitat-edit',
+  selector: 'arcadia-animal-edit',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -49,37 +48,42 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
     MatStepperModule,
     MatProgressSpinnerModule,
     AsyncPipe,
+    MatDatepickerModule,
+    MatSelectModule,
   ],
   providers: [
     {
       provide: STEPPER_GLOBAL_OPTIONS,
       useValue: { showError: true },
     },
+    provideNativeDateAdapter(),
   ],
-  templateUrl: './habitat-edit.component.html',
-  styleUrl: './habitat-edit.component.scss',
+  templateUrl: './animal-edit.component.html',
+  styleUrl: './animal-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HabitatEditComponent implements OnInit, OnChanges {
+export class AnimalEditComponent {
   private fb = inject(FormBuilder).nonNullable;
-  private userService = inject(UserService);
-  private habitatService = inject(HabitatService);
+  private animalService = inject(AnimalService);
+  animals = input.required<Animal[]>();
+  animalNames = input.required<string[]>();
   habitats = input.required<Habitat[]>();
   habitatNames = input.required<string[]>();
-  reloadHabitats = output<void>();
-  filteredHabitatNames$!: Observable<string[]>;
+  breeds = input.required<Breed[]>();
+  breedNames = input.required<string[]>();
+  reloadAnimals = output<void>();
+  filteredAnimalNames$!: Observable<string[]>;
   isLoading$ = signal(true);
   readonly panelOpenState$ = signal(false);
   selectedFile!: File | null;
 
-  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
-
   editForm: FormGroup = this.fb.group({
     id: [0],
     name: ['', [Validators.required, Validators.maxLength(20)]],
-    description: ['', [Validators.required, Validators.maxLength(1000)]],
-    comments: ['', [Validators.maxLength(1000)]],
-    habitatImage: [null],
+    birthDate: ['', [Validators.required]],
+    animalImage: [null, [Validators.required]],
+    breedId: [null, [Validators.required]],
+    habitatId: [null, [Validators.required]],
   });
 
   name = this.editForm.get('name') as FormControl<string>;
@@ -89,7 +93,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['habitats'] || changes['habitatNames']) {
+    if (changes['animals'] || changes['animalNames']) {
       this.loadNameFilter();
     }
   }
@@ -101,31 +105,34 @@ export class HabitatEditComponent implements OnInit, OnChanges {
   private _filter(name: string): string[] {
     const filterValue = name.toLocaleLowerCase();
 
-    return this.habitatNames().filter((name) =>
+    return this.animalNames().filter((name) =>
       name.toLocaleLowerCase().includes(filterValue)
     );
   }
 
   loadNameFilter() {
-    this.filteredHabitatNames$ = this.editForm.get('name')!.valueChanges.pipe(
+    this.filteredAnimalNames$ = this.name.valueChanges.pipe(
       startWith(''),
       map((name) => {
-        return name ? this._filter(name) : this.habitatNames().slice();
+        return name ? this._filter(name) : this.animalNames().slice();
       })
     );
   }
 
-  findHabitatByName(name: string) {
-    const habitat = this.habitats().find(
-      (habitat) => habitat.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+  findAnimalByName(name: string) {
+    const animal = this.animals().find(
+      (animal) => animal.name.toLocaleLowerCase() === name.toLocaleLowerCase()
     );
 
-    if (habitat) {
+    if (animal) {
       this.editForm.patchValue({
-        ...habitat
+        ...animal,
+        breedId: animal.breed.id,
+        habitatId: animal.habitat.id,
       });
+      console.log(this.editForm.value);
     } else {
-      console.error('Aucun habitat trouvé avec ce nom');
+      console.error('Aucun animal trouvé avec ce nom');
     }
   }
 
@@ -135,7 +142,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     if (image) {
       this.selectedFile = image;
       this.editForm.patchValue({
-        habitatImage: image,
+        animalImage: image,
       });
     }
   }
@@ -151,7 +158,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     this.loadNameFilter();
   }
 
-  updateHabitatById() {
+  updateAnimalById() {
     this.isLoading$.set(true);
 
     if (!this.editForm.valid) {
@@ -160,16 +167,17 @@ export class HabitatEditComponent implements OnInit, OnChanges {
 
     const formData = new FormData();
     formData.append('name', this.editForm.value.name);
-    formData.append('description', this.editForm.value.description);
-    formData.append('comments', this.editForm.value.comments);
-    formData.append('habitatImage', this.editForm.value.habitatImage);
+    formData.append('birthDate', this.editForm.value.birthDate);
+    formData.append('breedId', this.editForm.value.breedId);
+    formData.append('habitatId', this.editForm.value.habitatId);
+    formData.append('animalImage', this.editForm.value.animalImage);
 
-    this.habitatService
-      .updateHabitatById(this.editForm.value.id, formData)
+    this.animalService
+      .updateAnimalById(this.editForm.value.id, formData)
       .subscribe({
         next: () => {
           this.isLoading$.set(false);
-          this.reloadHabitats.emit();
+          this.reloadAnimals.emit();
           this.selectedFile = null;
         },
       });
