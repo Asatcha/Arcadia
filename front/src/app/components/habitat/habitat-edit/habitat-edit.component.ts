@@ -102,7 +102,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     const filterValue = name.toLocaleLowerCase();
 
     return this.habitatNames().filter((name) =>
-      name.toLocaleLowerCase().includes(filterValue)
+      name.toLocaleLowerCase().includes(filterValue),
     );
   }
 
@@ -111,18 +111,19 @@ export class HabitatEditComponent implements OnInit, OnChanges {
       startWith(''),
       map((name) => {
         return name ? this._filter(name) : this.habitatNames().slice();
-      })
+      }),
     );
   }
 
   findHabitatByName(name: string) {
     const habitat = this.habitats().find(
-      (habitat) => habitat.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      (habitat) =>
+        habitat.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
     );
 
     if (habitat) {
       this.editForm.patchValue({
-        ...habitat
+        ...habitat,
       });
     } else {
       console.error('Aucun habitat trouvé avec ce nom');

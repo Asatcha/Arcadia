@@ -106,7 +106,7 @@ export class AnimalEditComponent {
     const filterValue = name.toLocaleLowerCase();
 
     return this.animalNames().filter((name) =>
-      name.toLocaleLowerCase().includes(filterValue)
+      name.toLocaleLowerCase().includes(filterValue),
     );
   }
 
@@ -115,13 +115,13 @@ export class AnimalEditComponent {
       startWith(''),
       map((name) => {
         return name ? this._filter(name) : this.animalNames().slice();
-      })
+      }),
     );
   }
 
   findAnimalByName(name: string) {
     const animal = this.animals().find(
-      (animal) => animal.name.toLocaleLowerCase() === name.toLocaleLowerCase()
+      (animal) => animal.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
     );
 
     if (animal) {

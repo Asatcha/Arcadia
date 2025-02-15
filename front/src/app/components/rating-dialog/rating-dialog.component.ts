@@ -62,7 +62,7 @@ export class RatingDialogComponent {
       },
       {
         injector: this._injector,
-      }
+      },
     );
   }
 

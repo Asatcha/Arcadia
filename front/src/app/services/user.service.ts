@@ -18,7 +18,7 @@ export class UserService {
       catchError((err) => {
         console.error('Erreur lors de la récupération des rôles :', err);
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -37,7 +37,7 @@ export class UserService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -46,7 +46,7 @@ export class UserService {
       catchError((err) => {
         console.error('Erreur lors de la récupération des utilisateurs :', err);
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -55,10 +55,10 @@ export class UserService {
       catchError((err) => {
         console.error(
           `Erreur lors de la récupération de l'utilisateur avec l'ID ${id} :`,
-          err
+          err,
         );
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -75,14 +75,14 @@ export class UserService {
       catchError((err) => {
         console.error(
           `Erreur lors de la mise à jour de l'utilisateur avec l'ID ${id} :`,
-          err
+          err,
         );
         this.snackBar.open('Échec de la mise à jour du compte.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -97,14 +97,14 @@ export class UserService {
       catchError((err) => {
         console.error(
           `Erreur lors de la suppression de l'utilisateur avec l'ID ${id} :`,
-          err
+          err,
         );
         this.snackBar.open('Échec de la suppression du compte.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 }

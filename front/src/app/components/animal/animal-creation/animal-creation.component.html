@@ -34,10 +34,10 @@
             <mat-label>Habitat</mat-label>
             <mat-icon matPrefix>home</mat-icon>
             <mat-select formControlName="habitatId">
-              @for (habitat of habitats(); track habitat) {
-              <mat-option [value]="habitat.id">
-                {{ habitat.name }}
-              </mat-option>
+              @for (habitat of habitats(); track habitat.id) {
+                <mat-option [value]="habitat.id">
+                  {{ habitat.name }}
+                </mat-option>
               }
             </mat-select>
           </mat-form-field>
@@ -47,9 +47,9 @@
             <mat-icon matPrefix>pets</mat-icon>
             <mat-select formControlName="breedId">
               @for (breed of breeds(); track breed) {
-              <mat-option [value]="breed.id">
-                {{ breed.name }}
-              </mat-option>
+                <mat-option [value]="breed.id">
+                  {{ breed.name }}
+                </mat-option>
               }
             </mat-select>
           </mat-form-field>
