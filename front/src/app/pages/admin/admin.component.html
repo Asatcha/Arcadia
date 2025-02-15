@@ -6,11 +6,15 @@
     </div>
     } @else {
     <arcadia-account-creation
+      [roles]="roles$()"
+      [roleLabels]="roleLabels$()"
       (reloadUsers)="loadAllUsers()"
     ></arcadia-account-creation>
     <arcadia-account-edit
       [users]="users$()"
       [userEmails]="userEmails$()"
+      [roles]="roles$()"
+      [roleLabels]="roleLabels$()"
       (reloadUsers)="loadAllUsers()"
     ></arcadia-account-edit>
     <arcadia-account-delete
@@ -20,7 +24,26 @@
     ></arcadia-account-delete>
     }
   </mat-tab>
-  <mat-tab label="Animaux"> Content 2 </mat-tab>
+  <mat-tab label="Animaux">
+    @if (isLoadingAnimals$()) {
+    <div class="spinner-container">
+      <mat-spinner></mat-spinner>
+    </div>
+    } @else {
+    <arcadia-breed-creation
+      [breeds]="breeds$()"
+      [breedNames]="breedNames$()"
+      (reloadBreeds)="loadAllBreeds()"
+    ></arcadia-breed-creation>
+    <arcadia-animal-creation
+      [breeds]="breeds$()"
+      [breedNames]="breedNames$()"
+      [habitats]="habitats$()"
+      [habitatNames]="habitatNames$()"
+      (reloadAnimals)="loadAllAnimals()"
+    ></arcadia-animal-creation>
+    }
+  </mat-tab>
   <mat-tab label="Habitats">
     @if (isLoadingHabitats$()) {
     <div class="spinner-container">

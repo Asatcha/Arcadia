@@ -48,7 +48,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
   habitats = input.required<Habitat[]>();
   habitatNames = input.required<string[]>();
   reloadHabitats = output<void>();
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private habitatService = inject(HabitatService);
   filteredHabitatNames$!: Observable<string[]>;
   readonly panelOpenState = signal(false);
@@ -116,7 +116,6 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
         this.deleteForm.reset();
         this.reloadHabitats.emit();
       },
-      error: (err) => console.error('Erreur lors de la suppression :', err),
     });
   }
 }

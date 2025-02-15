@@ -48,7 +48,7 @@ export class AccountDeleteComponent implements OnInit, OnChanges {
   users = input.required<User[]>();
   userEmails = input.required<string[]>();
   reloadUsers = output<void>();
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private userService = inject(UserService);
   filteredUserEmails$!: Observable<string[]>;
   readonly panelOpenState = signal(false);

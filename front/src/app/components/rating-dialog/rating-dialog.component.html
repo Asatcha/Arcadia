@@ -38,7 +38,7 @@
     </div>
 
     <div class="button-fit">
-      <button mat-raised-button type="submit">Envoyer</button>
+      <button [disabled]="ratingForm.invalid" mat-raised-button type="submit">Envoyer</button>
     </div>
   </form>
 </mat-dialog-content>

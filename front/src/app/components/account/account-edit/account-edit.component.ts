@@ -19,7 +19,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Observable } from 'rxjs';
@@ -30,6 +29,8 @@ import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../services/user.service';
+import { Role } from '../../../models/role.model';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'arcadia-account-edit',
@@ -41,12 +42,12 @@ import { UserService } from '../../../services/user.service';
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    MatRadioModule,
     MatExpansionModule,
     MatAutocompleteModule,
     MatStepperModule,
     MatProgressSpinnerModule,
     AsyncPipe,
+    MatSelectModule,
   ],
   providers: [
     {
@@ -59,10 +60,12 @@ import { UserService } from '../../../services/user.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountEditComponent implements OnInit, OnChanges {
-  private fb = inject(FormBuilder).nonNullable;
-  private userService = inject(UserService);
+  roles = input.required<Role[]>();
+  roleLabels = input.required<string[]>();
   users = input.required<User[]>();
   userEmails = input.required<string[]>();
+  private fb = inject(FormBuilder).nonNullable;
+  private userService = inject(UserService);
   reloadUsers = output<void>();
   filteredUserEmails$!: Observable<string[]>;
   isLoading$ = signal(true);
