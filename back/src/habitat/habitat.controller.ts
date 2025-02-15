@@ -8,18 +8,12 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
-  Res,
-  StreamableFile,
-  NotFoundException,
 } from '@nestjs/common';
 import { HabitatService } from './habitat.service';
 import { CreateHabitatDto } from './dtos/create-habitat.dto';
 import { UpdateHabitatDto } from './dtos/update-habitat.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { multerConfig, UPLOADS_FOLDER } from '../config/multer.config';
-import { join } from 'path';
-import { createReadStream, existsSync } from 'fs';
-import { Response } from 'express';
+import { multerConfig } from '../config/multer.config';
 
 // localhost:3000/habitat
 @Controller('habitat')

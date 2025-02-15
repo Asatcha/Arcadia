@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  input,
   output,
   signal,
 } from '@angular/core';
@@ -16,9 +17,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatSelectModule } from '@angular/material/select';
 import { UserService } from '../../../services/user.service';
+import { Role } from '../../../models/role.model';
 
 @Component({
   selector: 'arcadia-account-creation',
@@ -29,18 +31,21 @@ import { UserService } from '../../../services/user.service';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule,
     MatExpansionModule,
+    MatSelectModule,
   ],
   templateUrl: './account-creation.component.html',
   styleUrl: './account-creation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountCreationComponent {
+  roles = input.required<Role[]>();
+  roleLabels = input.required<string[]>();
   reloadUsers = output<void>();
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private userService = inject(UserService);
   readonly panelOpenState = signal(false);
+  selectedValue!: string;
 
   accountForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required, Validators.maxLength(20)]],

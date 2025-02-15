@@ -44,7 +44,7 @@ import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
 })
 export class RatingDialogComponent {
   data = inject(MAT_DIALOG_DATA);
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private _injector = inject(Injector);
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;

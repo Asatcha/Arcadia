@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { User } from '../models/user.model';
+import { Role } from '../models/role.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,6 +12,15 @@ export class UserService {
   private snackBar = inject(MatSnackBar);
   private http = inject(HttpClient);
   private readonly snackBarDuration = 5000;
+
+  findAllRoles(): Observable<Role[]> {
+    return this.http.get<Role[]>('/role').pipe(
+      catchError((err) => {
+        console.error('Erreur lors de la récupération des rôles :', err);
+        return throwError(() => err);
+      })
+    );
+  }
 
   createUser(user: User): Observable<User> {
     return this.http.post<User>('/user', user).pipe(

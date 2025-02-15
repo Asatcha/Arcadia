@@ -1,109 +1,127 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AnimalImage } from './entities/animal-image.entity';
 import { Repository } from 'typeorm';
 import { Animal } from './entities/animal.entity';
 import { Breed } from './entities/breed.entity';
-import { AnimalDto } from './dtos/animal.dto';
-import { UpdateAnimalDto } from './dtos/update-animal.dto';
-import { AnimalImageService } from './animal-image.service';
+// import { UpdateAnimalDto } from './dtos/update-animal.dto';
+// import { AnimalImageService } from './animal-image.service';
+import { environment } from 'src/config/environment';
+import { plainToInstance } from 'class-transformer';
+import { CreateAnimalDto } from './dtos/create-animal.dto';
+import { Habitat } from 'src/habitat/entities/habitat.entity';
 
 @Injectable()
 export class AnimalService {
   constructor(
     @InjectRepository(Animal) private readonly animalRepo: Repository<Animal>,
     @InjectRepository(Breed) private readonly breedRepo: Repository<Breed>,
-    private animalImageService: AnimalImageService,
+    @InjectRepository(Habitat)
+    private readonly habitatRepo: Repository<Habitat>,
+    @InjectRepository(AnimalImage)
+    private animalImageRepo: Repository<AnimalImage>,
   ) {}
 
-  async create(animalDto: AnimalDto) {
-    const { name, birthDate, status, breedId, animalImage } = animalDto;
+  async create(createAnimalDto: CreateAnimalDto, file: Express.Multer.File) {
+    const { name, birthDate, breedId, habitatId } = createAnimalDto;
+
+    const foundAnimal = await this.animalRepo.findOneBy({ name });
+
+    if (foundAnimal) {
+      throw new InternalServerErrorException('Animal déjà existant.');
+    }
 
     const breed = await this.breedRepo.findOneBy({ id: breedId });
+
     if (!breed) {
       throw new InternalServerErrorException('Race non trouvée.');
     }
 
-    let createdAnimalImage: AnimalImage;
-    if (animalImage) {
-      createdAnimalImage = await this.animalImageService.saveImage(animalImage);
-    }
-
-    const animal = this.animalRepo.create({
+    const newAnimal = this.animalRepo.create({
       name,
       birthDate,
-      breed,
-      animalImage: createdAnimalImage,
+      breed: await this.breedRepo.findOneBy({ id: breedId }),
+      habitat: await this.habitatRepo.findOneBy({ id: habitatId }),
     });
 
-    return this.animalRepo.save(animal);
+    if (file) {
+      const createdAnimalImage = new AnimalImage();
+      createdAnimalImage.fileName = file.filename;
+      createdAnimalImage.animal = newAnimal;
+
+      await this.animalImageRepo.save(createdAnimalImage);
+      newAnimal.animalImage = createdAnimalImage;
+      await this.animalRepo.save(newAnimal);
+    }
+
+    return plainToInstance(Animal, newAnimal);
   }
 
   async findAll() {
-    const animals = await this.animalRepo.find();
+    const animals = await this.animalRepo.find({
+      relations: [
+        'animalImage',
+        'breed',
+        'habitat',
+        'vetReports',
+        'foodReports',
+      ],
+    });
 
-    return {
-      animals: animals,
-    };
+    return animals.map((animal) => ({
+      id: animal.id,
+      name: animal.name,
+      birthdate: animal.birthDate,
+      breed: animal.breed,
+      vetReports: animal.vetReports,
+      foodReports: animal.foodReports,
+      habitat: animal.habitat,
+      animalImageUrl: animal.animalImage
+        ? `${environment.baseUrl}/uploads/animal/${animal.animalImage.fileName}`
+        : null,
+      animalImage: animal.animalImage,
+    }));
   }
 
-  async findOne(id: number) {
-    const animal = await this.animalRepo.findOneBy({ id });
+  // async update(id: number, updatedAnimalDto: UpdateAnimalDto) {
+  //   const animal = await this.animalRepo.findOneBy({ id });
 
-    if (!animal) {
-      throw new NotFoundException(`Animal ${animal.name} non trouvé.`);
-    }
+  //   if (!animal) {
+  //     throw new NotFoundException(`Animal avec l'ID ${id} non trouvé.`);
+  //   }
 
-    return {
-      message: 'Animal trouvé.',
-      animal: animal,
-    };
-  }
+  //   if (updatedAnimalDto.animalImage) {
+  //     if (animal.animalImage) {
+  //       await this.animalImageService.deleteImage(animal.animalImage);
+  //     }
 
-  async update(id: number, updatedAnimalDto: UpdateAnimalDto) {
-    const animal = await this.animalRepo.findOneBy({ id });
+  //     const newImage = await this.animalImageService.saveImage(
+  //       updatedAnimalDto.animalImage,
+  //     );
+  //     animal.animalImage = newImage;
+  //   }
 
-    if (!animal) {
-      throw new NotFoundException(`Animal avec l'ID ${id} non trouvé.`);
-    }
+  //   const updatedAnimal = Object.assign(animal, updatedAnimalDto);
 
-    if (updatedAnimalDto.animalImage) {
-      if (animal.animalImage) {
-        await this.animalImageService.deleteImage(animal.animalImage);
-      }
+  //   await this.animalRepo.save(updatedAnimal);
 
-      const newImage = await this.animalImageService.saveImage(
-        updatedAnimalDto.animalImage,
-      );
-      animal.animalImage = newImage;
-    }
+  //   return {
+  //     message: 'Animal modifié.',
+  //     animal: updatedAnimal,
+  //   };
+  // }
 
-    const updatedAnimal = Object.assign(animal, updatedAnimalDto);
-    
-    await this.animalRepo.save(updatedAnimal);
+  // async delete(id: number) {
+  //   const animal = await this.animalRepo.findOneBy({ id });
 
-    return {
-      message: 'Animal modifié.',
-      animal: updatedAnimal,
-    };
-  }
+  //   if (!animal) {
+  //     throw new NotFoundException(`Animal ${id} non trouvé.`);
+  //   }
 
-  async delete(id: number) {
-    const animal = await this.animalRepo.findOneBy({ id });
+  //   await this.animalRepo.remove(animal);
 
-    if (!animal) {
-      throw new NotFoundException(`Animal ${id} non trouvé.`);
-    }
-
-    await this.animalRepo.remove(animal);
-
-    return {
-      message: `Animal ${animal.name} supprimé avec succès.`,
-    };
-  }
+  //   return {
+  //     message: `Animal ${animal.name} supprimé avec succès.`,
+  //   };
+  // }
 }

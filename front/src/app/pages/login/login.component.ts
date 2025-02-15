@@ -36,7 +36,7 @@ import { catchError, of } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
+  private fb = inject(FormBuilder).nonNullable;
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private http = inject(HttpClient);
