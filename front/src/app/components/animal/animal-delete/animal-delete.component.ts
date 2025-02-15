@@ -4,8 +4,6 @@ import {
   Component,
   inject,
   input,
-  OnChanges,
-  OnInit,
   output,
   signal,
   SimpleChanges,
@@ -19,16 +17,16 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { map, Observable, startWith } from 'rxjs';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { HabitatService } from '../../../services/habitat.service';
-import { Habitat } from '../../../models/habitat.model';
+import { MatInputModule } from '@angular/material/input';
+import { Animal } from '../../../models/animal.model';
+import { AnimalService } from '../../../services/animal.service';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
-  selector: 'arcadia-habitat-delete',
+  selector: 'arcadia-animal-delete',
   imports: [
     CommonModule,
     MatIconModule,
@@ -40,17 +38,17 @@ import { Habitat } from '../../../models/habitat.model';
     MatAutocompleteModule,
     AsyncPipe,
   ],
-  templateUrl: './habitat-delete.component.html',
-  styleUrl: './habitat-delete.component.scss',
+  templateUrl: './animal-delete.component.html',
+  styleUrl: './animal-delete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HabitatDeleteComponent implements OnInit, OnChanges {
-  habitats = input.required<Habitat[]>();
-  habitatNames = input.required<string[]>();
-  reloadHabitats = output<void>();
+export class AnimalDeleteComponent {
+  animals = input.required<Animal[]>();
+  animalNames = input.required<string[]>();
+  reloadAnimals = output<void>();
   private fb = inject(FormBuilder).nonNullable;
-  private habitatService = inject(HabitatService);
-  filteredHabitatNames$!: Observable<string[]>;
+  private animalService = inject(AnimalService);
+  filteredAnimalNames$!: Observable<string[]>;
   readonly panelOpenState = signal(false);
 
   deleteForm: FormGroup = this.fb.group({
@@ -65,16 +63,16 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['habitats'] || changes['habitatNames']) {
+    if (changes['animals'] || changes['animalNames']) {
       this.loadNameFilter();
     }
   }
 
   loadNameFilter() {
-    this.filteredHabitatNames$ = this.name.valueChanges.pipe(
+    this.filteredAnimalNames$ = this.name.valueChanges.pipe(
       startWith(''),
       map((name) => {
-        return name ? this._filter(name) : this.habitatNames().slice();
+        return name ? this._filter(name) : this.animalNames().slice();
       })
     );
   }
@@ -86,7 +84,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
   private _filter(name: string): string[] {
     const filterValue = name.toLocaleLowerCase();
 
-    return this.habitatNames().filter((name) =>
+    return this.animalNames().filter((name) =>
       name.toLocaleLowerCase().includes(filterValue)
     );
   }
@@ -99,22 +97,22 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
       return;
     }
 
-    const habitat = this.habitats().find(
-      (habitat) =>
-        habitat.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase()
+    const animal = this.animals().find(
+      (animal) =>
+        animal.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase()
     );
 
-    if (!habitat) {
-      console.error('Aucun utilisateur trouvé avec cet email !');
+    if (!animal) {
+      console.error('Aucun animal trouvé avec ce nom !');
       return;
     }
 
-    this.deleteForm.patchValue({ id: habitat.id });
+    this.deleteForm.patchValue({ id: animal.id });
 
-    this.habitatService.deleteHabitatById(habitat.id).subscribe({
+    this.animalService.deleteAnimalById(animal.id).subscribe({
       next: () => {
         this.deleteForm.reset();
-        this.reloadHabitats.emit();
+        this.reloadAnimals.emit();
       },
     });
   }

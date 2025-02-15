@@ -4,14 +4,14 @@
     (closed)="panelOpenState.set(false)"
   >
     <mat-expansion-panel-header>
-      <mat-panel-title>Créer un compte utilisateur</mat-panel-title>
+      <mat-panel-title>Créer un animal</mat-panel-title>
     </mat-expansion-panel-header>
     <div class="animal-container">
       <form [formGroup]="animalForm" (ngSubmit)="submit()">
         <div class="animal-form">
           <mat-form-field appearance="fill">
             <mat-label>Prénom</mat-label>
-            <mat-icon matPrefix>person</mat-icon>
+            <mat-icon matPrefix>cruelty_free</mat-icon>
             <input matInput formControlName="name" placeholder="Gribouille" />
           </mat-form-field>
 
@@ -30,24 +30,57 @@
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-icon matPrefix>lock</mat-icon>
-            <mat-label>Entrez un mot de passe</mat-label>
-            <input matInput formControlName="password" />
+          <mat-form-field appearance="fill">
+            <mat-label>Habitat</mat-label>
+            <mat-icon matPrefix>home</mat-icon>
+            <mat-select formControlName="habitatId">
+              @for (habitat of habitats(); track habitat) {
+              <mat-option [value]="habitat.id">
+                {{ habitat.name }}
+              </mat-option>
+              }
+            </mat-select>
           </mat-form-field>
 
-          <mat-radio-group aria-label="Role" formControlName="roleId">
-            <mat-label>Rôle :</mat-label>
+          <mat-form-field appearance="fill">
+            <mat-label>Race</mat-label>
+            <mat-icon matPrefix>pets</mat-icon>
+            <mat-select formControlName="breedId">
+              @for (breed of breeds(); track breed) {
+              <mat-option [value]="breed.id">
+                {{ breed.name }}
+              </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
 
-            <div class="radio-buttons">
-              <mat-radio-button value="2">Employé</mat-radio-button>
-              <mat-radio-button value="3">Vétérinaire</mat-radio-button>
-            </div>
-          </mat-radio-group>
+          <div class="button-fit">
+            <button
+              mat-raised-button
+              [ngClass]="{ selected: selectedFile }"
+              (click)="fileInput.click()"
+            >
+              <mat-icon>image</mat-icon>
+              {{ selectedFile ? "Image sélectionnée" : "Ajouter une image" }}
+            </button>
+          </div>
+
+          <input
+            type="file"
+            #fileInput
+            (change)="onFileSelected(fileInput)"
+            accept="image/*"
+            hidden
+          />
         </div>
-
         <div class="button-fit">
-          <button mat-raised-button type="submit">Envoyer</button>
+          <button
+            [disabled]="animalForm.invalid"
+            mat-raised-button
+            type="submit"
+          >
+            Créer
+          </button>
         </div>
       </form>
     </div>

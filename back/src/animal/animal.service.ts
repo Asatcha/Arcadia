@@ -1,5 +1,4 @@
 import {
-  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -9,101 +8,167 @@ import { AnimalImage } from './entities/animal-image.entity';
 import { Repository } from 'typeorm';
 import { Animal } from './entities/animal.entity';
 import { Breed } from './entities/breed.entity';
-import { AnimalDto } from './dtos/animal.dto';
+// import { UpdateAnimalDto } from './dtos/update-animal.dto';
+// import { AnimalImageService } from './animal-image.service';
+import { environment } from 'src/config/environment';
+import { plainToInstance } from 'class-transformer';
+import { CreateAnimalDto } from './dtos/create-animal.dto';
+import { Habitat } from 'src/habitat/entities/habitat.entity';
 import { UpdateAnimalDto } from './dtos/update-animal.dto';
-import { AnimalImageService } from './animal-image.service';
+import { join } from 'path';
+import { UPLOADS_FOLDER } from 'src/config/multer.config';
+import { existsSync, unlinkSync } from 'fs';
 
 @Injectable()
 export class AnimalService {
   constructor(
     @InjectRepository(Animal) private readonly animalRepo: Repository<Animal>,
     @InjectRepository(Breed) private readonly breedRepo: Repository<Breed>,
-    private animalImageService: AnimalImageService,
+    @InjectRepository(Habitat)
+    private readonly habitatRepo: Repository<Habitat>,
+    @InjectRepository(AnimalImage)
+    private animalImageRepo: Repository<AnimalImage>,
   ) {}
 
-  async create(animalDto: AnimalDto) {
-    const { name, birthDate, status, breedId, animalImage } = animalDto;
+  async create(createAnimalDto: CreateAnimalDto, file: Express.Multer.File) {
+    const { name, birthDate, breedId, habitatId } = createAnimalDto;
+
+    const foundAnimal = await this.animalRepo.findOneBy({ name });
+
+    if (foundAnimal) {
+      throw new InternalServerErrorException('Animal déjà existant.');
+    }
 
     const breed = await this.breedRepo.findOneBy({ id: breedId });
+
     if (!breed) {
       throw new InternalServerErrorException('Race non trouvée.');
     }
 
-    let createdAnimalImage: AnimalImage;
-    if (animalImage) {
-      createdAnimalImage = await this.animalImageService.saveImage(animalImage);
-    }
-
-    const animal = this.animalRepo.create({
+    const newAnimal = this.animalRepo.create({
       name,
       birthDate,
-      breed,
-      animalImage: createdAnimalImage,
+      breed: await this.breedRepo.findOneBy({ id: breedId }),
+      habitat: await this.habitatRepo.findOneBy({ id: habitatId }),
     });
 
-    return this.animalRepo.save(animal);
+    if (file) {
+      const createdAnimalImage = new AnimalImage();
+      createdAnimalImage.fileName = file.filename;
+      createdAnimalImage.animal = newAnimal;
+
+      await this.animalImageRepo.save(createdAnimalImage);
+      newAnimal.animalImage = createdAnimalImage;
+      await this.animalRepo.save(newAnimal);
+    }
+
+    return plainToInstance(Animal, newAnimal);
   }
 
   async findAll() {
-    const animals = await this.animalRepo.find();
+    const animals = await this.animalRepo.find({
+      relations: [
+        'animalImage',
+        'breed',
+        'habitat',
+        'vetReports',
+        'foodReports',
+      ],
+    });
 
-    return {
-      animals: animals,
-    };
+    return animals;
   }
 
-  async findOne(id: number) {
-    const animal = await this.animalRepo.findOneBy({ id });
+  async update(
+    id: number,
+    updateAnimalDto: UpdateAnimalDto,
+    file?: Express.Multer.File,
+  ): Promise<Animal> {
+    const animal = await this.animalRepo.findOne({
+      where: { id },
+      relations: [
+        'animalImage',
+        'breed',
+        'habitat',
+        'vetReports',
+        'foodReports',
+      ],
+    });
 
     if (!animal) {
-      throw new NotFoundException(`Animal ${animal.name} non trouvé.`);
+      throw new NotFoundException('Animal non trouvé');
     }
 
-    return {
-      message: 'Animal trouvé.',
-      animal: animal,
-    };
-  }
+    animal.name = updateAnimalDto.name ?? animal.name;
+    animal.birthDate = updateAnimalDto.birthDate ?? animal.birthDate;
+    animal.breed.id = updateAnimalDto.breedId ?? animal.breed.id;
+    animal.habitat.id = updateAnimalDto.habitatId ?? animal.habitat.id;
 
-  async update(id: number, updatedAnimalDto: UpdateAnimalDto) {
-    const animal = await this.animalRepo.findOneBy({ id });
-
-    if (!animal) {
-      throw new NotFoundException(`Animal avec l'ID ${id} non trouvé.`);
-    }
-
-    if (updatedAnimalDto.animalImage) {
+    if (file) {
       if (animal.animalImage) {
-        await this.animalImageService.deleteImage(animal.animalImage);
+        const oldFilePath = join(
+          UPLOADS_FOLDER,
+          'animal',
+          animal.animalImage.fileName,
+        );
+        if (existsSync(oldFilePath)) {
+          try {
+            unlinkSync(oldFilePath);
+          } catch (error) {
+            console.error(
+              "Erreur lors de la suppression de l'ancienne image :",
+              error,
+            );
+          }
+        }
+
+        await this.animalImageRepo.remove(animal.animalImage);
       }
 
-      const newImage = await this.animalImageService.saveImage(
-        updatedAnimalDto.animalImage,
-      );
-      animal.animalImage = newImage;
+      const newAnimalImage = new AnimalImage();
+      newAnimalImage.fileName = file.filename;
+      newAnimalImage.animal = animal;
+
+      await this.animalImageRepo.save(newAnimalImage);
+
+      animal.animalImage = newAnimalImage;
     }
 
-    const updatedAnimal = Object.assign(animal, updatedAnimalDto);
-    
-    await this.animalRepo.save(updatedAnimal);
+    await this.animalRepo.save(animal);
 
-    return {
-      message: 'Animal modifié.',
-      animal: updatedAnimal,
-    };
+    return plainToInstance(Animal, animal);
   }
 
-  async delete(id: number) {
-    const animal = await this.animalRepo.findOneBy({ id });
+  async delete(id: number): Promise<Animal> {
+    const animal = await this.animalRepo.findOne({
+      where: { id },
+      relations: ['animalImage'],
+    });
 
     if (!animal) {
-      throw new NotFoundException(`Animal ${id} non trouvé.`);
+      throw new NotFoundException('Animal non trouvé');
     }
 
-    await this.animalRepo.remove(animal);
+    if (animal.animalImage) {
+      const filePath = join(
+        UPLOADS_FOLDER,
+        'animal',
+        animal.animalImage.fileName,
+      );
+      if (existsSync(filePath)) {
+        try {
+          unlinkSync(filePath);
+        } catch (error) {
+          console.error(
+            'Erreur lors de la suppression du fichier image :',
+            error,
+          );
+        }
+      }
+    }
+    await this.animalImageRepo.remove(animal.animalImage);
 
-    return {
-      message: `Animal ${animal.name} supprimé avec succès.`,
-    };
+    await this.animalRepo.remove(animal);
+    return animal;
   }
 }

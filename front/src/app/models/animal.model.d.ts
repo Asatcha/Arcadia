@@ -1,4 +1,5 @@
 import { Base } from './base.model';
+import { Habitat } from './habitat.model';
 
 export interface Animal extends Base {
   name: string;
@@ -8,6 +9,8 @@ export interface Animal extends Base {
   animalImageId: number;
   breed: Breed;
   breedId: number;
-  vetReport: VetReport[];
-  foodReport: FoodReport[];
+  habitat: Habitat;
+  habitatId: number;
+  vetReports: VetReport[];
+  foodReports: FoodReport[];
 }

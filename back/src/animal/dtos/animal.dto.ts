@@ -1,8 +1,18 @@
-export class AnimalDto {
+import { FoodReport } from 'src/employee/entities/food-report.entity';
+import { VetReport } from 'src/vet/entities/vet-report.entity';
+import { Breed } from '../entities/breed.entity';
+import { Habitat } from 'src/habitat/entities/habitat.entity';
+import { BaseDto } from 'src/shared/base.dto';
+
+export class AnimalDto extends BaseDto {
   name: string;
   birthDate: Date;
-  status: string;
+  breed: Breed;
   breedId: number;
+  habitat: Habitat;
   habitatId: number;
-  animalImage: Buffer;
+  animalImage?: File;
+  animalImageUrl?: string;
+  vetReports: VetReport[];
+  foodReports: FoodReport[];
 }

@@ -10,6 +10,7 @@ import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/auth/entities/role.entity';
 import { plainToInstance } from 'class-transformer';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 
 @Injectable()
 export class UserService {
@@ -18,7 +19,7 @@ export class UserService {
     @InjectRepository(Role) private roleRepo: Repository<Role>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto | RegisterDto) {
     const { email, password, firstName, lastName, roleId } = createUserDto;
 
     const foundUser = await this.userRepo.findOneBy({ email });
@@ -41,9 +42,9 @@ export class UserService {
   }
 
   async findAll() {
-    const users = await this.userRepo.find({ relations: ['role']});
+    const users = await this.userRepo.find({ relations: ['role'] });
 
-    return plainToInstance(User, users);;
+    return plainToInstance(User, users);
   }
 
   async findOne(id: number) {
@@ -57,10 +58,17 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    const user = await this.userRepo.findOneBy({ id });
+    const user = await this.userRepo.findOne({
+      where: { id },
+      relations: ['role'],
+    });
 
     if (!user) {
       throw new NotFoundException(`Utilisateur avec l'id ${id} non trouvé.`);
+    }
+
+    if (updateUserDto.roleId) {
+      user.role.id = updateUserDto.roleId;
     }
 
     const updatedUser = { ...user, ...updateUserDto };

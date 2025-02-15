@@ -17,7 +17,15 @@ import { HabitatCreationComponent } from '../../components/habitat/habitat-creat
 import { HabitatService } from '../../services/habitat.service';
 import { Habitat } from '../../models/habitat.model';
 import { HabitatDeleteComponent } from '../../components/habitat/habitat-delete/habitat-delete.component';
-import { HabitatEditComponent } from "../../components/habitat/habitat-edit/habitat-edit.component";
+import { HabitatEditComponent } from '../../components/habitat/habitat-edit/habitat-edit.component';
+import { AnimalCreationComponent } from '../../components/animal/animal-creation/animal-creation.component';
+import { Animal } from '../../models/animal.model';
+import { AnimalService } from '../../services/animal.service';
+import { Breed } from '../../models/breed.model';
+import { BreedCreationComponent } from '../../components/animal/breed-creation/breed-creation.component';
+import { Role } from '../../models/role.model';
+import { AnimalEditComponent } from '../../components/animal/animal-edit/animal-edit.component';
+import { AnimalDeleteComponent } from '../../components/animal/animal-delete/animal-delete.component';
 
 @Component({
   selector: 'arcadia-admin',
@@ -30,8 +38,12 @@ import { HabitatEditComponent } from "../../components/habitat/habitat-edit/habi
     AccountDeleteComponent,
     HabitatCreationComponent,
     HabitatDeleteComponent,
-    HabitatEditComponent
-],
+    HabitatEditComponent,
+    BreedCreationComponent,
+    AnimalCreationComponent,
+    AnimalEditComponent,
+    AnimalDeleteComponent,
+  ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,16 +51,39 @@ import { HabitatEditComponent } from "../../components/habitat/habitat-edit/habi
 export class AdminComponent implements OnInit {
   private userService = inject(UserService);
   private habitatService = inject(HabitatService);
+  private animalService = inject(AnimalService);
+  roles$ = signal<Role[]>([]);
+  roleLabels$ = signal<string[]>([]);
   users$ = signal<User[]>([]);
   userEmails$ = signal<string[]>([]);
   habitats$ = signal<Habitat[]>([]);
   habitatNames$ = signal<string[]>([]);
+  breeds$ = signal<Breed[]>([]);
+  breedNames$ = signal<string[]>([]);
+  animals$ = signal<Animal[]>([]);
+  animalNames$ = signal<string[]>([]);
+  isLoadingRoles$ = signal(true);
   isLoadingUsers$ = signal(true);
   isLoadingHabitats$ = signal(true);
+  isLoadingBreeds$ = signal(true);
+  isLoadingAnimals$ = signal(true);
 
   ngOnInit() {
     this.loadAllUsers();
     this.loadAllHabitats();
+    this.loadAllBreeds();
+    this.loadAllAnimals();
+    this.loadAllRoles();
+  }
+
+  loadAllRoles() {
+    this.userService.findAllRoles().subscribe({
+      next: (roles) => {
+        this.roles$.set(roles);
+        this.roleLabels$.set(roles.map((role) => role.label));
+        this.isLoadingRoles$.set(false);
+      },
+    });
   }
 
   loadAllUsers() {
@@ -68,8 +103,25 @@ export class AdminComponent implements OnInit {
         this.habitatNames$.set(habitats.map((habitat) => habitat.name));
         this.isLoadingHabitats$.set(false);
       },
-      error: (err) => {
-        console.error('Erreur :', err);
+    });
+  }
+
+  loadAllBreeds() {
+    this.animalService.findAllBreeds().subscribe({
+      next: (breeds) => {
+        this.breeds$.set(breeds);
+        this.breedNames$.set(breeds.map((breed) => breed.name));
+        this.isLoadingBreeds$.set(false);
+      },
+    });
+  }
+
+  loadAllAnimals() {
+    this.animalService.findAllAnimals().subscribe({
+      next: (animals) => {
+        this.animals$.set(animals);
+        this.animalNames$.set(animals.map((animal) => animal.name));
+        this.isLoadingAnimals$.set(false);
       },
     });
   }

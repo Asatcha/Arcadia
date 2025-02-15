@@ -1,0 +1,23 @@
+<mat-accordion>
+  <mat-expansion-panel
+    (opened)="panelOpenState.set(true)"
+    (closed)="panelOpenState.set(false)"
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Créer une race</mat-panel-title>
+    </mat-expansion-panel-header>
+    <div class="breed-container">
+      <form [formGroup]="breedForm" (ngSubmit)="submit()">
+        <mat-form-field appearance="fill">
+          <mat-label>Race</mat-label>
+          <mat-icon matPrefix>pets</mat-icon>
+          <input matInput formControlName="name" placeholder="Panthère" />
+        </mat-form-field>
+
+        <div class="button-fit">
+          <button [disabled]="breedForm.invalid" mat-raised-button type="submit">Créer</button>
+        </div>
+      </form>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

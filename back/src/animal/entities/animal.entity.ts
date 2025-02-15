@@ -14,6 +14,8 @@ import { AnimalImage } from './animal-image.entity';
 import { VetReport } from 'src/vet/entities/vet-report.entity';
 import { FoodReport } from 'src/employee/entities/food-report.entity';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
+import { environment } from 'src/config/environment';
+import { Expose } from 'class-transformer';
 
 @Entity()
 @Unique(['name'])
@@ -34,7 +36,12 @@ export class Animal {
   @ManyToOne(() => Breed, (breed) => breed.animals)
   breed: Breed;
 
-  @OneToOne(() => AnimalImage, (image) => image.animal, { cascade: true })
+  // TODO: handle cascade delete
+  @OneToOne(() => AnimalImage, (image) => image.animal, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @JoinColumn()
   animalImage: AnimalImage;
 
@@ -46,4 +53,17 @@ export class Animal {
 
   @ManyToOne(() => Habitat, (habitat) => habitat.animals)
   habitat: Habitat;
+
+  get animalImageUrl(): string {
+    return this.animalImage
+      ? `${environment.baseUrl}/uploads/animal/${this.animalImage.fileName}`
+      : null;
+  }
+
+  toJSON() {
+    return {
+      ...this,
+      animalImageUrl: this.animalImageUrl,
+    };
+  }
 }

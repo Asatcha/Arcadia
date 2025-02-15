@@ -1,13 +1,23 @@
 :host {
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem;
-
-  mat-accordion {
-    width: 100%;
-
+    display: flex;
+    flex-flow: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+  
+    ::ng-deep {
+      .mat-horizontal-stepper-wrapper {
+        display: flex;
+        flex-flow: column;
+        gap: 1rem;
+      }
+  
+      .mat-step-header[aria-disabled="true"] {
+        pointer-events: none;
+        opacity: 0.5;
+      }
+    }
+  
     .animal-container {
       display: flex;
       flex-flow: row;
@@ -17,12 +27,12 @@
       border-radius: 1rem;
       padding: 1rem;
       width: fit-content;
-
+  
       form {
         display: flex;
         flex-flow: column;
         gap: 1rem;
-
+  
         .animal-form {
           display: flex;
           flex-flow: column;
@@ -33,4 +43,4 @@
       }
     }
   }
-}
+  
