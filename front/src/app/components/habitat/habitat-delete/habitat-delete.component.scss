@@ -17,21 +17,6 @@
       gap: 1rem;
       min-width: 30vw;
       width: fit-content;
-
-      mat-radio-group {
-        display: flex;
-        flex-flow: row;
-        align-items: center;
-        gap: 1rem;
-
-        .radio-buttons {
-          display: flex;
-          flex: 1 1 auto;
-          flex-flow: row;
-          justify-content: space-around;
-          gap: 1rem;
-        }
-      }
     }
   }
 }

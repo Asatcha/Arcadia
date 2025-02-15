@@ -11,7 +11,7 @@
         <div class="animal-form">
           <mat-form-field appearance="fill">
             <mat-label>Prénom</mat-label>
-            <mat-icon matPrefix>person</mat-icon>
+            <mat-icon matPrefix>cruelty_free</mat-icon>
             <input matInput formControlName="name" placeholder="Gribouille" />
           </mat-form-field>
 
@@ -32,6 +32,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Habitat</mat-label>
+            <mat-icon matPrefix>home</mat-icon>
             <mat-select formControlName="habitatId">
               @for (habitat of habitats(); track habitat) {
               <mat-option [value]="habitat.id">
@@ -43,6 +44,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Race</mat-label>
+            <mat-icon matPrefix>pets</mat-icon>
             <mat-select formControlName="breedId">
               @for (breed of breeds(); track breed) {
               <mat-option [value]="breed.id">

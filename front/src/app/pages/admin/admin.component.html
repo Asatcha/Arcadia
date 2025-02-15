@@ -42,6 +42,15 @@
       [habitatNames]="habitatNames$()"
       (reloadAnimals)="loadAllAnimals()"
     ></arcadia-animal-creation>
+    <arcadia-animal-edit
+    [breeds]="breeds$()"
+    [breedNames]="breedNames$()"
+    [animals]="animals$()"
+    [animalNames]="animalNames$()"
+    [habitats]="habitats$()"
+    [habitatNames]="habitatNames$()"
+    (reloadAnimals)="loadAllAnimals()"
+  ></arcadia-animal-edit>
     }
   </mat-tab>
   <mat-tab label="Habitats">

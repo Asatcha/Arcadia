@@ -45,7 +45,7 @@ export class AnimalService {
     return this.http.get<Animal>(`/animal/${id}`).pipe(
       catchError((err) => {
         console.error(
-          `Erreur lors de la récupération de lanimal avec l'ID ${id} :`,
+          `Erreur lors de la récupération de l'animal avec l'ID ${id} :`,
           err
         );
         return throwError(() => err);
@@ -66,7 +66,7 @@ export class AnimalService {
           `Erreur lors de la mise à jour de l'animal avec l'ID ${id} :`,
           err
         );
-        this.snackBar.open('Échec de la mise à jour de lanimal.', 'Fermer', {
+        this.snackBar.open('Échec de la mise à jour de l\'animal.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
         });

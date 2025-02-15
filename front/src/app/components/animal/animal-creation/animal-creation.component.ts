@@ -18,7 +18,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatRadioModule } from '@angular/material/radio';
 import { AnimalService } from '../../../services/animal.service';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -35,7 +34,6 @@ import { Breed } from '../../../models/breed.model';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    MatRadioModule,
     MatExpansionModule,
     MatDatepickerModule,
     MatSelectModule,
@@ -95,38 +93,5 @@ export class AnimalCreationComponent {
     });
 
     this.selectedFile = null;
-  }  
-  
-  // name = this.breedForm.get('name') as FormControl<string>;
-
-  // ngOnInit() {
-  //   this.loadNameFilter();
-  // }
-
-  // ngOnChanges(changes: SimpleChanges) {
-  //   if (changes['breeds'] || changes['breedNames']) {
-  //     this.loadNameFilter();
-  //   }
-  // }
-
-  // loadNameFilter() {
-  //   this.filteredBreedNames$ = this.name.valueChanges.pipe(
-  //     startWith(''),
-  //     map((name) => {
-  //       return name ? this._filter(name) : this.breedNames().slice();
-  //     })
-  //   );
-  // }
-
-  // displayFn(name: string): string {
-  //   return name;
-  // }
-
-  // private _filter(name: string): string[] {
-  //   const filterValue = name.toLocaleLowerCase();
-
-  //   return this.breedNames().filter((name) =>
-  //     name.toLocaleLowerCase().includes(filterValue)
-  //   );
-  // }
+  }
 }
