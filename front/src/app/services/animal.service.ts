@@ -28,7 +28,7 @@ export class AnimalService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -37,7 +37,7 @@ export class AnimalService {
       catchError((err) => {
         console.error('Erreur lors de la récupération des animaux :', err);
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -46,10 +46,10 @@ export class AnimalService {
       catchError((err) => {
         console.error(
           `Erreur lors de la récupération de l'animal avec l'ID ${id} :`,
-          err
+          err,
         );
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -64,14 +64,14 @@ export class AnimalService {
       catchError((err) => {
         console.error(
           `Erreur lors de la mise à jour de l'animal avec l'ID ${id} :`,
-          err
+          err,
         );
-        this.snackBar.open('Échec de la mise à jour de l\'animal.', 'Fermer', {
+        this.snackBar.open("Échec de la mise à jour de l'animal.", 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -90,7 +90,7 @@ export class AnimalService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -109,7 +109,7 @@ export class AnimalService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -118,7 +118,7 @@ export class AnimalService {
       catchError((err) => {
         console.error('Erreur lors de la récupération des races :', err);
         return throwError(() => err);
-      })
+      }),
     );
   }
 }

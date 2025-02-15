@@ -18,7 +18,7 @@
         />
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           @for (name of filteredHabitatNames$ | async; track name) {
-          <mat-option [value]="name">{{ name }}</mat-option>
+            <mat-option [value]="name">{{ name }}</mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>

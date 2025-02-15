@@ -75,7 +75,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
       startWith(''),
       map((name) => {
         return name ? this._filter(name) : this.habitatNames().slice();
-      })
+      }),
     );
   }
 
@@ -87,7 +87,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
     const filterValue = name.toLocaleLowerCase();
 
     return this.habitatNames().filter((name) =>
-      name.toLocaleLowerCase().includes(filterValue)
+      name.toLocaleLowerCase().includes(filterValue),
     );
   }
 
@@ -101,7 +101,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
 
     const habitat = this.habitats().find(
       (habitat) =>
-        habitat.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase()
+        habitat.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase(),
     );
 
     if (!habitat) {

@@ -58,7 +58,7 @@ export class LoginComponent {
       this.snackBar.open(
         'Veuillez remplir tous les champs correctement',
         'Fermer',
-        { duration: 3000 }
+        { duration: 3000 },
       );
       return;
     }
@@ -73,10 +73,10 @@ export class LoginComponent {
           this.snackBar.open(
             'Échec de la connexion. Vérifiez vos identifiants.',
             'Fermer',
-            { duration: 3000 }
+            { duration: 3000 },
           );
           return of(null);
-        })
+        }),
       )
       .subscribe((response) => {
         if (response) {

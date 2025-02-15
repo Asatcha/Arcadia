@@ -65,13 +65,13 @@ export class HabitatCreationComponent {
       },
       {
         injector: this._injector,
-      }
+      },
     );
   }
 
   onFileSelected(input: HTMLInputElement) {
     const image = input.files?.item(0);
-    
+
     if (image) {
       this.selectedFile = image;
       this.habitatForm.patchValue({
@@ -97,7 +97,7 @@ export class HabitatCreationComponent {
         this.habitatForm.reset();
       },
     });
-    
+
     this.selectedFile = null;
   }
 }

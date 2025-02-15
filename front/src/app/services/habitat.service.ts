@@ -27,7 +27,7 @@ export class HabitatService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -36,7 +36,7 @@ export class HabitatService {
       catchError((err) => {
         console.error('Erreur lors de la récupération des utilisateurs :', err);
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -45,10 +45,10 @@ export class HabitatService {
       catchError((err) => {
         console.error(
           `Erreur lors de la récupération de lhabitat avec l'ID ${id} :`,
-          err
+          err,
         );
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -63,14 +63,14 @@ export class HabitatService {
       catchError((err) => {
         console.error(
           `Erreur lors de la mise à jour de l'habitat avec l'ID ${id} :`,
-          err
+          err,
         );
         this.snackBar.open('Échec de la mise à jour de lhabitat.', 'Fermer', {
           duration: this.snackBarDuration,
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 
@@ -89,7 +89,7 @@ export class HabitatService {
           panelClass: ['error-snackbar'],
         });
         return throwError(() => err);
-      })
+      }),
     );
   }
 }

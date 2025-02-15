@@ -36,10 +36,10 @@ h1 {
 }
 
 button.selected {
-    background-color: #4caf50 !important;
-    color: white !important;
-    border: 2px solid #388e3c;
-    transition: all 0.3s ease;
+  background-color: #4caf50 !important;
+  color: white !important;
+  border: 2px solid #388e3c;
+  transition: all 0.3s ease;
 }
 
 .no-click {
@@ -51,7 +51,6 @@ mat-accordion {
 
   mat-form-field {
     width: 100%;
-
   }
 
   mat-form-field.mat-form-field-custom-width {

@@ -75,7 +75,7 @@ export class AccountDeleteComponent implements OnInit, OnChanges {
       startWith(''),
       map((email) => {
         return email ? this._filter(email) : this.userEmails().slice();
-      })
+      }),
     );
   }
 
@@ -87,7 +87,7 @@ export class AccountDeleteComponent implements OnInit, OnChanges {
     const filterValue = email.toLocaleLowerCase();
 
     return this.userEmails().filter((email) =>
-      email.toLocaleLowerCase().includes(filterValue)
+      email.toLocaleLowerCase().includes(filterValue),
     );
   }
 
@@ -101,7 +101,7 @@ export class AccountDeleteComponent implements OnInit, OnChanges {
 
     const user = this.users().find(
       (user) =>
-        user.email.toLocaleLowerCase() === emailValue.toLocaleLowerCase()
+        user.email.toLocaleLowerCase() === emailValue.toLocaleLowerCase(),
     );
 
     if (!user) {
