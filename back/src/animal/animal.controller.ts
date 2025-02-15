@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Patch,
@@ -50,5 +51,11 @@ export class AnimalController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.animalService.update(+id, updateAnimalDto, file);
+  }
+
+  // localhost:3000/animal/:id
+  @Delete(':id')
+  delete(@Param('id') id: string) {
+    return this.animalService.delete(+id);
   }
 }

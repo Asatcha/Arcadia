@@ -25,6 +25,7 @@ import { Breed } from '../../models/breed.model';
 import { BreedCreationComponent } from '../../components/animal/breed-creation/breed-creation.component';
 import { Role } from '../../models/role.model';
 import { AnimalEditComponent } from '../../components/animal/animal-edit/animal-edit.component';
+import { AnimalDeleteComponent } from '../../components/animal/animal-delete/animal-delete.component';
 
 @Component({
   selector: 'arcadia-admin',
@@ -41,6 +42,7 @@ import { AnimalEditComponent } from '../../components/animal/animal-edit/animal-
     BreedCreationComponent,
     AnimalCreationComponent,
     AnimalEditComponent,
+    AnimalDeleteComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
