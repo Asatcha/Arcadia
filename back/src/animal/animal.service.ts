@@ -139,17 +139,36 @@ export class AnimalService {
     return plainToInstance(Animal, animal);
   }
 
-  // async delete(id: number) {
-  //   const animal = await this.animalRepo.findOneBy({ id });
+  async delete(id: number): Promise<Animal> {
+    const animal = await this.animalRepo.findOne({
+      where: { id },
+      relations: ['animalImage'],
+    });
 
-  //   if (!animal) {
-  //     throw new NotFoundException(`Animal ${id} non trouvé.`);
-  //   }
+    if (!animal) {
+      throw new NotFoundException('Animal non trouvé');
+    }
 
-  //   await this.animalRepo.remove(animal);
+    if (animal.animalImage) {
+      const filePath = join(
+        UPLOADS_FOLDER,
+        'animal',
+        animal.animalImage.fileName,
+      );
+      if (existsSync(filePath)) {
+        try {
+          unlinkSync(filePath);
+        } catch (error) {
+          console.error(
+            'Erreur lors de la suppression du fichier image :',
+            error,
+          );
+        }
+      }
+    }
+    await this.animalImageRepo.remove(animal.animalImage);
 
-  //   return {
-  //     message: `Animal ${animal.name} supprimé avec succès.`,
-  //   };
-  // }
+    await this.animalRepo.remove(animal);
+    return animal;
+  }
 }

@@ -122,6 +122,7 @@ export class HabitatService {
       where: { id },
       relations: ['habitatImage'],
     });
+
     if (!habitat) {
       throw new NotFoundException('Habitat non trouvé');
     }
