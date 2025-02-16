@@ -11,12 +11,14 @@ import { Repository } from 'typeorm';
 import { Role } from 'src/auth/entities/role.entity';
 import { plainToInstance } from 'class-transformer';
 import { RegisterDto } from 'src/auth/dto/register.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class UserService {
   constructor(
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Role) private roleRepo: Repository<Role>,
+    private readonly mailService: MailService,
   ) {}
 
   async create(createUserDto: CreateUserDto | RegisterDto) {
@@ -37,6 +39,8 @@ export class UserService {
     });
 
     await this.userRepo.save(newUser);
+
+    await this.mailService.sendUserCreationEmail(email, newUser);
 
     return plainToInstance(User, newUser);
   }

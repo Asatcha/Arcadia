@@ -13,6 +13,7 @@ import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UPLOADS_FOLDER } from './config/multer.config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UPLOADS_FOLDER } from './config/multer.config';
       rootPath: join(UPLOADS_FOLDER),
       serveRoot: '/uploads',
     }),
+    ConfigModule.forRoot({ isGlobal: true }),
     AuthModule,
     UserModule,
     HabitatModule,
