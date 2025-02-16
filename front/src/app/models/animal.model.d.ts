@@ -7,6 +7,7 @@ export interface Animal extends Base {
   birthDate: Date;
   animalImage: AnimalImage;
   animalImageId: number;
+  animalImageUrl: string;
   breed: Breed;
   breedId: number;
   habitat: Habitat;

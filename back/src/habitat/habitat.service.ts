@@ -52,16 +52,7 @@ export class HabitatService {
       relations: ['habitatImage'],
     });
 
-    return habitats.map((habitat) => ({
-      id: habitat.id,
-      name: habitat.name,
-      description: habitat.description,
-      comments: habitat.comments,
-      habitatImageUrl: habitat.habitatImage
-        ? `${environment.baseUrl}/uploads/habitat/${habitat.habitatImage.fileName}`
-        : null,
-      habitatImage: habitat.habitatImage,
-    }));
+    return habitats;
   }
 
   async update(
@@ -99,8 +90,6 @@ export class HabitatService {
             );
           }
         }
-
-        await this.habitatImageRepo.remove(habitat.habitatImage);
       }
 
       const newHabitatImage = new HabitatImage();
@@ -144,9 +133,10 @@ export class HabitatService {
         }
       }
     }
-    await this.habitatImageRepo.remove(habitat.habitatImage);
-
+    
     await this.habitatRepo.remove(habitat);
+    await this.habitatImageRepo.remove(habitat.habitatImage);
+    
     return habitat;
   }
 }

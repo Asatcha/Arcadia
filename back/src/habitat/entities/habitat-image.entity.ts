@@ -21,4 +21,3 @@ export class HabitatImage {
   @Exclude()
   habitat: Habitat;
 }
-

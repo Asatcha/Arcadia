@@ -36,7 +36,6 @@ export class Animal {
   @ManyToOne(() => Breed, (breed) => breed.animals)
   breed: Breed;
 
-
   @OneToOne(() => AnimalImage, (image) => image.animal)
   @JoinColumn()
   animalImage: AnimalImage;

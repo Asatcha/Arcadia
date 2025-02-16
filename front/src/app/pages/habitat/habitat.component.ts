@@ -25,12 +25,6 @@ export class HabitatComponent {
   habitats$ = signal<Habitat[]>([]);
   isLoadingHabitats$ = signal(true);
 
-  habitats = [
-    { label: 'Jungle', imageUrl: 'jungle.jpg' },
-    { label: 'Savane', imageUrl: 'savane.jpg' },
-    { label: 'Marais', imageUrl: 'marais.jpg' },
-  ];
-
   ngOnInit() {
     this.habitatService.findAllHabitats().subscribe({
       next: (habitats) => {
@@ -38,5 +32,9 @@ export class HabitatComponent {
         this.isLoadingHabitats$.set(false);
       },
     });
+  }
+
+  goTo(route: string) {
+    this.router.navigate([route]);
   }
 }

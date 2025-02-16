@@ -53,6 +53,18 @@ export class AnimalService {
     );
   }
 
+  findOneAnimalByHabitat(habitat: string): Observable<Animal> {
+    return this.http.get<Animal>(`/animal/${habitat}`).pipe(
+      catchError((err) => {
+        console.error(
+          `Erreur lors de la récupération de l'animal avec l'habitat ${habitat} :`,
+          err,
+        );
+        return throwError(() => err);
+      }),
+    );
+  }
+
   updateAnimalById(id: number, animal: FormData): Observable<Animal> {
     return this.http.patch<Animal>(`/animal/${id}`, animal).pipe(
       tap(() => {
