@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -33,6 +34,15 @@ export class AnimalController {
   // localhost:3000/animal
   @Get()
   findAll() {
+    return this.animalService.findAll();
+  }
+  
+ // localhost:3000/animal?habitatId=
+  @Get()
+  findAllByHabitat(@Query('habitatId') habitatId?: string) {
+    if (habitatId) {
+      return this.animalService.findAllByHabitat(Number(habitatId));
+    }
     return this.animalService.findAll();
   }
 

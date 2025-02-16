@@ -1,0 +1,10 @@
+<h1>Les animaux</h1>
+
+<div class="animal-images">
+  @for (animal of animals$(); track animal) {
+    <div class="animal-item">
+      <img [src]="animal.animalImageUrl" [alt]="animal.name" />
+      <h2>{{ animal.name }}</h2>
+    </div>
+  }
+</div>

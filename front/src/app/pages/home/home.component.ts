@@ -30,12 +30,6 @@ export class HomeComponent implements OnInit {
 
   dialog = inject(MatDialog);
 
-  habitats = [
-    { label: 'Jungle', imageUrl: 'jungle.jpg' },
-    { label: 'Savane', imageUrl: 'savane.jpg' },
-    { label: 'Marais', imageUrl: 'marais.jpg' },
-  ];
-
   services = [
     {
       label: 'Restauration',

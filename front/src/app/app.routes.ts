@@ -4,12 +4,19 @@ import { HomeComponent } from './pages/home/home.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HabitatComponent } from './pages/habitat/habitat.component';
+import { AnimalComponent } from './pages/animal/animal.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { roles: ['isAdmin']} },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['isAdmin'] },
+  },
   { path: 'home', component: HomeComponent },
   { path: 'habitat', component: HabitatComponent },
+  { path: 'animal', component: AnimalComponent },
   { path: '**', redirectTo: 'home' },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];

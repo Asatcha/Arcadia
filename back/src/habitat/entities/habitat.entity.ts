@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { HabitatImage } from './habitat-image.entity';
 import { Animal } from 'src/animal/entities/animal.entity';
+import { environment } from 'src/config/environment';
 
 @Entity()
 @Unique(['name'])
@@ -35,8 +36,20 @@ export class Habitat {
   @OneToMany(() => Animal, (animal) => animal.habitat)
   animals: Animal[];
 
-  // TODO: handle cascade delete
-  @OneToOne(() => HabitatImage, (image) => image.habitat, { cascade: true, onDelete: 'CASCADE', orphanedRowAction: 'delete' })
+  @OneToOne(() => HabitatImage, (image) => image.habitat)
   @JoinColumn()
   habitatImage: HabitatImage;
+
+  get habitatImageUrl(): string {
+    return this.habitatImage
+      ? `${environment.baseUrl}/uploads/habitat/${this.habitatImage.fileName}`
+      : null;
+  }
+
+  toJSON() {
+    return {
+      ...this,
+      habitatImageUrl: this.habitatImageUrl,
+    };
+  }
 }

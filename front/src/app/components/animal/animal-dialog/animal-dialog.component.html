@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Laisser un avis</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="ratingForm" (ngSubmit)="submit()">
+    <div class="star-rating">
+      <div class="stars">
+        <mat-icon
+          *ngFor="let i of [1, 2, 3, 4, 5]"
+          class="star-icon"
+          [class.filled]="i <= ratingForm.value.stars"
+          (click)="setRating(i)"
+        >
+          star
+        </mat-icon>
+      </div>
+      <input type="hidden" formControlName="stars" />
+    </div>
+
+    <div class="rating-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Pseudonyme</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="name" placeholder="Jean-Eudes" />
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-icon matPrefix>comment</mat-icon>
+        <mat-label>Commentaire</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="2"
+          cdkAutosizeMaxRows="5"
+          formControlName="comment"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="button-fit">
+      <button [disabled]="ratingForm.invalid" mat-raised-button type="submit">
+        Envoyer
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>
