@@ -6,10 +6,11 @@ import { Role } from './entities/role.entity';
 import { RegisterController } from './register.controller';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   controllers: [AuthController, RegisterController],
   providers: [AuthService, UserService],
-  imports: [TypeOrmModule.forFeature([User, Role])]
+  imports: [TypeOrmModule.forFeature([User, Role]), MailModule]
 })
 export class AuthModule {}
