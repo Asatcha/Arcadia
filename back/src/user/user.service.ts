@@ -51,16 +51,6 @@ export class UserService {
     return plainToInstance(User, users);
   }
 
-  async findOne(id: number) {
-    const user = await this.userRepo.findOneBy({ id });
-
-    if (!user) {
-      throw new NotFoundException(`Utilisateur avec l'id ${id} non trouvé.`);
-    }
-
-    return plainToInstance(User, user);
-  }
-
   async update(id: number, updateUserDto: UpdateUserDto) {
     const user = await this.userRepo.findOne({
       where: { id },

@@ -1,6 +1,7 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Post, Body, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
+import { Response } from 'express';
 
 // localhost:3000/login
 @Controller('login')
@@ -8,7 +9,15 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post()
-  login(@Body() loginDto: LoginDto) {
-    return this.authService.login(loginDto);
+  async login(@Body() loginDto: LoginDto, @Res() res: Response) {
+    const { accessToken, user, role } = await this.authService.login(loginDto);
+    
+    res.cookie('jwt', accessToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      maxAge: 3600000,
+    });
+
+    return res.send({ accessToken, user, role });
   }
 }
