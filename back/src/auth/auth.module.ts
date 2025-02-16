@@ -7,10 +7,18 @@ import { RegisterController } from './register.controller';
 import { User } from 'src/user/entities/user.entity';
 import { UserService } from 'src/user/user.service';
 import { MailModule } from 'src/mail/mail.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   controllers: [AuthController, RegisterController],
   providers: [AuthService, UserService],
-  imports: [TypeOrmModule.forFeature([User, Role]), MailModule]
+  imports: [
+    TypeOrmModule.forFeature([User, Role]),
+    MailModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+  ],
 })
 export class AuthModule {}

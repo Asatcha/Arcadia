@@ -17,8 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import { catchError, of } from 'rxjs';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'arcadia-login',
@@ -32,14 +31,14 @@ import { catchError, of } from 'rxjs';
     MatSnackBarModule,
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   private fb = inject(FormBuilder).nonNullable;
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
-  private http = inject(HttpClient);
+  private authService = inject(AuthService);
 
   hide = signal(true);
 
@@ -58,32 +57,36 @@ export class LoginComponent {
       this.snackBar.open(
         'Veuillez remplir tous les champs correctement',
         'Fermer',
-        { duration: 3000 },
+        {
+          duration: 3000,
+        },
       );
       return;
     }
 
     const formData = this.loginForm.value;
 
-    this.http
-      .post<{ token: string }>('/login', formData)
-      .pipe(
-        catchError((error) => {
-          console.error('Erreur de connexion :', error);
-          this.snackBar.open(
-            'Échec de la connexion. Vérifiez vos identifiants.',
-            'Fermer',
-            { duration: 3000 },
-          );
-          return of(null);
-        }),
-      )
-      .subscribe((response) => {
-        if (response) {
-          // localStorage.setItem('authToken', response.token);
-          this.snackBar.open('Connexion réussie !', 'OK', { duration: 3000 });
-          this.router.navigate(['/home']);
+    this.authService.login(formData).subscribe((response) => {
+      if (response) {
+        this.snackBar.open('Connexion réussie !', 'OK', { duration: 3000 });
+
+        const userRole = this.authService.getUserRole();
+
+        switch (userRole) {
+          case 'isAdmin':
+            this.router.navigate(['/admin']);
+            break;
+          case 'isEmployee':
+            this.router.navigate(['/employee']);
+            break;
+          case 'isVet':
+            this.router.navigate(['/vet']);
+            break;
+          default:
+            this.router.navigate(['/home']);
+            break;
         }
-      });
+      }
+    });
   }
 }
