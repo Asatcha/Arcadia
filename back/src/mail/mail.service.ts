@@ -33,7 +33,7 @@ export class MailService {
     try {
       await this.transporter.sendMail(mailOptions);
     } catch (error) {
-      console.error("Erreur lors de l'envoi de l'email:", error);
+      console.error("Erreur lors de l'envoi de l'email :", error);
     }
   }
 }

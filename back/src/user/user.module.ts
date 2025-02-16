@@ -7,10 +7,11 @@ import { Role } from 'src/auth/entities/role.entity';
 import { RoleService } from './role.service';
 import { RoleController } from './role.controller';
 import { MailModule } from 'src/mail/mail.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   controllers: [UserController, RoleController],
-  providers: [UserService, RoleService],
+  providers: [UserService, RoleService, JwtService],
   imports: [TypeOrmModule.forFeature([User, Role]), MailModule]
 })
 export class UserModule {}
