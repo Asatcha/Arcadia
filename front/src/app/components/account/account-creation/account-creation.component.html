@@ -45,16 +45,22 @@
             <mat-label>Rôle</mat-label>
             <mat-select formControlName="roleId">
               @for (role of roles(); track role) {
-              <mat-option [value]="role.id">
-                {{ role.label }}
-              </mat-option>
+                <mat-option [value]="role.id">
+                  {{ role.label }}
+                </mat-option>
               }
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="button-fit">
-          <button [disabled]="accountForm.invalid" mat-raised-button type="submit">Créer</button>
+          <button
+            [disabled]="accountForm.invalid"
+            mat-raised-button
+            type="submit"
+          >
+            Créer
+          </button>
         </div>
       </form>
     </div>

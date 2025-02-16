@@ -17,7 +17,10 @@ export class AnimalImage {
   @Column()
   fileName: string;
 
-  @OneToOne(() => Animal, (animal) => animal.animalImage)
+  @OneToOne(() => Animal, (animal) => animal.animalImage, {
+    onDelete: 'CASCADE',
+    orphanedRowAction: 'delete',
+  })
   @Exclude()
   animal: Animal;
 }

@@ -1,82 +1,82 @@
 <mat-tab-group mat-stretch-tabs>
   <mat-tab label="Comptes">
     @if (isLoadingUsers$()) {
-    <div class="spinner-container">
-      <mat-spinner></mat-spinner>
-    </div>
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
     } @else {
-    <arcadia-account-creation
-      [roles]="roles$()"
-      [roleLabels]="roleLabels$()"
-      (reloadUsers)="loadAllUsers()"
-    ></arcadia-account-creation>
-    <arcadia-account-edit
-      [users]="users$()"
-      [userEmails]="userEmails$()"
-      [roles]="roles$()"
-      [roleLabels]="roleLabels$()"
-      (reloadUsers)="loadAllUsers()"
-    ></arcadia-account-edit>
-    <arcadia-account-delete
-      [users]="users$()"
-      [userEmails]="userEmails$()"
-      (reloadUsers)="loadAllUsers()"
-    ></arcadia-account-delete>
+      <arcadia-account-creation
+        [roles]="roles$()"
+        [roleLabels]="roleLabels$()"
+        (reloadUsers)="loadAllUsers()"
+      ></arcadia-account-creation>
+      <arcadia-account-edit
+        [users]="users$()"
+        [userEmails]="userEmails$()"
+        [roles]="roles$()"
+        [roleLabels]="roleLabels$()"
+        (reloadUsers)="loadAllUsers()"
+      ></arcadia-account-edit>
+      <arcadia-account-delete
+        [users]="users$()"
+        [userEmails]="userEmails$()"
+        (reloadUsers)="loadAllUsers()"
+      ></arcadia-account-delete>
     }
   </mat-tab>
   <mat-tab label="Animaux">
     @if (isLoadingAnimals$()) {
-    <div class="spinner-container">
-      <mat-spinner></mat-spinner>
-    </div>
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
     } @else {
-    <arcadia-breed-creation
-      [breeds]="breeds$()"
-      [breedNames]="breedNames$()"
-      (reloadBreeds)="loadAllBreeds()"
-    ></arcadia-breed-creation>
-    <arcadia-animal-creation
-      [breeds]="breeds$()"
-      [breedNames]="breedNames$()"
-      [habitats]="habitats$()"
-      [habitatNames]="habitatNames$()"
-      (reloadAnimals)="loadAllAnimals()"
-    ></arcadia-animal-creation>
-    <arcadia-animal-edit
-      [breeds]="breeds$()"
-      [breedNames]="breedNames$()"
-      [animals]="animals$()"
-      [animalNames]="animalNames$()"
-      [habitats]="habitats$()"
-      [habitatNames]="habitatNames$()"
-      (reloadAnimals)="loadAllAnimals()"
-    ></arcadia-animal-edit>
-    <arcadia-animal-delete
-      [animals]="animals$()"
-      [animalNames]="animalNames$()"
-      (reloadAnimals)="loadAllAnimals()"
-    ></arcadia-animal-delete>
+      <arcadia-breed-creation
+        [breeds]="breeds$()"
+        [breedNames]="breedNames$()"
+        (reloadBreeds)="loadAllBreeds()"
+      ></arcadia-breed-creation>
+      <arcadia-animal-creation
+        [breeds]="breeds$()"
+        [breedNames]="breedNames$()"
+        [habitats]="habitats$()"
+        [habitatNames]="habitatNames$()"
+        (reloadAnimals)="loadAllAnimals()"
+      ></arcadia-animal-creation>
+      <arcadia-animal-edit
+        [breeds]="breeds$()"
+        [breedNames]="breedNames$()"
+        [animals]="animals$()"
+        [animalNames]="animalNames$()"
+        [habitats]="habitats$()"
+        [habitatNames]="habitatNames$()"
+        (reloadAnimals)="loadAllAnimals()"
+      ></arcadia-animal-edit>
+      <arcadia-animal-delete
+        [animals]="animals$()"
+        [animalNames]="animalNames$()"
+        (reloadAnimals)="loadAllAnimals()"
+      ></arcadia-animal-delete>
     }
   </mat-tab>
   <mat-tab label="Habitats">
     @if (isLoadingHabitats$()) {
-    <div class="spinner-container">
-      <mat-spinner></mat-spinner>
-    </div>
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
     } @else {
-    <arcadia-habitat-creation
-      (reloadHabitats)="loadAllHabitats()"
-    ></arcadia-habitat-creation>
-    <arcadia-habitat-edit
-      [habitats]="habitats$()"
-      [habitatNames]="habitatNames$()"
-      (reloadHabitats)="loadAllHabitats()"
-    ></arcadia-habitat-edit>
-    <arcadia-habitat-delete
-      [habitats]="habitats$()"
-      [habitatNames]="habitatNames$()"
-      (reloadHabitats)="loadAllHabitats()"
-    ></arcadia-habitat-delete>
+      <arcadia-habitat-creation
+        (reloadHabitats)="loadAllHabitats()"
+      ></arcadia-habitat-creation>
+      <arcadia-habitat-edit
+        [habitats]="habitats$()"
+        [habitatNames]="habitatNames$()"
+        (reloadHabitats)="loadAllHabitats()"
+      ></arcadia-habitat-edit>
+      <arcadia-habitat-delete
+        [habitats]="habitats$()"
+        [habitatNames]="habitatNames$()"
+        (reloadHabitats)="loadAllHabitats()"
+      ></arcadia-habitat-delete>
     }
   </mat-tab>
   <mat-tab label="Services"> Content 3 </mat-tab>

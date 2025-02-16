@@ -36,12 +36,8 @@ export class Animal {
   @ManyToOne(() => Breed, (breed) => breed.animals)
   breed: Breed;
 
-  // TODO: handle cascade delete
-  @OneToOne(() => AnimalImage, (image) => image.animal, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    orphanedRowAction: 'delete',
-  })
+
+  @OneToOne(() => AnimalImage, (image) => image.animal)
   @JoinColumn()
   animalImage: AnimalImage;
 

@@ -27,10 +27,10 @@
 
 <div class="habitat-images">
   @for (habitat of habitats$(); track habitat) {
-  <div class="habitat-item" (click)="goTo('/habitat')">
-    <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
-    <h2>{{ habitat.name }}</h2>
-  </div>
+    <div class="habitat-item" (click)="goTo('/habitat')">
+      <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
+      <h2>{{ habitat.name }}</h2>
+    </div>
   }
 </div>
 

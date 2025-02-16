@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([BaseUrlInterceptor.intercept])),
-    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR'}
+    { provide: MAT_DATE_LOCALE, useValue: 'fr-FR' },
   ],
 };

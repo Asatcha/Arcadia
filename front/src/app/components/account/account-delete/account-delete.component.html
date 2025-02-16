@@ -18,7 +18,7 @@
         />
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
           @for (email of filteredUserEmails$ | async; track email) {
-          <mat-option [value]="email">{{ email }}</mat-option>
+            <mat-option [value]="email">{{ email }}</mat-option>
           }
         </mat-autocomplete>
       </mat-form-field>

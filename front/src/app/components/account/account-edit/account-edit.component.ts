@@ -100,7 +100,7 @@ export class AccountEditComponent implements OnInit, OnChanges {
     const filterValue = email.toLocaleLowerCase();
 
     return this.userEmails().filter((email) =>
-      email.toLocaleLowerCase().includes(filterValue)
+      email.toLocaleLowerCase().includes(filterValue),
     );
   }
 
@@ -109,13 +109,13 @@ export class AccountEditComponent implements OnInit, OnChanges {
       startWith(''),
       map((email) => {
         return email ? this._filter(email) : this.userEmails().slice();
-      })
+      }),
     );
   }
 
   findUserByEmail(email: string) {
     const user = this.users().find(
-      (user) => user.email.toLocaleLowerCase() === email.toLocaleLowerCase()
+      (user) => user.email.toLocaleLowerCase() === email.toLocaleLowerCase(),
     );
 
     if (user) {
