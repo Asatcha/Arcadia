@@ -14,6 +14,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { UPLOADS_FOLDER } from './config/multer.config';
 import { ConfigModule } from '@nestjs/config';
+import { ContactModule } from './contact/contact.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ConfigModule } from '@nestjs/config';
     VetModule,
     EmployeeModule,
     ServiceModule,
+    ContactModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],

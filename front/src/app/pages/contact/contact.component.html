@@ -1,0 +1,49 @@
+<div class="contact-container">
+  <form [formGroup]="contactForm" (ngSubmit)="submit()">
+    <div class="contact-form">
+      <mat-form-field appearance="fill">
+        <mat-label>Prénom</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="firstName" placeholder="Jean-Eudes" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Nom</mat-label>
+        <mat-icon matPrefix>person</mat-icon>
+        <input matInput formControlName="lastName" placeholder="Dupont" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-icon matPrefix>mail</mat-icon>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="abc@arcadia.com" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-icon matPrefix>title</mat-icon>
+        <mat-label>Titre</mat-label>
+        <input matInput formControlName="title" />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-icon matPrefix>comment</mat-icon>
+        <mat-label>Votre message</mat-label>
+        <textarea
+          matInput
+          cdkTextareaAutosize
+          #autosize="cdkTextareaAutosize"
+          cdkAutosizeMinRows="2"
+          cdkAutosizeMaxRows="10"
+          formControlName="message"
+          placeholder="Une question ? Une demande ? N'hésitez pas à nous envoyer un message !"
+        ></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="button-fit">
+      <button [disabled]="contactForm.invalid" mat-raised-button type="submit">
+        Envoyer
+      </button>
+    </div>
+  </form>
+</div>
