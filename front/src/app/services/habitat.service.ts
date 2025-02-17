@@ -40,7 +40,7 @@ export class HabitatService {
     );
   }
 
-  findOneHabitatById(id: number): Observable<Habitat> {
+  findHabitatById(id: number): Observable<Habitat> {
     return this.http.get<Habitat>(`/habitat/${id}`).pipe(
       catchError((err) => {
         console.error(

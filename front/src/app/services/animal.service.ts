@@ -41,23 +41,21 @@ export class AnimalService {
     );
   }
 
-  findOneAnimalById(id: number): Observable<Animal> {
-    return this.http.get<Animal>(`/animal/${id}`).pipe(
+  findAnimalsByHabitat(habitatId: number): Observable<Animal[]> {
+    console.log(`/animal?habitatId=${habitatId}`);
+    return this.http.get<Animal[]>(`/animal?habitatId=${habitatId}`).pipe(
       catchError((err) => {
-        console.error(
-          `Erreur lors de la récupération de l'animal avec l'ID ${id} :`,
-          err,
-        );
+        console.error('Erreur lors de la récupération des animaux :', err);
         return throwError(() => err);
       }),
     );
   }
 
-  findOneAnimalByHabitat(habitat: string): Observable<Animal> {
-    return this.http.get<Animal>(`/animal/${habitat}`).pipe(
+  findAnimalById(id: number): Observable<Animal> {
+    return this.http.get<Animal>(`/animal/${id}`).pipe(
       catchError((err) => {
         console.error(
-          `Erreur lors de la récupération de l'animal avec l'habitat ${habitat} :`,
+          `Erreur lors de la récupération de l'animal avec l'ID ${id} :`,
           err,
         );
         return throwError(() => err);

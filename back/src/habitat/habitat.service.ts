@@ -55,6 +55,15 @@ export class HabitatService {
     return habitats;
   }
 
+  async findOneById(id: number) {
+    const foundHabitat = await this.habitatRepo.findOne({
+      where: { id },
+      relations: ['habitatImage'],
+    });
+
+    return foundHabitat;
+  }
+
   async update(
     id: number,
     updateHabitatDto: UpdateHabitatDto,
@@ -133,10 +142,10 @@ export class HabitatService {
         }
       }
     }
-    
+
     await this.habitatRepo.remove(habitat);
     await this.habitatImageRepo.remove(habitat.habitatImage);
-    
+
     return habitat;
   }
 }
