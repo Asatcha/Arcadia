@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { HabitatImage } from './habitat-image.entity';
 import { Animal } from 'src/animal/entities/animal.entity';
-import { environment } from 'src/config/environment';
+import { environment } from 'src/config/environments/environment';
 
 @Entity()
 @Unique(['name'])
