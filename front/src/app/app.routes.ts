@@ -5,6 +5,7 @@ import { AdminComponent } from './pages/admin/admin.component';
 import { AuthGuard } from './guards/auth.guard';
 import { HabitatComponent } from './pages/habitat/habitat.component';
 import { AnimalComponent } from './pages/animal/animal.component';
+import { ContactComponent } from './pages/contact/contact.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent },
   { path: 'habitat', component: HabitatComponent },
   { path: 'animal', component: AnimalComponent },
+  { path: 'contact', component: ContactComponent },
   { path: '**', redirectTo: 'home' },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
 ];
