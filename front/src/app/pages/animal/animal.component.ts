@@ -13,10 +13,18 @@ import { MatCardModule } from '@angular/material/card';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HabitatService } from '../../services/habitat.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDialog } from '@angular/material/dialog';
+import { AnimalDialogComponent } from '../../components/animal/animal-dialog/animal-dialog.component';
 
 @Component({
   selector: 'arcadia-animal',
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatCardModule, MatProgressSpinnerModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+  ],
   templateUrl: './animal.component.html',
   styleUrl: './animal.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -26,6 +34,8 @@ export class AnimalComponent {
   private router = inject(Router);
   private animalService = inject(AnimalService);
   private habitatService = inject(HabitatService);
+
+  dialog = inject(MatDialog);
 
   animals$ = signal<Animal[]>([]);
   habitatName$ = signal<string>('Les animaux');
@@ -65,5 +75,9 @@ export class AnimalComponent {
       this.animals$.set(animals);
       this.isLoadingAnimals$.set(false);
     });
+  }
+
+  openAnimalDetails(animal: Animal) {
+    this.dialog.open(AnimalDialogComponent, { data: animal });
   }
 }

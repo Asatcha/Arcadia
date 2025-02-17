@@ -1,46 +1,23 @@
-<h2 mat-dialog-title>Laisser un avis</h2>
+<h2 mat-dialog-title>{{ animal.name }}</h2>
 
-<mat-dialog-content>
-  <form [formGroup]="ratingForm" (ngSubmit)="submit()">
-    <div class="star-rating">
-      <div class="stars">
-        <mat-icon
-          *ngFor="let i of [1, 2, 3, 4, 5]"
-          class="star-icon"
-          [class.filled]="i <= ratingForm.value.stars"
-          (click)="setRating(i)"
-        >
-          star
-        </mat-icon>
-      </div>
-      <input type="hidden" formControlName="stars" />
-    </div>
+<mat-dialog-content class="dialog-content">
+  <img [src]="animal.animalImageUrl" [alt]="animal.name" />
+  <div class="property">
+    <h3>Race :</h3>
+    {{ animal.breed.name }}
+  </div>
 
-    <div class="rating-form">
-      <mat-form-field appearance="fill">
-        <mat-label>Pseudonyme</mat-label>
-        <mat-icon matPrefix>person</mat-icon>
-        <input matInput formControlName="name" placeholder="Jean-Eudes" />
-      </mat-form-field>
+  <div class="property">
+    <h3>Habitat :</h3>
+    {{ animal.habitat.name }}
+  </div>
 
-      <mat-form-field>
-        <mat-icon matPrefix>comment</mat-icon>
-        <mat-label>Commentaire</mat-label>
-        <textarea
-          matInput
-          cdkTextareaAutosize
-          #autosize="cdkTextareaAutosize"
-          cdkAutosizeMinRows="2"
-          cdkAutosizeMaxRows="5"
-          formControlName="comment"
-        ></textarea>
-      </mat-form-field>
-    </div>
-
-    <div class="button-fit">
-      <button [disabled]="ratingForm.invalid" mat-raised-button type="submit">
-        Envoyer
-      </button>
-    </div>
-  </form>
+  <div class="property">
+    <h3>Date de naissance :</h3>
+    {{ animal.birthDate | date: "dd/MM/yyyy" }} ({{ animal.birthDate | age }})
+  </div>
 </mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Fermer</button>
+</mat-dialog-actions>

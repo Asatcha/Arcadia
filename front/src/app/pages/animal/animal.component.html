@@ -7,7 +7,7 @@
 } @else {
   <div class="animal-images">
     @for (animal of animals$(); track animal.id) {
-      <div class="animal-item">
+      <div class="animal-item" (click)="openAnimalDetails(animal)">
         <img [src]="animal.animalImageUrl" [alt]="animal.name" />
         <h2>{{ animal.name }}</h2>
       </div>
