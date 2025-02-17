@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { environment } from './config/environment';
+import { environment } from './config/environments/environment';
 import * as cookieParser from 'cookie-parser';
 import * as dotenv from 'dotenv';
 
@@ -9,8 +9,8 @@ dotenv.config();  // Charger les variables d'environnement
 
 const env =
   process.env.NODE_ENV === 'production'
-    ? require('./config/environment.prod').environment
-    : require('./config/environment').environment;
+    ? require('./config/environments/environment.prod').environment
+    : require('./config/environments/environment').environment;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
