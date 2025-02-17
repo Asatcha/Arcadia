@@ -3,6 +3,7 @@ services:
   postgres:
     image: postgres:15
     container_name: nestjs_postgres
+    restart: always
     ports:
       - "5432:5432"
     environment:
