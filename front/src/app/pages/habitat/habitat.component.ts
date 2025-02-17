@@ -34,7 +34,11 @@ export class HabitatComponent {
     });
   }
 
-  goTo(route: string) {
-    this.router.navigate([route]);
+  goToAnimals(route: string, habitatId: number | null = null) {
+    if (!habitatId) {
+      this.router.navigate([route]);
+    } else {
+      this.router.navigate([route], { queryParams: { habitatId } });
+    }
   }
 }

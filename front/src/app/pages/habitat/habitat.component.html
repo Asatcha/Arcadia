@@ -28,7 +28,7 @@
       <div class="habitat-description">
         <h2>{{ habitat.name }}</h2>
         <p>{{ habitat.description }}</p>
-        <button class="habitat-button" mat-raised-button>
+        <button (click)="goToAnimals('/animal', habitat.id)" class="habitat-button" mat-raised-button>
           Découvrir les animaux de l'habitat : {{ habitat.name }}
         </button>
       </div>
@@ -36,6 +36,6 @@
   }
 </div>
 
-<button class="button-animals" mat-raised-button (click)="goTo('/animal')">
+<button class="button-animals" mat-raised-button (click)="goToAnimals('/animal')">
   Découvrir tous les animaux
 </button>

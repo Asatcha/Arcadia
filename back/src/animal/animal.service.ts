@@ -80,7 +80,7 @@ export class AnimalService {
   }
 
   async findAllByHabitat(habitatId: number) {
-    return this.animalRepo.find({
+    const foundAnimals = this.animalRepo.find({
       where: { habitat: { id: habitatId } },
       relations: [
         'animalImage',
@@ -90,6 +90,8 @@ export class AnimalService {
         'foodReports',
       ],
     });
+    
+    return foundAnimals;
   }
 
   async update(

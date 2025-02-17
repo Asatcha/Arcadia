@@ -39,7 +39,7 @@ export class HabitatController {
   // localhost:3000/habitat/:id
   @Get(':id')
   findOne(@Param('id') id: string) {
-    // return this.habitatService.findOne(+id);
+    return this.habitatService.findOneById(+id);
   }
 
   // localhost:3000/habitat/:id
