@@ -1,25 +1,31 @@
 <h1>Les habitats</h1>
 
-<p class="description">
-  Arcadia est un zoo situé en France près de la forêt de Brocéliande, en
-  bretagne depuis 1960. Ils possèdent tout un panel d’animaux, réparti par
-  habitat (savane, jungle, marais) et font extrêmement attention à leurs santés.
-  Chaque jour, plusieurs vétérinaires viennent afin d’effectuer les contrôles
-  sur chaque animal avant l’ouverture du zoo afin de s’assurer que tout se passe
-  bien, de même, toute la nourriture donnée est calculée afin d’avoir le bon
-  grammage (le bon grammage est précisé dans le rapport du vétérinaire). Le zoo,
-  se porte très bien financièrement, les animaux sont heureux. Cela fait la
-  fierté de son directeur, José, qui a de grandes ambitions. Arcadia est un zoo
-  situé en France près de la forêt de Brocéliande, en bretagne depuis 1960. Ils
-  possèdent tout un panel d’animaux, réparti par habitat (savane, jungle,
-  marais) et font extrêmement attention à leurs santés. Chaque jour, plusieurs
-  vétérinaires viennent afin d’effectuer les contrôles sur chaque animal avant
-  l’ouverture du zoo afin de s’assurer que tout se passe bien, de même, toute la
-  nourriture donnée est calculée afin d’avoir le bon grammage (le bon grammage
-  est précisé dans le rapport du vétérinaire). Le zoo, se porte très bien
-  financièrement, les animaux sont heureux. Cela fait la fierté de son
-  directeur, José, qui a de grandes ambitions.
-</p>
+<div class="description">
+  <p>
+    Un habitat est l’environnement naturel dans lequel un animal vit et évolue.
+    C’est un espace spécifique qui répond à ses besoins fondamentaux, tels que
+    la nourriture, l'eau, la protection et la reproduction.
+  </p>
+
+  <p>
+    L’habitat varie en fonction des espèces et des conditions climatiques, et
+    chaque type d'habitat offre un cadre de vie particulier, adapté aux
+    caractéristiques des animaux qui y résident. Les habitats jouent un rôle
+    vital dans la survie des espèces. Chaque habitat est un écosystème unique
+    qui soutient des populations animales en leur offrant les ressources
+    nécessaires pour se nourrir, se reproduire et se protéger. La destruction ou
+    la modification d'un habitat peut mettre en danger les espèces qui en
+    dépendent, perturbant ainsi l'équilibre écologique.
+  </p>
+
+  <p>
+    Les zoos, comme Arcadia, recréent des habitats spécifiques pour offrir un
+    cadre de vie optimal aux animaux qu'ils hébergent. Cela permet non seulement
+    d’assurer leur bien-être, mais aussi de sensibiliser le public à la
+    conservation de la nature et à l’importance de protéger les habitats
+    naturels des espèces en danger.
+  </p>
+</div>
 
 <div class="habitat-container">
   @for (habitat of habitats$(); track habitat.id) {
@@ -28,7 +34,11 @@
       <div class="habitat-description">
         <h2>{{ habitat.name }}</h2>
         <p>{{ habitat.description }}</p>
-        <button (click)="goToAnimals('/animal', habitat.id)" class="habitat-button" mat-raised-button>
+        <button
+          (click)="goToAnimals('/animal', habitat.id)"
+          class="habitat-button"
+          mat-raised-button
+        >
           Découvrir les animaux de l'habitat : {{ habitat.name }}
         </button>
       </div>
@@ -36,6 +46,10 @@
   }
 </div>
 
-<button class="button-animals" mat-raised-button (click)="goToAnimals('/animal')">
+<button
+  class="habitat-button"
+  mat-raised-button
+  (click)="goToAnimals('/animal')"
+>
   Découvrir tous les animaux
 </button>

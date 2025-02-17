@@ -1,27 +1,16 @@
 import { CommonModule } from '@angular/common';
-import {
-  afterNextRender,
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  Injector,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
   MatDialogContent,
+  MatDialogRef,
+  MatDialogActions,
 } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { TextFieldModule } from '@angular/cdk/text-field';
+import { Animal } from '../../../models/animal.model';
+import { AgePipe } from '../../../pipes/age-pipe.pipe';
 
 @Component({
   selector: 'arcadia-animal-dialog',
@@ -29,50 +18,24 @@ import { TextFieldModule } from '@angular/cdk/text-field';
     CommonModule,
     MatDialogTitle,
     MatDialogContent,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
+    MatDialogActions,
     MatIconModule,
     MatButtonModule,
-    TextFieldModule,
+    AgePipe,
   ],
   templateUrl: './animal-dialog.component.html',
   styleUrl: './animal-dialog.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AnimalDialogComponent {
-  data = inject(MAT_DIALOG_DATA);
-  private fb = inject(FormBuilder).nonNullable;
-  private _injector = inject(Injector);
+  animal: Animal = inject(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<AnimalDialogComponent>);
 
-
-  ratingForm: FormGroup = this.fb.group({
-    stars: [undefined, [Validators.required]],
-    name: ['', [Validators.required, Validators.maxLength(20)]],
-    comment: ['', [Validators.required, Validators.maxLength(200)]],
-  });
-
-  // triggerResize() {
-  //   afterNextRender(
-  //     () => {
-  //       this.autosize.resizeToFitContent(true);
-  //     },
-  //     {
-  //       injector: this._injector,
-  //     },
-  //   );
-  // }
-
-  submit() {
-    console.log(this.ratingForm.value);
-    // if (this.ratingForm.valid) {
-    //   this.data.close(this.ratingForm.value);
-    // }
+  ngOnInit() {
+    console.log(this.animal);
   }
 
-  setRating(star: number): void {
-    this.ratingForm.patchValue({
-      stars: star,
-    });
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 }
