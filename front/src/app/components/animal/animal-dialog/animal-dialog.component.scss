@@ -1,0 +1,26 @@
+:host {
+  h2 {
+    text-align: center;
+  }
+
+  .dialog-content {
+    display: flex;
+    flex-flow: column;
+    align-items: stretch;
+
+    img {
+      height: auto;
+      max-width: 25vw;
+      object-fit: cover;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .property {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      gap: 1rem;
+    }
+  }
+}

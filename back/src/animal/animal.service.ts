@@ -79,6 +79,21 @@ export class AnimalService {
     return animals;
   }
 
+  async findAllByHabitat(habitatId: number) {
+    const foundAnimals = this.animalRepo.find({
+      where: { habitat: { id: habitatId } },
+      relations: [
+        'animalImage',
+        'breed',
+        'habitat',
+        'vetReports',
+        'foodReports',
+      ],
+    });
+    
+    return foundAnimals;
+  }
+
   async update(
     id: number,
     updateAnimalDto: UpdateAnimalDto,
@@ -121,8 +136,6 @@ export class AnimalService {
             );
           }
         }
-
-        await this.animalImageRepo.remove(animal.animalImage);
       }
 
       const newAnimalImage = new AnimalImage();
@@ -166,9 +179,10 @@ export class AnimalService {
         }
       }
     }
-    await this.animalImageRepo.remove(animal.animalImage);
 
     await this.animalRepo.remove(animal);
+    await this.animalImageRepo.remove(animal.animalImage);
+
     return animal;
   }
 }

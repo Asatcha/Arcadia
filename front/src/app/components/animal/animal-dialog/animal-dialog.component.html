@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>{{ animal.name }}</h2>
+
+<mat-dialog-content class="dialog-content">
+  <img [src]="animal.animalImageUrl" [alt]="animal.name" />
+  <div class="property">
+    <h3>Race :</h3>
+    {{ animal.breed.name }}
+  </div>
+
+  <div class="property">
+    <h3>Habitat :</h3>
+    {{ animal.habitat.name }}
+  </div>
+
+  <div class="property">
+    <h3>Date de naissance :</h3>
+    {{ animal.birthDate | date: "dd/MM/yyyy" }} ({{ animal.birthDate | age }})
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Fermer</button>
+</mat-dialog-actions>
