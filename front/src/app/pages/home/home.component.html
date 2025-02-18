@@ -26,7 +26,7 @@
 </button>
 
 <div class="habitat-images">
-  @for (habitat of habitats$(); track habitat) {
+  @for (habitat of habitats$(); track habitat.id) {
     <div class="habitat-item" (click)="goTo('/habitat')">
       <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
       <h2>{{ habitat.name }}</h2>
@@ -38,18 +38,13 @@
   Découvrir nos services
 </button>
 
-<div class="services">
-  <div class="service-item" *ngFor="let service of services">
-    <img
-      [src]="service.imageUrl"
-      [alt]="service.label"
-      class="rectangle-image"
-    />
-    <div class="rectangle-text">
-      <h2>Restauration</h2>
-      <p>blablabla</p>
+<div class="service-images">
+  @for (service of services$(); track service.id) {
+    <div class="service-item" (click)="goTo('/service')">
+      <img [src]="service.serviceImageUrl" [alt]="service.name" />
+      <h2>{{ service.name }}</h2>
     </div>
-  </div>
+  }
 </div>
 
 <button class="button-title no-click" mat-raised-button>

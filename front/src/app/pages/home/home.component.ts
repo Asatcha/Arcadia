@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { RatingDialogComponent } from '../../components/rating-dialog/rating-dialog.component';
 import { HabitatService } from '../../services/habitat.service';
 import { Habitat } from '../../models/habitat.model';
+import { ServiceService } from '../../services/service.service';
+import { Service } from '../../models/service.model';
 
 @Component({
   selector: 'arcadia-home',
@@ -27,18 +29,21 @@ export class HomeComponent implements OnInit {
   private habitatService = inject(HabitatService);
   habitats$ = signal<Habitat[]>([]);
   isLoadingHabitats$ = signal(true);
+  private serviceService = inject(ServiceService);
+  services$ = signal<Service[]>([]);
+  isLoadingServices$ = signal(true);
 
   dialog = inject(MatDialog);
 
-  services = [
-    {
-      label: 'Restauration',
-      description: 'blablabla',
-      imageUrl: 'restaurant.jpg',
-    },
-    { label: 'Petit train', description: 'blablabla', imageUrl: 'train.png' },
-    { label: 'Marais', description: 'blablabla', imageUrl: 'marais.jpg' },
-  ];
+  // services = [
+  //   {
+  //     label: 'Restauration',
+  //     description: 'blablabla',
+  //     imageUrl: 'restaurant.jpg',
+  //   },
+  //   { label: 'Petit train', description: 'blablabla', imageUrl: 'train.png' },
+  //   { label: 'Marais', description: 'blablabla', imageUrl: 'marais.jpg' },
+  // ];
 
   ratings = [
     {
@@ -66,6 +71,13 @@ export class HomeComponent implements OnInit {
       next: (habitats) => {
         this.habitats$.set(habitats);
         this.isLoadingHabitats$.set(false);
+      },
+    });
+
+    this.serviceService.findAllServices().subscribe({
+      next: (services) => {
+        this.services$.set(services);
+        this.isLoadingServices$.set(false);
       },
     });
   }

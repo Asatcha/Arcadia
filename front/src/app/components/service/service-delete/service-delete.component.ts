@@ -1,4 +1,3 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +9,7 @@ import {
   signal,
   SimpleChanges,
 } from '@angular/core';
+import { Service } from '../../../models/service.model';
 import {
   FormBuilder,
   FormControl,
@@ -17,18 +17,18 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { ServiceService } from '../../../services/service.service';
 import { map, Observable, startWith } from 'rxjs';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatInputModule } from '@angular/material/input';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { HabitatService } from '../../../services/habitat.service';
-import { Habitat } from '../../../models/habitat.model';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 @Component({
-  selector: 'arcadia-habitat-delete',
+  selector: 'arcadia-service-delete',
   imports: [
     CommonModule,
     MatIconModule,
@@ -40,17 +40,17 @@ import { Habitat } from '../../../models/habitat.model';
     MatAutocompleteModule,
     AsyncPipe,
   ],
-  templateUrl: './habitat-delete.component.html',
-  styleUrl: './habitat-delete.component.scss',
+  templateUrl: './service-delete.component.html',
+  styleUrl: './service-delete.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HabitatDeleteComponent implements OnInit, OnChanges {
-  habitats = input.required<Habitat[]>();
-  habitatNames = input.required<string[]>();
-  reloadHabitats = output<void>();
+export class ServiceDeleteComponent implements OnInit, OnChanges {
+  services = input.required<Service[]>();
+  serviceNames = input.required<string[]>();
+  reloadServices = output<void>();
   private fb = inject(FormBuilder).nonNullable;
-  private habitatService = inject(HabitatService);
-  filteredHabitatNames$!: Observable<string[]>;
+  private serviceService = inject(ServiceService);
+  filteredServiceNames$!: Observable<string[]>;
   readonly panelOpenState = signal(false);
 
   deleteForm: FormGroup = this.fb.group({
@@ -65,16 +65,16 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['habitats'] || changes['habitatNames']) {
+    if (changes['services'] || changes['serviceNames']) {
       this.loadNameFilter();
     }
   }
 
   loadNameFilter() {
-    this.filteredHabitatNames$ = this.name.valueChanges.pipe(
+    this.filteredServiceNames$ = this.name.valueChanges.pipe(
       startWith(''),
       map((name) => {
-        return name ? this._filter(name) : this.habitatNames().slice();
+        return name ? this._filter(name) : this.serviceNames().slice();
       }),
     );
   }
@@ -86,7 +86,7 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
   private _filter(name: string): string[] {
     const filterValue = name.toLocaleLowerCase();
 
-    return this.habitatNames().filter((name) =>
+    return this.serviceNames().filter((name) =>
       name.toLocaleLowerCase().includes(filterValue),
     );
   }
@@ -99,22 +99,22 @@ export class HabitatDeleteComponent implements OnInit, OnChanges {
       return;
     }
 
-    const habitat = this.habitats().find(
-      (habitat) =>
-        habitat.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase(),
+    const service = this.services().find(
+      (service) =>
+        service.name.toLocaleLowerCase() === nameValue.toLocaleLowerCase(),
     );
 
-    if (!habitat) {
-      console.error('Aucun habitat trouvé avec ce nom !');
+    if (!service) {
+      console.error('Aucun service trouvé avec ce nom !');
       return;
     }
 
-    this.deleteForm.patchValue({ id: habitat.id });
+    this.deleteForm.patchValue({ id: service.id });
 
-    this.habitatService.deleteHabitatById(habitat.id).subscribe({
+    this.serviceService.deleteServiceById(service.id).subscribe({
       next: () => {
         this.deleteForm.reset();
-        this.reloadHabitats.emit();
+        this.reloadServices.emit();
       },
     });
   }

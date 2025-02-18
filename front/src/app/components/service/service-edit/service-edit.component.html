@@ -4,17 +4,17 @@
     (closed)="panelOpenState$.set(false)"
   >
     <mat-expansion-panel-header>
-      <mat-panel-title>Modifier un habitat</mat-panel-title>
+      <mat-panel-title>Modifier un service</mat-panel-title>
     </mat-expansion-panel-header>
     <mat-stepper linear #stepper>
       <mat-step
         [stepControl]="editForm.controls['name']"
         errorMessage="Nom obligatoire."
       >
-        <ng-template matStepLabel>Nom de l'habitat</ng-template>
+        <ng-template matStepLabel>Nom du service</ng-template>
         <form>
           <mat-form-field class="mat-form-field-custom-width" appearance="fill">
-            <mat-icon matPrefix>home</mat-icon>
+            <mat-icon matPrefix>restaurant</mat-icon>
             <mat-label>Nom</mat-label>
             <input
               type="text"
@@ -23,7 +23,7 @@
               [matAutocomplete]="auto"
             />
             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-              @for (name of filteredHabitatNames$ | async; track $index) {
+              @for (name of filteredServiceNames$ | async; track $index) {
                 <mat-option [value]="name">{{ name }}</mat-option>
               }
             </mat-autocomplete>
@@ -31,7 +31,7 @@
         </form>
 
         <button
-          (click)="findHabitatByName(editForm.controls['name'].value)"
+          (click)="findServiceByName(editForm.controls['name'].value)"
           [disabled]="editForm.controls['name'].invalid"
           mat-button
           matStepperNext
@@ -41,14 +41,14 @@
       </mat-step>
 
       <mat-step [stepControl]="editForm">
-        <ng-template matStepLabel>Modifier l'habitat</ng-template>
+        <ng-template matStepLabel>Modifier le service</ng-template>
 
-        <div class="habitat-container">
+        <div class="service-container">
           <form class="form" [formGroup]="editForm">
-            <div class="habitat-form">
+            <div class="service-form">
               <mat-form-field appearance="fill">
                 <mat-label>Nom</mat-label>
-                <mat-icon matPrefix>house</mat-icon>
+                <mat-icon matPrefix>restaurant</mat-icon>
                 <input matInput formControlName="name" placeholder="Jungle" />
               </mat-form-field>
 
@@ -63,20 +63,6 @@
                   cdkAutosizeMaxRows="10"
                   formControlName="description"
                   placeholder="Un environnement chaud et humide."
-                ></textarea>
-              </mat-form-field>
-
-              <mat-form-field>
-                <mat-icon matPrefix>comment</mat-icon>
-                <mat-label>Commentaires</mat-label>
-                <textarea
-                  matInput
-                  cdkTextareaAutosize
-                  #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="2"
-                  cdkAutosizeMaxRows="10"
-                  formControlName="comments"
-                  placeholder="Il faut penser à changer l'eau des orang-outans..."
                 ></textarea>
               </mat-form-field>
 
@@ -104,7 +90,7 @@
               <button (click)="onBackButton()" mat-button matStepperPrevious>
                 Retour
               </button>
-              <button (click)="updateHabitatById()" mat-button matStepperNext>
+              <button (click)="updateServiceById()" mat-button matStepperNext>
                 Mettre à jour
               </button>
             </div>
@@ -120,10 +106,10 @@
             <mat-spinner></mat-spinner>
           </div>
         } @else {
-          <p>Habitat modifié.</p>
+          <p>Service modifié.</p>
           <div>
             <button mat-button (click)="onResetButton(stepper)">
-              Modifier un autre habitat
+              Modifier un autre service
             </button>
           </div>
         }

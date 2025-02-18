@@ -1,9 +1,19 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { CreateServiceDto } from './dtos/create-service.dto';
+import { multerConfig } from 'src/config/multer.config';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateServiceDto } from './dtos/update-service.dto';
-import { UpdateHabitatDto } from 'src/habitat/dtos/update-habitat.dto';
-
 
 // localhost:3000/service
 @Controller('service')
@@ -12,8 +22,12 @@ export class ServiceController {
 
   // localhost:3000/service
   @Post()
-  create(@Body() createServiceDto: CreateServiceDto) {
-    return this.serviceService.create(createServiceDto);
+  @UseInterceptors(FileInterceptor('serviceImage', multerConfig('service')))
+  create(
+    @Body() createServiceDto: CreateServiceDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.serviceService.create(createServiceDto, file);
   }
 
   // localhost:3000/service
@@ -25,11 +39,12 @@ export class ServiceController {
   // localhost:3000/service/:id
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.serviceService.findOne(+id);
+    return this.serviceService.findOneById(+id);
   }
 
   // localhost:3000/service/:id
   @Patch(':id')
+  @UseInterceptors(FileInterceptor('serviceImage', multerConfig('service')))
   update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.serviceService.update(+id, updateServiceDto);
   }
@@ -40,4 +55,3 @@ export class ServiceController {
     return this.serviceService.delete(+id);
   }
 }
-

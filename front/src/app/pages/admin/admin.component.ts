@@ -26,6 +26,11 @@ import { BreedCreationComponent } from '../../components/animal/breed-creation/b
 import { Role } from '../../models/role.model';
 import { AnimalEditComponent } from '../../components/animal/animal-edit/animal-edit.component';
 import { AnimalDeleteComponent } from '../../components/animal/animal-delete/animal-delete.component';
+import { ServiceService } from '../../services/service.service';
+import { Service } from '../../models/service.model';
+import { ServiceCreationComponent } from '../../components/service/service-creation/service-creation.component';
+import { ServiceDeleteComponent } from '../../components/service/service-delete/service-delete.component';
+import { ServiceEditComponent } from '../../components/service/service-edit/service-edit.component';
 
 @Component({
   selector: 'arcadia-admin',
@@ -43,6 +48,9 @@ import { AnimalDeleteComponent } from '../../components/animal/animal-delete/ani
     AnimalCreationComponent,
     AnimalEditComponent,
     AnimalDeleteComponent,
+    ServiceCreationComponent,
+    ServiceEditComponent,
+    ServiceDeleteComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -52,12 +60,15 @@ export class AdminComponent implements OnInit {
   private userService = inject(UserService);
   private habitatService = inject(HabitatService);
   private animalService = inject(AnimalService);
+  private serviceService = inject(ServiceService);
   roles$ = signal<Role[]>([]);
   roleLabels$ = signal<string[]>([]);
   users$ = signal<User[]>([]);
   userEmails$ = signal<string[]>([]);
   habitats$ = signal<Habitat[]>([]);
   habitatNames$ = signal<string[]>([]);
+  services$ = signal<Service[]>([]);
+  serviceNames$ = signal<string[]>([]);
   breeds$ = signal<Breed[]>([]);
   breedNames$ = signal<string[]>([]);
   animals$ = signal<Animal[]>([]);
@@ -67,6 +78,7 @@ export class AdminComponent implements OnInit {
   isLoadingHabitats$ = signal(true);
   isLoadingBreeds$ = signal(true);
   isLoadingAnimals$ = signal(true);
+  isLoadingServices$ = signal(true);
 
   ngOnInit() {
     this.loadAllUsers();
@@ -74,6 +86,7 @@ export class AdminComponent implements OnInit {
     this.loadAllBreeds();
     this.loadAllAnimals();
     this.loadAllRoles();
+    this.loadAllServices();
   }
 
   loadAllRoles() {
@@ -122,6 +135,16 @@ export class AdminComponent implements OnInit {
         this.animals$.set(animals);
         this.animalNames$.set(animals.map((animal) => animal.name));
         this.isLoadingAnimals$.set(false);
+      },
+    });
+  }
+
+  loadAllServices() {
+    this.serviceService.findAllServices().subscribe({
+      next: (services) => {
+        this.services$.set(services);
+        this.serviceNames$.set(services.map((service) => service.name));
+        this.isLoadingServices$.set(false);
       },
     });
   }

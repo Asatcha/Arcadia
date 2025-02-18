@@ -4,11 +4,10 @@ import { ServiceController } from './service.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Service } from './entities/service.entity';
 import { ServiceImage } from './entities/service-image.entity';
-import { ServiceImageService } from './service-image.service';
 
 @Module({
   controllers: [ServiceController],
-  providers: [ServiceService, ServiceImageService],
+  providers: [ServiceService],
   imports: [TypeOrmModule.forFeature([Service, ServiceImage])],
 })
 export class ServiceModule {}

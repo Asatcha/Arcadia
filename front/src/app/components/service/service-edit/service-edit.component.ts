@@ -3,13 +3,14 @@ import {
   Component,
   inject,
   input,
-  OnChanges,
-  OnInit,
   output,
+  OnInit,
   signal,
   SimpleChanges,
   ViewChild,
+  OnChanges,
 } from '@angular/core';
+import { Service } from '../../../models/service.model';
 import {
   FormBuilder,
   FormControl,
@@ -17,24 +18,22 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ServiceService } from '../../../services/service.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { map, Observable, startWith } from 'rxjs';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { Observable } from 'rxjs';
-import { map, startWith } from 'rxjs/operators';
-import { AsyncPipe, CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatStepper, MatStepperModule } from '@angular/material/stepper';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { Habitat } from '../../../models/habitat.model';
-import { HabitatService } from '../../../services/habitat.service';
-import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 
 @Component({
-  selector: 'arcadia-habitat-edit',
+  selector: 'arcadia-service-edit',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -55,17 +54,17 @@ import { CdkTextareaAutosize } from '@angular/cdk/text-field';
       useValue: { showError: true },
     },
   ],
-  templateUrl: './habitat-edit.component.html',
-  styleUrl: './habitat-edit.component.scss',
+  templateUrl: './service-edit.component.html',
+  styleUrl: './service-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HabitatEditComponent implements OnInit, OnChanges {
+export class ServiceEditComponent implements OnInit, OnChanges {
   private fb = inject(FormBuilder).nonNullable;
-  private habitatService = inject(HabitatService);
-  habitats = input.required<Habitat[]>();
-  habitatNames = input.required<string[]>();
-  reloadHabitats = output<void>();
-  filteredHabitatNames$!: Observable<string[]>;
+  private serviceService = inject(ServiceService);
+  services = input.required<Service[]>();
+  serviceNames = input.required<string[]>();
+  reloadServices = output<void>();
+  filteredServiceNames$!: Observable<string[]>;
   isLoading$ = signal(true);
   readonly panelOpenState$ = signal(false);
   selectedFile!: File | null;
@@ -76,8 +75,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     id: [0],
     name: ['', [Validators.required, Validators.maxLength(20)]],
     description: ['', [Validators.required, Validators.maxLength(1000)]],
-    comments: ['', [Validators.maxLength(1000)]],
-    habitatImage: [null],
+    serviceImage: [null],
   });
 
   name = this.editForm.get('name') as FormControl<string>;
@@ -87,7 +85,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['habitats'] || changes['habitatNames']) {
+    if (changes['services'] || changes['serviceNames']) {
       this.loadNameFilter();
     }
   }
@@ -99,32 +97,32 @@ export class HabitatEditComponent implements OnInit, OnChanges {
   private _filter(name: string): string[] {
     const filterValue = name.toLocaleLowerCase();
 
-    return this.habitatNames().filter((name) =>
+    return this.serviceNames().filter((name) =>
       name.toLocaleLowerCase().includes(filterValue),
     );
   }
 
   loadNameFilter() {
-    this.filteredHabitatNames$ = this.editForm.get('name')!.valueChanges.pipe(
+    this.filteredServiceNames$ = this.editForm.get('name')!.valueChanges.pipe(
       startWith(''),
       map((name) => {
-        return name ? this._filter(name) : this.habitatNames().slice();
+        return name ? this._filter(name) : this.serviceNames().slice();
       }),
     );
   }
 
-  findHabitatByName(name: string) {
-    const habitat = this.habitats().find(
-      (habitat) =>
-        habitat.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
+  findServiceByName(name: string) {
+    const service = this.services().find(
+      (service) =>
+        service.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
     );
 
-    if (habitat) {
+    if (service) {
       this.editForm.patchValue({
-        ...habitat,
+        ...service,
       });
     } else {
-      console.error('Aucun habitat trouvé avec ce nom');
+      console.error('Aucun service trouvé avec ce nom');
     }
   }
 
@@ -134,7 +132,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     if (image) {
       this.selectedFile = image;
       this.editForm.patchValue({
-        habitatImage: image,
+        serviceImage: image,
       });
     }
   }
@@ -150,7 +148,7 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     this.loadNameFilter();
   }
 
-  updateHabitatById() {
+  updateServiceById() {
     this.isLoading$.set(true);
 
     if (!this.editForm.valid) {
@@ -160,15 +158,14 @@ export class HabitatEditComponent implements OnInit, OnChanges {
     const formData = new FormData();
     formData.append('name', this.editForm.value.name);
     formData.append('description', this.editForm.value.description);
-    formData.append('comments', this.editForm.value.comments);
-    formData.append('habitatImage', this.editForm.value.habitatImage);
+    formData.append('serviceImage', this.editForm.value.serviceImage);
 
-    this.habitatService
-      .updateHabitatById(this.editForm.value.id, formData)
+    this.serviceService
+      .updateServiceById(this.editForm.value.id, formData)
       .subscribe({
         next: () => {
           this.isLoading$.set(false);
-          this.reloadHabitats.emit();
+          this.reloadServices.emit();
           this.selectedFile = null;
         },
       });
