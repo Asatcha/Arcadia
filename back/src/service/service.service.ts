@@ -5,21 +5,25 @@ import {
 } from '@nestjs/common';
 import { Service } from './entities/service.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { UpdateServiceDto } from './dtos/update-service.dto';
 import { CreateServiceDto } from './dtos/create-service.dto';
 import { ServiceImage } from './entities/service-image.entity';
 import { Repository } from 'typeorm';
-import { ServiceImageService } from './service-image.service';
+import { plainToInstance } from 'class-transformer';
+import { existsSync, unlinkSync } from 'fs';
+import { UPLOADS_FOLDER } from 'src/config/multer.config';
+import { join } from 'path';
+import { UpdateServiceDto } from './dtos/update-service.dto';
 
 @Injectable()
 export class ServiceService {
   constructor(
     @InjectRepository(Service) private serviceRepo: Repository<Service>,
-    private serviceImageService: ServiceImageService,
+    @InjectRepository(ServiceImage)
+    private serviceImageRepo: Repository<ServiceImage>,
   ) {}
 
-  async create(createdServiceDto: CreateServiceDto) {
-    const { name, description, serviceImage } = createdServiceDto;
+  async create(createServiceDto: CreateServiceDto, file: Express.Multer.File) {
+    const { name, description } = createServiceDto;
 
     const foundService = await this.serviceRepo.findOneBy({ name });
 
@@ -27,86 +31,119 @@ export class ServiceService {
       throw new InternalServerErrorException('Service déjà existant.');
     }
 
-    let createdServiceImage: ServiceImage;
-    if (serviceImage) {
-      createdServiceImage =
-        await this.serviceImageService.saveImage(serviceImage);
+    const newService = this.serviceRepo.create({ name, description });
+
+    if (file) {
+      const createdServiceImage = new ServiceImage();
+      createdServiceImage.fileName = file.filename;
+      createdServiceImage.service = newService;
+
+      await this.serviceImageRepo.save(createdServiceImage);
+      newService.serviceImage = createdServiceImage;
+      await this.serviceRepo.save(newService);
     }
 
-    const newService = this.serviceRepo.create({
-      name,
-      description,
-      serviceImage: createdServiceImage,
-    });
-
-    await this.serviceRepo.save(newService);
-
-    return {
-      message: 'Service créé.',
-      service: newService,
-    };
+    return plainToInstance(Service, newService);
   }
 
   async findAll() {
-    const services = await this.serviceRepo.find();
+    const services = await this.serviceRepo.find({
+      relations: ['serviceImage'],
+    });
 
-    return {
-      services: services,
-    };
+    return services;
   }
 
-  async findOne(id: number) {
-    const service = await this.serviceRepo.findOneBy({ id });
+  async findOneById(id: number) {
+    const foundService = await this.serviceRepo.findOne({
+      where: { id },
+      relations: ['serviceImage'],
+    });
 
-    if (!service) {
-      throw new NotFoundException(`Service ${service.name} non trouvé.`);
-    }
-
-    return {
-      message: 'Service trouvé.',
-      service: service,
-    };
+    return foundService;
   }
 
-  async update(id: number, updatedServiceDto: UpdateServiceDto) {
-    const service = await this.serviceRepo.findOneBy({ id });
+  async update(
+    id: number,
+    updateServiceDto: UpdateServiceDto,
+    file?: Express.Multer.File,
+  ) {
+    const service = await this.serviceRepo.findOne({
+      where: { id },
+      relations: ['serviceImage'],
+    });
 
     if (!service) {
-      throw new NotFoundException(`Service ${service.name} non trouvé.`);
+      throw new NotFoundException('Service non trouvé');
     }
 
-    if (updatedServiceDto.serviceImage) {
+    service.name = updateServiceDto.name ?? service.name;
+    service.description = updateServiceDto.description ?? service.description;
+
+    if (file) {
       if (service.serviceImage) {
-        await this.serviceImageService.deleteImage(service.serviceImage);
+        const oldFilePath = join(
+          UPLOADS_FOLDER,
+          'service',
+          service.serviceImage.fileName,
+        );
+        if (existsSync(oldFilePath)) {
+          try {
+            unlinkSync(oldFilePath);
+          } catch (error) {
+            console.error(
+              "Erreur lors de la suppression de l'ancienne image :",
+              error,
+            );
+          }
+        }
       }
 
-      const newImage = await this.serviceImageService.saveImage(
-        updatedServiceDto.serviceImage,
-      );
-      service.serviceImage = newImage;
+      const newServiceImage = new ServiceImage();
+      newServiceImage.fileName = file.filename;
+      newServiceImage.service = service;
+
+      await this.serviceImageRepo.save(newServiceImage);
+
+      service.serviceImage = newServiceImage;
     }
 
-    const updatedService = Object.assign(service, updatedServiceDto);
+    await this.serviceRepo.save(service);
 
-    await this.serviceRepo.save(updatedService);
-
-    return {
-      message: 'Service modifié.',
-      service: updatedService,
-    };
+    return plainToInstance(Service, service);
   }
 
-  async delete(id: number) {
-    const service = await this.serviceRepo.findOneBy({ id });
+  async delete(id: number): Promise<Service> {
+    const service = await this.serviceRepo.findOne({
+      where: { id },
+      relations: ['serviceImage'],
+    });
 
     if (!service) {
-      throw new NotFoundException(`Service ${id} non trouvé.`);
+      throw new NotFoundException('Service non trouvé');
+    }
+
+    if (service.serviceImage) {
+      const filePath = join(
+        UPLOADS_FOLDER,
+        'service',
+        service.serviceImage.fileName,
+      );
+      if (existsSync(filePath)) {
+        try {
+          unlinkSync(filePath);
+        } catch (error) {
+          console.error(
+            'Erreur lors de la suppression du fichier image :',
+            error,
+          );
+        }
+      }
     }
 
     await this.serviceRepo.remove(service);
+    await this.serviceImageRepo.remove(service.serviceImage);
 
-    return {
-      message: `Service ${service.name} supprimé avec succès.`,
-    };
+    return service;
   }
 }

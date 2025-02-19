@@ -9,7 +9,6 @@ import { Habitat } from './entities/habitat.entity';
 import { CreateHabitatDto } from './dtos/create-habitat.dto';
 import { HabitatImage } from './entities/habitat-image.entity';
 import { plainToInstance } from 'class-transformer';
-import {  } from 'src/config/environments/environment';
 import { existsSync, unlinkSync } from 'fs';
 import { join } from 'path';
 import { UPLOADS_FOLDER } from 'src/config/multer.config';

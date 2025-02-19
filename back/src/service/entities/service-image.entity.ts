@@ -1,14 +1,23 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from 'typeorm';
 import { Service } from './service.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity()
+@Unique(['fileName'])
 export class ServiceImage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'bytea' })
-  image: Buffer;
+  @Column()
+  fileName: string;
 
   @OneToOne(() => Service, (service) => service.serviceImage)
+  @Exclude()
   service: Service;
 }
