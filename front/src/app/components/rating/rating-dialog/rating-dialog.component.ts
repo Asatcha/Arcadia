@@ -5,6 +5,7 @@ import {
   Component,
   inject,
   Injector,
+  output,
   ViewChild,
 } from '@angular/core';
 import {
@@ -18,12 +19,13 @@ import {
   MAT_DIALOG_DATA,
   MatDialogTitle,
   MatDialogContent,
+  MatDialogRef,
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
+import { RatingService } from '../../../services/rating.service';
 
 @Component({
   selector: 'arcadia-rating-dialog',
@@ -43,9 +45,14 @@ import { CdkTextareaAutosize, TextFieldModule } from '@angular/cdk/text-field';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RatingDialogComponent {
+  reloadRatings = output<void>();
+
   data = inject(MAT_DIALOG_DATA);
+  dialogRef = inject(MatDialogRef<RatingDialogComponent>);
+
   private fb = inject(FormBuilder).nonNullable;
   private _injector = inject(Injector);
+  private ratingService = inject(RatingService);
 
   @ViewChild('autosize') autosize!: CdkTextareaAutosize;
 
@@ -67,13 +74,20 @@ export class RatingDialogComponent {
   }
 
   submit() {
-    console.log(this.ratingForm.value);
-    // if (this.ratingForm.valid) {
-    //   this.data.close(this.ratingForm.value);
-    // }
+    if (!this.ratingForm.valid) {
+      return;
+    }
+
+    this.ratingService.createRating(this.ratingForm.value).subscribe({
+      next: () => {
+        this.ratingForm.reset();
+        this.dialogRef.close();
+        this.reloadRatings.emit();
+      },
+    });
   }
 
-  setRating(star: number): void {
+  setRating(star: number) {
     this.ratingForm.patchValue({
       stars: star,
     });

@@ -24,17 +24,15 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
-import { AnimalService } from '../../../services/animal.service';
 import { Animal } from '../../../models/animal.model';
 import { map, Observable, startWith } from 'rxjs';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { Habitat } from '../../../models/habitat.model';
-import { Breed } from '../../../models/breed.model';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { FoodReportService } from '../../../services/food-report.service';
+import { MatTimepickerModule } from '@angular/material/timepicker';
 
 @Component({
-  selector: 'arcadia-animal-edit',
+  selector: 'arcadia-food-report-creation',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -48,7 +46,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatStepperModule,
     MatProgressSpinnerModule,
     AsyncPipe,
-    MatDatepickerModule,
+    MatTimepickerModule,
     MatSelectModule,
   ],
   providers: [
@@ -58,35 +56,28 @@ import { MatSelectModule } from '@angular/material/select';
     },
     provideNativeDateAdapter(),
   ],
-  templateUrl: './animal-edit.component.html',
-  styleUrl: './animal-edit.component.scss',
+  templateUrl: './food-report-creation.component.html',
+  styleUrl: './food-report-creation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnimalEditComponent {
+export class FoodReportCreationComponent {
   animals = input.required<Animal[]>();
   animalNames = input.required<string[]>();
-  habitats = input.required<Habitat[]>();
-  habitatNames = input.required<string[]>();
-  breeds = input.required<Breed[]>();
-  breedNames = input.required<string[]>();
   reloadAnimals = output<void>();
   private fb = inject(FormBuilder).nonNullable;
-  private animalService = inject(AnimalService);
+  private foodReportService = inject(FoodReportService);
   filteredAnimalNames$!: Observable<string[]>;
   isLoading$ = signal(true);
   readonly panelOpenState$ = signal(false);
-  selectedFile!: File | null;
 
-  editForm: FormGroup = this.fb.group({
-    id: [0],
-    name: ['', [Validators.required, Validators.maxLength(20)]],
-    birthDate: ['', [Validators.required]],
-    animalImage: [null, [Validators.required]],
-    breedId: [null, [Validators.required]],
-    habitatId: [null, [Validators.required]],
+  foodReportForm: FormGroup = this.fb.group({
+    date: ['', [Validators.required]],
+    food: ['', [Validators.required, Validators.maxLength(20)]],
+    foodWeight: [undefined, [Validators.required]],
+    animalId: [0],
   });
 
-  name = this.editForm.get('name') as FormControl<string>;
+  name = new FormControl<string>('');
 
   ngOnInit() {
     this.loadNameFilter();
@@ -119,65 +110,44 @@ export class AnimalEditComponent {
     );
   }
 
-  findAnimalByName(name: string) {
+  findAnimalByName(name: string | null) {
     const animal = this.animals().find(
-      (animal) => animal.name.toLocaleLowerCase() === name.toLocaleLowerCase(),
+      (animal) => animal.name.toLocaleLowerCase() === name?.toLocaleLowerCase(),
     );
 
     if (animal) {
-      this.editForm.patchValue({
-        ...animal,
-        breedId: animal.breed.id,
-        habitatId: animal.habitat.id,
+      this.foodReportForm.patchValue({
+        animalId: animal.id,
       });
     } else {
       console.error('Aucun animal trouvé avec ce nom');
     }
   }
 
-  onFileSelected(input: HTMLInputElement) {
-    const image = input.files?.item(0);
-
-    if (image) {
-      this.selectedFile = image;
-      this.editForm.patchValue({
-        animalImage: image,
-      });
-    }
-  }
-
   onBackButton() {
     this.isLoading$.set(true);
-    this.editForm.reset();
+    this.foodReportForm.reset();
   }
 
   onResetButton(stepper: MatStepper) {
     stepper.reset();
-    this.editForm.reset();
+    this.foodReportForm.reset();
     this.loadNameFilter();
   }
 
   updateAnimalById() {
     this.isLoading$.set(true);
 
-    if (!this.editForm.valid) {
+    if (!this.foodReportForm.valid) {
       return;
     }
 
-    const formData = new FormData();
-    formData.append('name', this.editForm.value.name);
-    formData.append('birthDate', this.editForm.value.birthDate);
-    formData.append('breedId', this.editForm.value.breedId);
-    formData.append('habitatId', this.editForm.value.habitatId);
-    formData.append('animalImage', this.editForm.value.animalImage);
-
-    this.animalService
-      .updateAnimalById(this.editForm.value.id, formData)
+    this.foodReportService
+      .createFoodReport(this.foodReportForm.value)
       .subscribe({
         next: () => {
           this.isLoading$.set(false);
           this.reloadAnimals.emit();
-          this.selectedFile = null;
         },
       });
   }

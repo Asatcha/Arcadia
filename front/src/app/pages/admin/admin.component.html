@@ -24,6 +24,7 @@
       ></arcadia-account-delete>
     }
   </mat-tab>
+
   <mat-tab label="Animaux">
     @if (isLoadingAnimals$()) {
       <div class="spinner-container">
@@ -58,6 +59,7 @@
       ></arcadia-animal-delete>
     }
   </mat-tab>
+
   <mat-tab label="Habitats">
     @if (isLoadingHabitats$()) {
       <div class="spinner-container">
@@ -79,6 +81,7 @@
       ></arcadia-habitat-delete>
     }
   </mat-tab>
+
   <mat-tab label="Services">
     @if (isLoadingServices$()) {
       <div class="spinner-container">
@@ -100,6 +103,7 @@
       ></arcadia-service-delete>
     }
   </mat-tab>
+
   <mat-tab label="Horaires">
     @if (isLoadingTimetables$()) {
       <div class="spinner-container">

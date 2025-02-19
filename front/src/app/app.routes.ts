@@ -7,6 +7,7 @@ import { HabitatComponent } from './pages/habitat/habitat.component';
 import { AnimalComponent } from './pages/animal/animal.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ServiceComponent } from './pages/service/service.component';
+import { EmployeeComponent } from './pages/employee/employee.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -15,6 +16,12 @@ export const routes: Routes = [
     component: AdminComponent,
     canActivate: [AuthGuard],
     data: { roles: ['isAdmin'] },
+  },
+  {
+    path: 'employee',
+    component: EmployeeComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['isEmployee'] },
   },
   { path: 'home', component: HomeComponent },
   { path: 'habitat', component: HabitatComponent },

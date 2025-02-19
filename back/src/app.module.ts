@@ -7,7 +7,6 @@ import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
 import { AnimalModule } from './animal/animal.module';
 import { VetModule } from './vet/vet.module';
-import { EmployeeModule } from './employee/employee.module';
 import { ServiceModule } from './service/service.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -16,6 +15,7 @@ import { UPLOADS_FOLDER } from './config/multer.config';
 import { ConfigModule } from '@nestjs/config';
 import { ContactModule } from './contact/contact.module';
 import { TimetableModule } from './timetable/timetable.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -32,10 +32,10 @@ import { TimetableModule } from './timetable/timetable.module';
     HabitatModule,
     AnimalModule,
     VetModule,
-    EmployeeModule,
     ServiceModule,
     ContactModule,
     TimetableModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],

@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty } from 'class-validator';
+import { IsDate, IsNotEmpty, MaxLength, maxLength } from 'class-validator';
 import { Animal } from 'src/animal/entities/animal.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToOne, ManyToOne } from 'typeorm';
 
@@ -13,6 +13,7 @@ export class FoodReport {
   date: Date;
 
   @Column()
+  @MaxLength(20)
   @IsNotEmpty()
   food: string;
 

@@ -3,14 +3,14 @@ import {
   InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto } from './dtos/create-user.dto';
+import { UpdateUserDto } from './dtos/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { Role } from 'src/auth/entities/role.entity';
 import { plainToInstance } from 'class-transformer';
-import { RegisterDto } from 'src/auth/dto/register.dto';
+import { RegisterDto } from 'src/auth/dtos/register.dto';
 import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
