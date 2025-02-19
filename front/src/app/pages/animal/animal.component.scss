@@ -6,6 +6,10 @@ $gap: 2rem;
   align-items: center;
   gap: 2rem;
 
+  h1 {
+    font-family: "junge", sans-serif;
+  }
+  
   .animal-images {
     display: flex;
     flex-flow: row wrap;

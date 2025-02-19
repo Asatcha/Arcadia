@@ -8,7 +8,8 @@
     margin-left: -1rem;
     margin-right: -1rem;
     text-align: center;
-    background: rgba(101, 133, 90, 0.856);
+    background: rgba(83, 107, 75, 0.856);
+    opacity: 0.8;
 
     .menu-title {
       opacity: 1 !important;
@@ -24,7 +25,7 @@
       display: flex;
       gap: 70px;
       justify-content: center;
-      opacity: 0.9;
+      opacity: 1;
     }
 
     button {
@@ -36,6 +37,7 @@
       font-size: 16px;
       border-radius: 5px;
       transition: transform 0.2s;
+      font-family: "junge", sans-serif;
     }
 
     button:hover {
