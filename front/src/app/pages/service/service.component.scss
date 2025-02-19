@@ -11,7 +11,7 @@ $gap: 2rem;
     padding: 0 7rem;
   }
 
-  .habitat-container {
+  .service-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -19,26 +19,26 @@ $gap: 2rem;
     width: 100%;
   }
 
-  .habitat-item {
+  .service-item {
     display: flex;
     flex-flow: row;
     align-items: center;
-    background-color: #f5f5f5;
     padding: 1rem;
     border-radius: 1rem;
     max-width: 60%;
-    border: 2px solid #225332;
+    border: 3px solid #e2cd0f;
     gap: 1rem;
   }
 
-  .habitat-item img {
+  .service-item img {
     width: 200px;
     height: 200px;
     object-fit: cover;
     border-radius: 1rem;
+    aspect-ratio: 1/1;
   }
 
-  .habitat-description {
+  .service-description {
     display: flex;
     flex-flow: column;
     align-items: center;
@@ -48,27 +48,5 @@ $gap: 2rem;
       text-align: justify;
       word-break: break-word;
     }
-  }
-
-  .habitat-description h2 {
-    margin: 0;
-    font-size: 1.5em;
-  }
-
-  .habitat-button {
-    background-color: #89a882;
-    color: white;
-    align-items: center;
-  }
-
-  .habitat-button:hover {
-    background-color: #5c7948ce;
-  }
-
-  .button-animals {
-    display: flex;
-    align-items: center;
-    background-color: #486b53;
-    color: white;
   }
 }

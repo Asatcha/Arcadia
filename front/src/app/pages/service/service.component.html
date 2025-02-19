@@ -1,0 +1,27 @@
+<h1>Nos services</h1>
+
+<div class="description">
+  <p>
+    Nous sommes ravis de vous accueillir dans notre parc dédié à la découverte
+    de la faune et à la préservation des espèces ! Pour rendre votre visite
+    encore plus agréable, nous mettons à votre disposition plusieurs services.
+  </p>
+</div>
+
+@if (isLoadingServices$()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <div class="service-container">
+    @for (service of services$(); track service.id) {
+      <div class="service-item">
+        <img [src]="service.serviceImageUrl" [alt]="service.name" />
+        <div class="service-description">
+          <h2>{{ service.name }}</h2>
+          <p>{{ service.description }}</p>
+        </div>
+      </div>
+    }
+  </div>
+}
