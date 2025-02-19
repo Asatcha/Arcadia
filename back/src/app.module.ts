@@ -15,6 +15,7 @@ import { join } from 'path';
 import { UPLOADS_FOLDER } from './config/multer.config';
 import { ConfigModule } from '@nestjs/config';
 import { ContactModule } from './contact/contact.module';
+import { TimetableModule } from './timetable/timetable.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ContactModule } from './contact/contact.module';
     EmployeeModule,
     ServiceModule,
     ContactModule,
+    TimetableModule,
   ],
   controllers: [AppController],
   providers: [AppService, TypeOrmConfigService],

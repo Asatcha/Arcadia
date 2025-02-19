@@ -77,3 +77,44 @@
   <mat-icon>edit_note</mat-icon>
   Laisser un avis
 </button>
+
+<button class="button-title no-click" mat-raised-button>
+  Horaires d'ouverture du zoo
+</button>
+
+<div class="timetable">
+  <mat-table [dataSource]="timetables$()" class="mat-elevation-z8">
+    <ng-container matColumnDef="dayOfWeek">
+      <mat-header-cell *matHeaderCellDef>Jour</mat-header-cell>
+      <mat-cell *matCellDef="let element"> {{ element.dayOfWeek }} </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="openingTime">
+      <mat-header-cell *matHeaderCellDef>Horaire d'ouverture</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        @if (!element.isClosed) {
+          {{ element.openingTime | timeFormat }}
+        }
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="closingTime">
+      <mat-header-cell *matHeaderCellDef>Horaire de fermeture</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        @if (!element.isClosed) {
+          {{ element.closingTime | timeFormat }}
+        }
+      </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="isClosed">
+      <mat-header-cell *matHeaderCellDef>Fermé</mat-header-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.isClosed ? "Fermé" : "" }}
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns$()"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns$()"></mat-row>
+  </mat-table>
+</div>

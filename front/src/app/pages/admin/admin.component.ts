@@ -31,6 +31,9 @@ import { ServiceCreationComponent } from '../../components/service/service-creat
 import { ServiceDeleteComponent } from '../../components/service/service-delete/service-delete.component';
 import { ServiceEditComponent } from '../../components/service/service-edit/service-edit.component';
 import { Service } from '../../models/service.model';
+import { Timetable } from '../../models/timetable.model';
+import { TimetableService } from '../../services/timetable.service';
+import { TimetableEditComponent } from '../../components/timetable/timetable-edit/timetable-edit.component';
 
 @Component({
   selector: 'arcadia-admin',
@@ -51,6 +54,7 @@ import { Service } from '../../models/service.model';
     ServiceCreationComponent,
     ServiceEditComponent,
     ServiceDeleteComponent,
+    TimetableEditComponent,
   ],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
@@ -61,6 +65,7 @@ export class AdminComponent implements OnInit {
   private habitatService = inject(HabitatService);
   private animalService = inject(AnimalService);
   private serviceService = inject(ServiceService);
+  private timetableService = inject(TimetableService);
   roles$ = signal<Role[]>([]);
   roleLabels$ = signal<string[]>([]);
   users$ = signal<User[]>([]);
@@ -73,12 +78,15 @@ export class AdminComponent implements OnInit {
   breedNames$ = signal<string[]>([]);
   animals$ = signal<Animal[]>([]);
   animalNames$ = signal<string[]>([]);
+  timetables$ = signal<Timetable[]>([]);
+  timetableDays$ = signal<string[]>([]);
   isLoadingRoles$ = signal(true);
   isLoadingUsers$ = signal(true);
   isLoadingHabitats$ = signal(true);
   isLoadingBreeds$ = signal(true);
   isLoadingAnimals$ = signal(true);
   isLoadingServices$ = signal(true);
+  isLoadingTimetables$ = signal(true);
 
   ngOnInit() {
     this.loadAllUsers();
@@ -87,6 +95,7 @@ export class AdminComponent implements OnInit {
     this.loadAllAnimals();
     this.loadAllRoles();
     this.loadAllServices();
+    this.loadAllTimetables();
   }
 
   loadAllRoles() {
@@ -145,6 +154,18 @@ export class AdminComponent implements OnInit {
         this.services$.set(services);
         this.serviceNames$.set(services.map((service) => service.name));
         this.isLoadingServices$.set(false);
+      },
+    });
+  }
+
+  loadAllTimetables() {
+    this.timetableService.findAllTimetables().subscribe({
+      next: (timetables) => {
+        this.timetables$.set(timetables);
+        this.timetableDays$.set(
+          timetables.map((timetable) => timetable.dayOfWeek),
+        );
+        this.isLoadingTimetables$.set(false);
       },
     });
   }

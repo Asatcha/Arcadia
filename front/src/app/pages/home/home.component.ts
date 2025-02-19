@@ -16,11 +16,21 @@ import { HabitatService } from '../../services/habitat.service';
 import { Habitat } from '../../models/habitat.model';
 import { ServiceService } from '../../services/service.service';
 import { Service } from '../../models/service.model';
-
+import { MatTableModule } from '@angular/material/table';
+import { Timetable } from '../../models/timetable.model';
+import { TimetableService } from '../../services/timetable.service';
+import { TimeFormatPipe } from '../../pipes/time-format.pipe';
 
 @Component({
   selector: 'arcadia-home',
-  imports: [CommonModule, MatButtonModule, MatIconModule, MatCardModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatTableModule,
+    TimeFormatPipe,
+  ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,11 +38,20 @@ import { Service } from '../../models/service.model';
 export class HomeComponent implements OnInit {
   private router = inject(Router);
   private habitatService = inject(HabitatService);
-  habitats$ = signal<Habitat[]>([]);
-  isLoadingHabitats$ = signal(true);
   private serviceService = inject(ServiceService);
+  private timetableService = inject(TimetableService);
+  habitats$ = signal<Habitat[]>([]);
   services$ = signal<Service[]>([]);
+  timetables$ = signal<Timetable[]>([]);
+  displayedColumns$ = signal<string[]>([
+    'dayOfWeek',
+    'openingTime',
+    'closingTime',
+    'isClosed',
+  ]);
+  isLoadingHabitats$ = signal(true);
   isLoadingServices$ = signal(true);
+  isLoadingTimetables$ = signal(true);
 
   dialog = inject(MatDialog);
 
@@ -58,17 +77,34 @@ export class HomeComponent implements OnInit {
   ];
 
   ngOnInit() {
+    this.loadAllHabitats();
+    this.loadAllServices();
+    this.loadAllTimetables();
+  }
+
+  loadAllHabitats() {
     this.habitatService.findAllHabitats().subscribe({
       next: (habitats) => {
         this.habitats$.set(habitats);
         this.isLoadingHabitats$.set(false);
       },
     });
+  }
 
+  loadAllServices() {
     this.serviceService.findAllServices().subscribe({
       next: (services) => {
         this.services$.set(services);
         this.isLoadingServices$.set(false);
+      },
+    });
+  }
+
+  loadAllTimetables() {
+    this.timetableService.findAllTimetables().subscribe({
+      next: (timetables) => {
+        this.timetables$.set(timetables);
+        this.isLoadingTimetables$.set(false);
       },
     });
   }
