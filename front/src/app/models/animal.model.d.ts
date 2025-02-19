@@ -1,5 +1,4 @@
 import { Base } from './base.model';
-import { Habitat } from './habitat.model';
 
 export interface Animal extends Base {
   name: string;

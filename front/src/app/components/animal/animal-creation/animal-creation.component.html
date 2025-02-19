@@ -46,7 +46,7 @@
             <mat-label>Race</mat-label>
             <mat-icon matPrefix>pets</mat-icon>
             <mat-select formControlName="breedId">
-              @for (breed of breeds(); track breed) {
+              @for (breed of breeds(); track breed.id) {
                 <mat-option [value]="breed.id">
                   {{ breed.name }}
                 </mat-option>

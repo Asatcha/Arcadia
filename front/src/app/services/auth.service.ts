@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
@@ -17,6 +17,10 @@ export class AuthService {
   private router = inject(Router);
 
   isLoggedIn$ = signal<boolean>(!!localStorage.getItem(this.tokenKey));
+
+  constructor() {
+    this.startTokenExpirationCheck();
+  }
 
   login(loginDto: Login): Observable<any> {
     return this.http
@@ -74,6 +78,16 @@ export class AuthService {
       console.error('Erreur de décodage du token :', error);
       return true;
     }
+  }
+
+  private startTokenExpirationCheck() {
+    setInterval(() => {
+      if (this.isTokenExpired() && this.isLoggedIn$()) {
+        console.warn('Token expiré, suppression du locale storage');
+        this.clearAuthData();
+        this.isLoggedIn$.set(false);
+      }
+    }, 60000);
   }
 
   private setAuthToken(token: string): void {
