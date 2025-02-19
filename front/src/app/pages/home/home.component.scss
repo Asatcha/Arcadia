@@ -21,6 +21,17 @@ $gap: 2rem;
     padding: 0 7rem;
     padding-top: 13rem;
   }
+  
+  .button-title {
+    text-align: center;
+    font-family: "junge", sans-serif;
+    background-color: rgb(115, 146, 111);
+    color: white;
+
+    .button-title:hover {
+      background-color: rgb(84, 109, 81);
+    }
+  }
 
   .habitat-images {
     display: flex;
@@ -62,6 +73,7 @@ $gap: 2rem;
       border-radius: 0.5rem;
       text-align: center;
       width: 80%;
+      font-family: "junge", sans-serif;
     }
   }
 
@@ -105,6 +117,7 @@ $gap: 2rem;
       border-radius: 0.5rem;
       text-align: center;
       width: 80%;
+      font-family: "junge", sans-serif;
     }
   }
 

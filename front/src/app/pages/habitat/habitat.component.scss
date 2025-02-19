@@ -6,6 +6,10 @@ $gap: 2rem;
   align-items: center;
   gap: 2rem;
 
+  h1 {
+    font-family: "junge", sans-serif;
+  }
+
   .description {
     text-align: justify;
     padding: 0 7rem;
@@ -27,7 +31,7 @@ $gap: 2rem;
     padding: 1rem;
     border-radius: 1rem;
     max-width: 60%;
-    border: 2px solid #225332;
+    border: 4px solid #395031;
     gap: 1rem;
   }
 
@@ -44,6 +48,10 @@ $gap: 2rem;
     align-items: center;
     gap: 0.5rem;
 
+    h2 {
+      font-family: "junge", sans-serif;
+    }
+
     p {
       text-align: justify;
       word-break: break-word;
@@ -56,13 +64,15 @@ $gap: 2rem;
   }
 
   .habitat-button {
-    background-color: #89a882;
+    text-align: center;
+    font-family: "junge", sans-serif;
+    background-color: rgb(115, 146, 111);
     color: white;
-    align-items: center;
   }
 
   .habitat-button:hover {
-    background-color: #5c7948ce;
+    background-color: rgb(84, 109, 81);
+    
   }
 
   .button-animals {
