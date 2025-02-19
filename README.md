@@ -1,128 +1,122 @@
 # Arcadia - Full Stack zoo Management System
 
-A comprehensive zoo management system featuring a web application for zoo management, for customers, and a robust DevOps infrastructure. The project aims to improve customer experience and optimize internal operations through modern technology solutions.
+A comprehensive zoo management system featuring a web application for zoo management and for customers. The project aims to improve customer experience and optimize internal operations through modern technology solutions.
 
 ## Table of contents
 
 - Project Structure
 - Technical Requirements
 - Getting Started
-- Utilisation 
+- Utilisation
 
 ## Project Structure
 
 ```
 /arcadia
-├── /devops                 # DevOps configuration files
-│   ├── /gitlab            # GitLab CI/CD configuration
-│   └── /docker            # Docker configuration files
 │
-├── /backend               # Backend (NestJS)
-│   ├── /src               # Code source
-│   ├── /tests             # Tests unitaires
-│   ├── /docs              # Documentation API
+├── /back                  # Backend (Nest)
+│   ├── /src               # Source code
+│   ├── .env.sample        # Environment variables template
+|   ├── docker-compose.yml # Docker Compose
 │
-├── /frontend              # Frontend (Angular)
-│   ├── /src               # Code source
-│   ├── /tests             # Tests unitaires et E2E
-│   ├── /public            # Fichiers statiques
+├── /front                 # Frontend (Angular)
+│   ├── /src               # Source code
+│   ├── /public            # Static files
 │
-└── /doc                   # Documentation du projet
+└── /README.md             # Project documentation
 ```
 
 ## Technical Requirements
 
-### DevOps
-- GitLab Runner
-- Docker
-- Linux-based VM for runners
-- Minimum 20% test coverage
-
 ### Backend
-- Node.js (v14 or higher)
-- PostgreSQL/MongoDB
-- JWT for authentication
-- REST API standards
+
+- Node.js (v22 or higher)
+- Docker and Docker Compose
+- Nest (v11 or higher)
 
 ### Frontend
-- Modern JavaScript framework (Angular)
-- State management solution
-- Responsive design support
+
+- Angular (v19 or higher)
 
 ## Getting Started
 
 ### Prerequisites
-- Node.js (v14 or higher)
+
+- Node.js (v22 or higher)
 - Docker and Docker Compose
-- GitLab Runner
 
 ### Installation
 
 1. **Clone the Repository**
+
 ```bash
 git clone [repository-url]
 cd [project-name]
 ```
 
 2. **Set Up Environment Variables**
+
 ```bash
 # Create necessary .env files
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env
+cp back/.env.sample back/.env
 ```
 
 3. **Start Development Environment**
+
 ```bash
+# Start database
+cd back
+docker-compose up -d
+
 # Start backend
-cd backend
 npm install
-npm run dev
+npm run start
 
 # Start frontend
-cd frontend
+cd front
 npm install
-npm run dev
+npm run start
 ```
 
 ## Utilisation
 
-### Public 
+### Public
 
 Menu avec lien vers la page d'accueil, services, habitats, contact et connexion.
-Page d'accueil avec Présention du zoo, habitats, services, avis et informations. Lien vers la page habitats et services.
-Page habitats 
+Page d'accueil avec présention du zoo, habitats, services, avis et informations. Lien vers la page habitats et services.
+Page habitats
 Page services
 Page contact
 
-### Page connexion 
+### Page connexion
 
 Connexion pour les administrateurs, employés et vétérinaires.
 
-### Espace admin 
+### Espace admin
 
-Création, modifition, suppression utilisateurs.
-Création, modifition, suppression habitats.
+Création, modification, suppression utilisateurs.
+Création, modification, suppression habitats.
 Création races animaux.
-Création, modifition, suppression utilisateurs.
-Création, modifition, suppression utilisateurs.
-Modifition horaires zoo.
-Validation/Suppression avis. 
+Création, modification, suppression utilisateurs.
+Création, modification, suppression utilisateurs.
+Modification horaires zoo.
+Validation/Suppression avis.
 
 ### Espace employé
 
 ### Espace vétérinaire
 
-
-## Construit avec 
+## Construit avec
 
 ### Langages et frameworks
 
-- Html : 
-- Css : 
-- Javascript : 
-- Angular : 
-- TypeScritp : 
-  
-### Outils 
+- Html
+- Css
+- TypeScript
+- Angular
+- Nest
 
+### Outils
 
+- Docker
+- PostgreSQL
