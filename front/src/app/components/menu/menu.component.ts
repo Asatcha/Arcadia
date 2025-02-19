@@ -20,7 +20,7 @@ export class MenuComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  isLoggedIn = this.authService.isLoggedIn$;
+  isLoggedIn$ = this.authService.isLoggedIn$;
 
   menu = [
     { label: 'Accueil', link: '/home' },
@@ -30,11 +30,11 @@ export class MenuComponent {
   ];
 
   get authButtonLabel() {
-    return this.isLoggedIn() ? 'Déconnexion' : 'Connexion';
+    return this.isLoggedIn$() ? 'Déconnexion' : 'Connexion';
   }
 
   handleAuthAction() {
-    if (this.isLoggedIn()) {
+    if (this.isLoggedIn$()) {
       this.authService.logout();
     } else {
       this.router.navigate(['/login']);
