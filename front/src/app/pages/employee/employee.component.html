@@ -1,0 +1,40 @@
+<mat-tab-group mat-stretch-tabs>
+  <mat-tab label="Animaux">
+    @if (isLoadingAnimals$()) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      <arcadia-food-report-creation
+        [animals]="animals$()"
+        [animalNames]="animalNames$()"
+      ></arcadia-food-report-creation>
+    }
+  </mat-tab>
+
+  <mat-tab label="Services">
+    @if (isLoadingServices$()) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      <arcadia-service-edit
+        [services]="services$()"
+        [serviceNames]="serviceNames$()"
+        (reloadServices)="loadAllServices()"
+      ></arcadia-service-edit>
+    }
+  </mat-tab>
+  <mat-tab label="Avis">
+    @if (isLoadingRatingsToValidate$()) {
+      <div class="spinner-container">
+        <mat-spinner></mat-spinner>
+      </div>
+    } @else {
+      <arcadia-rating-edit
+        [ratings]="ratingsToValidate$()"
+        (reloadRatings)="loadAllRatingsToValidate()"
+      ></arcadia-rating-edit>
+    }
+  </mat-tab>
+</mat-tab-group>

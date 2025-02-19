@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Animal } from '../models/animal.model';
 import { Breed } from '../models/breed.model';
+import { FoodReport } from '../models/food-report.model';
 
 @Injectable({
   providedIn: 'root',

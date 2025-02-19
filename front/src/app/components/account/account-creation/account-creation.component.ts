@@ -45,7 +45,6 @@ export class AccountCreationComponent {
   private fb = inject(FormBuilder).nonNullable;
   private userService = inject(UserService);
   readonly panelOpenState = signal(false);
-  selectedValue!: string;
 
   accountForm: FormGroup = this.fb.group({
     firstName: ['', [Validators.required, Validators.maxLength(20)]],

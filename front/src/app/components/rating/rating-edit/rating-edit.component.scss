@@ -1,0 +1,62 @@
+$gap: 2rem;
+
+:host {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+
+  .ratings {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
+    gap: $gap;
+
+    .rating-item {
+      flex: 0 1 calc(25% - $gap);
+      max-width: calc(25% - $gap);
+      position: relative;
+
+      .star-icon {
+        color: grey;
+        margin-right: 4px;
+      }
+
+      .star-icon.filled {
+        color: gold;
+      }
+
+      mat-card {
+        height: 100%;
+        padding: 1rem;
+
+        mat-card-header {
+          display: flex;
+          flex-flow: column;
+          position: relative;
+        }
+
+        mat-card-content {
+          padding: 0 16px 30px 16px;
+        }
+
+        mat-card-actions {
+          display: flex;
+          justify-content: flex-end;
+          position: absolute;
+          bottom: 0;
+          right: 0;
+
+          .validate-btn {
+            color: green;
+          }
+
+          .delete-btn {
+            color: red;
+          }
+        }
+      }
+    }
+  }
+}

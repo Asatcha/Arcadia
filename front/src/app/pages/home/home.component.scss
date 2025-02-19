@@ -111,30 +111,32 @@ $gap: 2rem;
   .ratings {
     display: flex;
     flex-flow: row;
+    width: 100%;
     justify-content: space-evenly;
     gap: $gap;
 
     .rating-item {
+      flex: 0 1 calc(25% - $gap);
       max-width: calc(25% - $gap);
-    }
 
-    .star-icon {
-      color: grey; /* Par défaut, l'étoile est vide */
-      margin-right: 4px;
-    }
+      .star-icon {
+        color: grey;
+        margin-right: 4px;
+      }
 
-    .star-icon.filled {
-      color: gold; /* Si l'étoile est pleine, la couleur devient dorée */
-    }
+      .star-icon.filled {
+        color: gold;
+      }
 
-    mat-card {
-      height: 100%;
-      padding: 1rem;
-    }
+      mat-card {
+        height: 100%;
+        padding: 1rem;
 
-    mat-card-header {
-      display: flex;
-      flex-flow: column;
+        mat-card-header {
+          display: flex;
+          flex-flow: column;
+        }
+      }
     }
   }
 

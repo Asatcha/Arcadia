@@ -25,53 +25,73 @@
   Découvrir nos habitats et leurs habitants
 </button>
 
-<div class="habitat-images">
-  @for (habitat of habitats$(); track habitat.id) {
-    <div class="habitat-item" (click)="goTo('/habitat')">
-      <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
-      <h2>{{ habitat.name }}</h2>
-    </div>
-  }
-</div>
+@if (isLoadingHabitats$()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <div class="habitat-images">
+    @for (habitat of habitats$(); track habitat.id) {
+      <div class="habitat-item" (click)="goTo('/habitat')">
+        <img [src]="habitat.habitatImageUrl" [alt]="habitat.name" />
+        <h2>{{ habitat.name }}</h2>
+      </div>
+    }
+  </div>
+}
 
 <button class="button-title" mat-raised-button (click)="goTo('/service')">
   Découvrir nos services
 </button>
 
-<div class="service-images">
-  @for (service of services$(); track service.id) {
-    <div class="service-item" (click)="goTo('/service')">
-      <img [src]="service.serviceImageUrl" [alt]="service.name" />
-      <h2>{{ service.name }}</h2>
-    </div>
-  }
-</div>
+@if (isLoadingServices$()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <div class="service-images">
+    @for (service of services$(); track service.id) {
+      <div class="service-item" (click)="goTo('/service')">
+        <img [src]="service.serviceImageUrl" [alt]="service.name" />
+        <h2>{{ service.name }}</h2>
+      </div>
+    }
+  </div>
+}
 
 <button class="button-title no-click" mat-raised-button>
   Ce qu'en pensent nos visiteurs
 </button>
 
-<div class="ratings">
-  <div *ngFor="let rating of ratings" class="rating-item">
-    <mat-card appearance="outlined">
-      <mat-card-title>
-        <div>
-          <mat-icon
-            *ngFor="let i of [0, 1, 2, 3, 4]"
-            class="star-icon"
-            [class.filled]="i < rating.stars"
-          >
-            star
-          </mat-icon>
-        </div>
-      </mat-card-title>
-      <mat-card-title>{{ rating.name }}</mat-card-title>
-      <mat-card-content>
-        <p>{{ rating.comment }}</p>
-      </mat-card-content>
-    </mat-card>
+@if (isLoadingRatings$()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
   </div>
-</div>
+} @else {
+  <div class="ratings">
+    @for (rating of ratings$(); track rating.id) {
+      <div class="rating-item">
+        <mat-card appearance="outlined">
+          <mat-card-title>
+            <div>
+              <mat-icon
+                *ngFor="let i of [0, 1, 2, 3, 4]"
+                class="star-icon"
+                [class.filled]="i < rating.stars"
+              >
+                star
+              </mat-icon>
+            </div>
+          </mat-card-title>
+          <mat-card-title>{{ rating.name }}</mat-card-title>
+          <mat-card-content>
+            <p>{{ rating.comment }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    }
+  </div>
+}
 
 <button mat-raised-button (click)="openRatingDialog()">
   <mat-icon>edit_note</mat-icon>
@@ -82,39 +102,47 @@
   Horaires d'ouverture du zoo
 </button>
 
-<div class="timetable">
-  <mat-table [dataSource]="timetables$()" class="mat-elevation-z8">
-    <ng-container matColumnDef="dayOfWeek">
-      <mat-header-cell *matHeaderCellDef>Jour</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.dayOfWeek }} </mat-cell>
-    </ng-container>
+@if (isLoadingTimetables$()) {
+  <div class="spinner-container">
+    <mat-spinner></mat-spinner>
+  </div>
+} @else {
+  <div class="timetable">
+    <mat-table [dataSource]="timetables$()" class="mat-elevation-z8">
+      <ng-container matColumnDef="dayOfWeek">
+        <mat-header-cell *matHeaderCellDef>Jour</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{ element.dayOfWeek }} </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="openingTime">
-      <mat-header-cell *matHeaderCellDef>Horaire d'ouverture</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        @if (!element.isClosed) {
-          {{ element.openingTime | timeFormat }}
-        }
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="openingTime">
+        <mat-header-cell *matHeaderCellDef>Horaire d'ouverture</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          @if (!element.isClosed) {
+            {{ element.openingTime | timeFormat }}
+          }
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="closingTime">
-      <mat-header-cell *matHeaderCellDef>Horaire de fermeture</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        @if (!element.isClosed) {
-          {{ element.closingTime | timeFormat }}
-        }
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="closingTime">
+        <mat-header-cell *matHeaderCellDef
+          >Horaire de fermeture</mat-header-cell
+        >
+        <mat-cell *matCellDef="let element">
+          @if (!element.isClosed) {
+            {{ element.closingTime | timeFormat }}
+          }
+        </mat-cell>
+      </ng-container>
 
-    <ng-container matColumnDef="isClosed">
-      <mat-header-cell *matHeaderCellDef>Fermé</mat-header-cell>
-      <mat-cell *matCellDef="let element">
-        {{ element.isClosed ? "Fermé" : "" }}
-      </mat-cell>
-    </ng-container>
+      <ng-container matColumnDef="isClosed">
+        <mat-header-cell *matHeaderCellDef>Fermé</mat-header-cell>
+        <mat-cell *matCellDef="let element">
+          {{ element.isClosed ? "Fermé" : "" }}
+        </mat-cell>
+      </ng-container>
 
-    <mat-header-row *matHeaderRowDef="displayedColumns$()"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: displayedColumns$()"></mat-row>
-  </mat-table>
-</div>
+      <mat-header-row *matHeaderRowDef="displayedColumns$()"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns$()"></mat-row>
+    </mat-table>
+  </div>
+}

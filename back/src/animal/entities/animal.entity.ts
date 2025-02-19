@@ -12,7 +12,7 @@ import {
 import { Breed } from './breed.entity';
 import { AnimalImage } from './animal-image.entity';
 import { VetReport } from 'src/vet/entities/vet-report.entity';
-import { FoodReport } from 'src/employee/entities/food-report.entity';
+import { FoodReport } from 'src/animal/entities/food-report.entity';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
 import { environment } from 'src/config/environments/environment';
 

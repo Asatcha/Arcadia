@@ -1,0 +1,41 @@
+<div class="ratings">
+  @for (rating of ratings(); track rating.id) {
+    <div class="rating-item">
+      <mat-card appearance="outlined">
+        <mat-card-title>
+          <div>
+            <mat-icon
+              *ngFor="let i of [0, 1, 2, 3, 4]"
+              class="star-icon"
+              [class.filled]="i < rating.stars"
+            >
+              star
+            </mat-icon>
+          </div>
+        </mat-card-title>
+        <mat-card-title>{{ rating.name }}</mat-card-title>
+
+        <mat-card-content>
+          <p>{{ rating.comment }}</p>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button
+            mat-icon-button
+            class="validate-btn"
+            (click)="validateRating(rating.id)"
+          >
+            <mat-icon>check</mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            class="delete-btn"
+            (click)="deleteRating(rating.id)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  }
+</div>
