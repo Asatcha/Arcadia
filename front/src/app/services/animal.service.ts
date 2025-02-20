@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { catchError, Observable, tap, throwError } from 'rxjs';
 import { Animal } from '../models/animal.model';
 import { Breed } from '../models/breed.model';
-import { FoodReport } from '../models/food-report.model';
+import { EmployeeVetReport } from '../models/employee-vet-report.model';
 
 @Injectable({
   providedIn: 'root',
@@ -42,8 +42,19 @@ export class AnimalService {
     );
   }
 
+  findAllAnimalsWithLatestVetReport(): Observable<Animal[]> {
+    return this.http.get<Animal[]>('/animal/latest-vet-report').pipe(
+      catchError((err) => {
+        console.error(
+          'Erreur lors de la récupération des animaux avec leur dernier rapport vétérinaire :',
+          err,
+        );
+        return throwError(() => err);
+      }),
+    );
+  }
+
   findAnimalsByHabitat(habitatId: number): Observable<Animal[]> {
-    console.log(`/animal?habitatId=${habitatId}`);
     return this.http.get<Animal[]>(`/animal?habitatId=${habitatId}`).pipe(
       catchError((err) => {
         console.error('Erreur lors de la récupération des animaux :', err);

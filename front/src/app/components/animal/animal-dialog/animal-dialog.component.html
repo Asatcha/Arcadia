@@ -16,6 +16,13 @@
     <h3>Date de naissance :</h3>
     {{ animal.birthDate | date: "dd/MM/yyyy" }} ({{ animal.birthDate | age }})
   </div>
+
+  @if (animal.latestVetReport) {
+    <div class="property">
+      <h3>Avis du vétérinaire :</h3>
+      {{ animal.latestVetReport.status }}
+    </div>
+  }
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">

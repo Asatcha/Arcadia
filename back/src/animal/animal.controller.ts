@@ -45,6 +45,12 @@ export class AnimalController {
     return this.animalService.findAll();
   }
 
+  // localhost:3000/animal/latest-vet-report
+  @Get('latest-vet-report')
+  findAllWithLatestVetReport() {
+    return this.animalService.findAllWithLatestVetReport();
+  }
+
   // localhost:3000/animal/:id
   @Patch(':id')
   @UseInterceptors(FileInterceptor('animalImage', multerConfig('animal')))

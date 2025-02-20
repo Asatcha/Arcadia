@@ -1,12 +1,12 @@
 <h1>{{ habitatName$() }}</h1>
 
-@if (isLoadingAnimals$()) {
+@if (isLoadingAnimalsWithLatestVetReport$()) {
   <div class="spinner-container">
     <mat-spinner></mat-spinner>
   </div>
 } @else {
   <div class="animal-images">
-    @for (animal of animals$(); track animal.id) {
+    @for (animal of animalsWithLatestVetReport$(); track animal.id) {
       <div class="animal-item" (click)="openAnimalDetails(animal)">
         <img [src]="animal.animalImageUrl" [alt]="animal.name" />
         <h2>{{ animal.name }}</h2>

@@ -1,13 +1,16 @@
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   inject,
+  Injector,
   input,
   output,
   signal,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -28,11 +31,13 @@ import { Animal } from '../../../models/animal.model';
 import { map, Observable, startWith } from 'rxjs';
 import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
-import { FoodReportService } from '../../../services/food-report.service';
 import { MatTimepickerModule } from '@angular/material/timepicker';
+import { VetReportService } from '../../../services/vet-report.service';
+import { CdkTextareaAutosize } from '@angular/cdk/text-field';
+import { VetReport } from '../../../models/vet-report.model';
 
 @Component({
-  selector: 'arcadia-food-report-creation',
+  selector: 'arcadia-vet-report-creation',
   imports: [
     CommonModule,
     MatButtonModule,
@@ -56,24 +61,31 @@ import { MatTimepickerModule } from '@angular/material/timepicker';
     },
     provideNativeDateAdapter(),
   ],
-  templateUrl: './food-report-creation.component.html',
-  styleUrl: './food-report-creation.component.scss',
+  templateUrl: './vet-report-edit.component.html',
+  styleUrl: './vet-report-edit.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FoodReportCreationComponent {
+export class VetReportEditComponent {
   animals = input.required<Animal[]>();
   animalNames = input.required<string[]>();
   reloadAnimals = output<void>();
   private fb = inject(FormBuilder).nonNullable;
-  private foodReportService = inject(FoodReportService);
+  private vetReportService = inject(VetReportService);
   filteredAnimalNames$!: Observable<string[]>;
+  private _injector = inject(Injector);
+  animalHasNoVetReport$ = signal(true);
   isLoading$ = signal(true);
   readonly panelOpenState$ = signal(false);
 
-  foodReportForm: FormGroup = this.fb.group({
+  @ViewChild('autosize') autosize!: CdkTextareaAutosize;
+
+  vetReportForm: FormGroup = this.fb.group({
+    id: [0],
     date: ['', [Validators.required]],
     food: ['', [Validators.required, Validators.maxLength(20)]],
     foodWeight: [undefined, [Validators.required]],
+    status: ['', [Validators.required, Validators.maxLength(50)]],
+    details: ['', [Validators.maxLength(200)]],
     animalId: [0],
   });
 
@@ -87,6 +99,17 @@ export class FoodReportCreationComponent {
     if (changes['animals'] || changes['animalNames']) {
       this.loadNameFilter();
     }
+  }
+
+  triggerResize() {
+    afterNextRender(
+      () => {
+        this.autosize.resizeToFitContent(true);
+      },
+      {
+        injector: this._injector,
+      },
+    );
   }
 
   displayFn(name: string): string {
@@ -116,7 +139,11 @@ export class FoodReportCreationComponent {
     );
 
     if (animal) {
-      this.foodReportForm.patchValue({
+      this.vetReportForm.patchValue({
+        id: animal.latestVetReport.id,
+        date: animal.latestVetReport.date,
+        food: animal.latestVetReport.food,
+        foodWeight: animal.latestVetReport.foodWeight,
         animalId: animal.id,
       });
     } else {
@@ -124,26 +151,36 @@ export class FoodReportCreationComponent {
     }
   }
 
+  checkAnimalHasVetReport(name: string | null) {
+    const animal = this.animals().find(
+      (animal) => animal.name.toLocaleLowerCase() === name?.toLocaleLowerCase(),
+    );
+
+    console.log(name, animal)
+
+    this.animalHasNoVetReport$.set(!animal || !animal.latestVetReport);
+  }
+
   onBackButton() {
     this.isLoading$.set(true);
-    this.foodReportForm.reset();
+    this.vetReportForm.reset();
   }
 
   onResetButton(stepper: MatStepper) {
     stepper.reset();
-    this.foodReportForm.reset();
+    this.vetReportForm.reset();
     this.loadNameFilter();
   }
 
-  updateAnimalById() {
+  updateVetReportByAnimalId() {
     this.isLoading$.set(true);
 
-    if (!this.foodReportForm.valid) {
+    if (!this.vetReportForm.valid) {
       return;
     }
 
-    this.foodReportService
-      .createFoodReport(this.foodReportForm.value)
+    this.vetReportService
+      .updateVetReportById(this.vetReportForm.value)
       .subscribe({
         next: () => {
           this.isLoading$.set(false);

@@ -1,6 +1,6 @@
 import { Base } from './base.model';
 
-export interface FoodReport extends Base {
+export interface EmployeeVetReport extends Base {
   date: Date;
   food: string;
   foodWeight: number;

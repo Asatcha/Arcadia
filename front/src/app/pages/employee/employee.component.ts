@@ -15,7 +15,7 @@ import { RatingService } from '../../services/rating.service';
 import { Rating } from '../../models/rating.model';
 import { Animal } from '../../models/animal.model';
 import { RatingEditComponent } from '../../components/rating/rating-edit/rating-edit.component';
-import { FoodReportCreationComponent } from '../../components/animal/food-report-creation/food-report-creation.component';
+import { EmployeeVetReportCreationComponent } from '../../components/animal/employee-vet-report-creation/employee-vet-report-creation.component';
 
 @Component({
   selector: 'arcadia-employee',
@@ -25,7 +25,7 @@ import { FoodReportCreationComponent } from '../../components/animal/food-report
     MatProgressSpinnerModule,
     ServiceEditComponent,
     RatingEditComponent,
-    FoodReportCreationComponent,
+    EmployeeVetReportCreationComponent,
   ],
   templateUrl: './employee.component.html',
   styleUrl: './employee.component.scss',

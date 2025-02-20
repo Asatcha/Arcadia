@@ -1,8 +1,7 @@
-import { FoodReport } from 'src/animal/entities/food-report.entity';
-import { VetReport } from 'src/vet/entities/vet-report.entity';
 import { Breed } from '../entities/breed.entity';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
 import { BaseDto } from 'src/shared/base.dto';
+import { VetReport } from '../entities/vet-report.entity';
 
 export class AnimalDto extends BaseDto {
   name: string;
@@ -13,6 +12,6 @@ export class AnimalDto extends BaseDto {
   habitatId: number;
   animalImage?: File;
   animalImageUrl?: string;
+  latestVetReport: VetReport;
   vetReports: VetReport[];
-  foodReports: FoodReport[];
 }

@@ -8,6 +8,7 @@ import { AnimalComponent } from './pages/animal/animal.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { ServiceComponent } from './pages/service/service.component';
 import { EmployeeComponent } from './pages/employee/employee.component';
+import { VetComponent } from './pages/vet/vet.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -22,6 +23,12 @@ export const routes: Routes = [
     component: EmployeeComponent,
     canActivate: [AuthGuard],
     data: { roles: ['isEmployee'] },
+  },
+  {
+    path: 'vet',
+    component: VetComponent,
+    canActivate: [AuthGuard],
+    data: { roles: ['isVet'] },
   },
   { path: 'home', component: HomeComponent },
   { path: 'habitat', component: HabitatComponent },

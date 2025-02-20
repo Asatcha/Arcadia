@@ -1,5 +1,5 @@
-import { FoodReportDto } from "./food-report.dto";
+import { EmployeeVetReportDto } from "./employee-vet-report.dto";
 
-export class CreateFoodReportDto extends FoodReportDto {
+export class CreateEmployeeVetReportDto extends EmployeeVetReportDto {
     animalId: number;
 }

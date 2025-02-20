@@ -11,10 +11,9 @@ import {
 } from 'typeorm';
 import { Breed } from './breed.entity';
 import { AnimalImage } from './animal-image.entity';
-import { VetReport } from 'src/vet/entities/vet-report.entity';
-import { FoodReport } from 'src/animal/entities/food-report.entity';
 import { Habitat } from 'src/habitat/entities/habitat.entity';
 import { environment } from 'src/config/environments/environment';
+import { VetReport } from './vet-report.entity';
 
 @Entity()
 @Unique(['name'])
@@ -42,9 +41,6 @@ export class Animal {
   @OneToMany(() => VetReport, (vetReport) => vetReport.animal)
   vetReports: VetReport[];
 
-  @OneToMany(() => FoodReport, (foodReport) => foodReport.animal)
-  foodReports: FoodReport[];
-
   @ManyToOne(() => Habitat, (habitat) => habitat.animals)
   habitat: Habitat;
 
@@ -54,10 +50,19 @@ export class Animal {
       : null;
   }
 
+  get latestVetReport(): VetReport | null {
+    return this.vetReports?.length
+      ? this.vetReports.sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+        )[0]
+      : null;
+  }
+
   toJSON() {
     return {
       ...this,
       animalImageUrl: this.animalImageUrl,
+      latestVetReport: this.latestVetReport,
     };
   }
 }
