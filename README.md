@@ -53,6 +53,7 @@ A comprehensive zoo management system featuring a web application for zoo manage
 
 ```bash
 git clone [repository-url]
+cd arcadia
 ```
 
 2. **Set Up Environment Variables**
