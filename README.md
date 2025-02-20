@@ -8,6 +8,8 @@ A comprehensive zoo management system featuring a web application for zoo manage
 - Technical Requirements
 - Getting Started
 - Utilisation
+- Langages et frameworks
+- Tools
 
 ## Project Structure
 
@@ -17,11 +19,11 @@ A comprehensive zoo management system featuring a web application for zoo manage
 ├── /back                  # Backend (Nest)
 │   ├── /src               # Source code
 │   ├── .env.sample        # Environment variables template
-|   ├── docker-compose.yml # Docker Compose
+|   └── docker-compose.yml # Docker Compose
 │
 ├── /front                 # Frontend (Angular)
 │   ├── /src               # Source code
-│   ├── /public            # Static files
+│   └── /public            # Static files
 │
 └── /README.md             # Project documentation
 ```
@@ -82,41 +84,43 @@ npm run start
 
 ### Public
 
-Menu avec lien vers la page d'accueil, services, habitats, contact et connexion.
-Page d'accueil avec présention du zoo, habitats, services, avis et informations. Lien vers la page habitats et services.
-Page habitats
-Page services
-Page contact
+Menu with links to the homepage, services, habitats, contact, and login/logout.
+Homepage with an introduction to the zoo, habitats, services, reviews, and opening hours. Link to the habitats and services pages.
+Habitats page
+Services page
+Contact page
 
-### Page connexion
+### Login page
 
-Connexion pour les administrateurs, employés et vétérinaires.
+Login for administrators, employees, and veterinarians.
 
-### Espace admin
+### Admin Area
 
-Création, modification, suppression utilisateurs.
-Création, modification, suppression habitats.
-Création races animaux.
-Création, modification, suppression utilisateurs.
-Création, modification, suppression utilisateurs.
-Modification horaires zoo.
-Validation/Suppression avis.
+Creation, modification, and deletion of users.
+Creation, modification, and deletion of habitats.
+Creation of animal breeds.
+Creation, modification, and deletion of animals.
+Modification of zoo opening hours.
+Approval/deletion of reviews.
 
-### Espace employé
+### Employee Area
 
-### Espace vétérinaire
+Validating/deleting rating.
+Animal food management.
 
-## Construit avec
+### Vet Area
 
-### Langages et frameworks
+Creation of the vet report.
+
+## Langages et frameworks
 
 - Html
-- Css
+- CSS
 - TypeScript
 - Angular
 - Nest
 
-### Outils
+## Tools
 
 - Docker
 - PostgreSQL
