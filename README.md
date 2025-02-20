@@ -53,7 +53,6 @@ A comprehensive zoo management system featuring a web application for zoo manage
 
 ```bash
 git clone [repository-url]
-cd [project-name]
 ```
 
 2. **Set Up Environment Variables**
@@ -73,8 +72,10 @@ docker-compose up -d
 # Start backend
 npm install
 npm run start
+```
 
-# Start frontend
+```bash
+# Start frontend (in an other terminal)
 cd front
 npm install
 npm run start
