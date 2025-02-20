@@ -34,8 +34,6 @@ export class AuthService {
         role: string;
       }>(`/login`, loginDto)
       .pipe(
-        tap(() => console.log('ccc')),
-
         map((response) => {
           this.setAuthToken(response.accessToken);
           this.setUser(response.user);

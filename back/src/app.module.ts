@@ -15,6 +15,7 @@ import { ConfigModule } from '@nestjs/config';
 import { ContactModule } from './contact/contact.module';
 import { TimetableModule } from './timetable/timetable.module';
 import { RatingModule } from './rating/rating.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -36,6 +37,6 @@ import { RatingModule } from './rating/rating.module';
     RatingModule,
   ],
   controllers: [AppController],
-  providers: [AppService, TypeOrmConfigService],
+  providers: [AppService, TypeOrmConfigService, JwtModule],
 })
 export class AppModule {}
