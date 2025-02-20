@@ -156,8 +156,6 @@ export class VetReportEditComponent {
       (animal) => animal.name.toLocaleLowerCase() === name?.toLocaleLowerCase(),
     );
 
-    console.log(name, animal)
-
     this.animalHasNoVetReport$.set(!animal || !animal.latestVetReport);
   }
 

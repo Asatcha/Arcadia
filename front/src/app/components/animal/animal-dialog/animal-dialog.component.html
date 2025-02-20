@@ -19,8 +19,13 @@
 
   @if (animal.latestVetReport) {
     <div class="property">
-      <h3>Avis du vétérinaire :</h3>
+      <h3>Etat de l'animal :</h3>
       {{ animal.latestVetReport.status }}
+    </div>
+
+    <div class="property">
+      <h3>Dernier repas :</h3>
+      {{ animal.latestVetReport.food }}
     </div>
   }
 </mat-dialog-content>

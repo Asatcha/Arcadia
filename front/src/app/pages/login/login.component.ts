@@ -64,29 +64,36 @@ export class LoginComponent {
       return;
     }
 
-    const formData = this.loginForm.value;
+    this.authService.login(this.loginForm.value).subscribe({
+      next: (response) => {
+        if (response) {
+          this.snackBar.open('Connexion réussie !', 'OK', { duration: 3000 });
 
-    this.authService.login(formData).subscribe((response) => {
-      if (response) {
-        this.snackBar.open('Connexion réussie !', 'OK', { duration: 3000 });
+          const userRole = this.authService.getUserRole();
 
-        const userRole = this.authService.getUserRole();
-
-        switch (userRole) {
-          case 'isAdmin':
-            this.router.navigate(['/admin']);
-            break;
-          case 'isEmployee':
-            this.router.navigate(['/employee']);
-            break;
-          case 'isVet':
-            this.router.navigate(['/vet']);
-            break;
-          default:
-            this.router.navigate(['/home']);
-            break;
+          switch (userRole) {
+            case 'isAdmin':
+              this.router.navigate(['/admin']);
+              break;
+            case 'isEmployee':
+              this.router.navigate(['/employee']);
+              break;
+            case 'isVet':
+              this.router.navigate(['/vet']);
+              break;
+            default:
+              this.router.navigate(['/home']);
+              break;
+          }
         }
-      }
+      },
+      error: (err) => {
+        console.error('Erreur lors de la connexion :', err);
+        this.snackBar.open('Échec de la connexion.', 'Fermer', {
+          duration: 3000,
+          panelClass: ['error-snackbar'],
+        });
+      },
     });
   }
 }

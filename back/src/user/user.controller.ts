@@ -11,7 +11,7 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
-import { Roles } from 'src/auth/roles.decorator';
+import { Role, Roles } from 'src/auth/roles.decorator';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 // localhost:3000/user
@@ -22,7 +22,7 @@ export class UserController {
   // localhost:3000/user
   @Post()
   @UseGuards(RolesGuard)
-  @Roles('isAdmin')
+  @Roles(Role.Admin)
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
@@ -30,7 +30,7 @@ export class UserController {
   // localhost:3000/user
   @Get()
   @UseGuards(RolesGuard)
-  @Roles('isAdmin')
+  @Roles(Role.Admin)
   findAll() {
     return this.userService.findAll();
   }
@@ -38,7 +38,7 @@ export class UserController {
   // localhost:3000/user/:id
   @Patch(':id')
   @UseGuards(RolesGuard)
-  @Roles('isAdmin')
+  @Roles(Role.Admin)
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
   }
@@ -46,7 +46,7 @@ export class UserController {
   // localhost:3000/user/:id
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles('isAdmin')
+  @Roles(Role.Admin)
   delete(@Param('id') id: string) {
     return this.userService.delete(+id);
   }

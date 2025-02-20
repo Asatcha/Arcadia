@@ -1,7 +1,7 @@
 import { inject, Injectable, OnInit, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { Login } from '../models/login.model';
 import { jwtDecode } from 'jwt-decode';
@@ -22,7 +22,11 @@ export class AuthService {
     this.startTokenExpirationCheck();
   }
 
-  login(loginDto: Login): Observable<any> {
+  login(loginDto: Login): Observable<{
+    accessToken: string;
+    user: any;
+    role: string;
+  }> {
     return this.http
       .post<{
         accessToken: string;

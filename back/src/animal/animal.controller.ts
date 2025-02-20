@@ -8,6 +8,7 @@ import {
   Post,
   Query,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { AnimalService } from './animal.service';
@@ -15,6 +16,8 @@ import { CreateAnimalDto } from './dtos/create-animal.dto';
 import { multerConfig } from 'src/config/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateAnimalDto } from './dtos/update-animal.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role, Roles } from 'src/auth/roles.decorator';
 
 @Controller('animal')
 export class AnimalController {
@@ -22,6 +25,8 @@ export class AnimalController {
 
   // localhost:3000/animal
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   @UseInterceptors(FileInterceptor('animalImage', multerConfig('animal')))
   create(
     @Body() createAnimalDto: CreateAnimalDto,
@@ -53,6 +58,8 @@ export class AnimalController {
 
   // localhost:3000/animal/:id
   @Patch(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   @UseInterceptors(FileInterceptor('animalImage', multerConfig('animal')))
   update(
     @Param('id') id: string,
@@ -64,6 +71,8 @@ export class AnimalController {
 
   // localhost:3000/animal/:id
   @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   delete(@Param('id') id: string) {
     return this.animalService.delete(+id);
   }

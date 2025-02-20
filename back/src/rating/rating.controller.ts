@@ -11,7 +11,7 @@ import {
 import { RatingService } from './rating.service';
 import { CreateRatingDto } from './dtos/create-rating.dto';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { Roles } from 'src/auth/roles.decorator';
+import { Role, Roles } from 'src/auth/roles.decorator';
 import { UpdateRatingDto } from './dtos/update-rating.dto';
 
 @Controller('rating')
@@ -32,6 +32,8 @@ export class RatingController {
 
   // localhost:3000/rating/to-validate
   @Get('to-validate')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Employee)
   findAllToValidate() {
     return this.ratingService.findAllToValidate();
   }
@@ -39,7 +41,7 @@ export class RatingController {
   // localhost:3000/rating/:id
   @Patch(':id')
   @UseGuards(RolesGuard)
-  @Roles('isEmployee')
+  @Roles(Role.Employee)
   update(@Param('id') id: string, @Body() updateRatingDto: UpdateRatingDto) {
     return this.ratingService.update(+id, updateRatingDto);
   }
@@ -47,7 +49,7 @@ export class RatingController {
   // localhost:3000/rating/:id
   @Delete(':id')
   @UseGuards(RolesGuard)
-  @Roles('isEmployee')
+  @Roles(Role.Employee)
   delete(@Param('id') id: string) {
     return this.ratingService.delete(+id);
   }

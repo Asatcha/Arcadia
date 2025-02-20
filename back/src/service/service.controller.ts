@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { ServiceService } from './service.service';
@@ -14,6 +15,8 @@ import { CreateServiceDto } from './dtos/create-service.dto';
 import { multerConfig } from 'src/config/multer.config';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UpdateServiceDto } from './dtos/update-service.dto';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
+import { Role, Roles } from 'src/auth/roles.decorator';
 
 // localhost:3000/service
 @Controller('service')
@@ -22,6 +25,8 @@ export class ServiceController {
 
   // localhost:3000/service
   @Post()
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   @UseInterceptors(FileInterceptor('serviceImage', multerConfig('service')))
   create(
     @Body() createServiceDto: CreateServiceDto,
@@ -44,6 +49,8 @@ export class ServiceController {
 
   // localhost:3000/service/:id
   @Patch(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin, Role.Employee)
   @UseInterceptors(FileInterceptor('serviceImage', multerConfig('service')))
   update(@Param('id') id: string, @Body() updateServiceDto: UpdateServiceDto) {
     return this.serviceService.update(+id, updateServiceDto);
@@ -51,6 +58,8 @@ export class ServiceController {
 
   // localhost:3000/service/:id
   @Delete(':id')
+  @UseGuards(RolesGuard)
+  @Roles(Role.Admin)
   delete(@Param('id') id: string) {
     return this.serviceService.delete(+id);
   }
