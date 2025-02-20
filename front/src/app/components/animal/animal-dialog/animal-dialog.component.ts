@@ -31,10 +31,6 @@ export class AnimalDialogComponent {
   animal: Animal = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<AnimalDialogComponent>);
 
-  ngOnInit() {
-    console.log(this.animal);
-  }
-
   closeDialog(): void {
     this.dialogRef.close();
   }

@@ -64,31 +64,27 @@ export class AnimalService {
 
   async findAll() {
     const animals = await this.animalRepo.find({
-      relations: [
-        'animalImage',
-        'breed',
-        'habitat',
-        'vetReports',
-        'foodReports',
-      ],
+      relations: ['animalImage', 'breed', 'habitat', 'vetReports'],
+    });
+
+    return animals;
+  }
+
+  async findAllWithLatestVetReport() {
+    const animals = await this.animalRepo.find({
+      relations: ['vetReports'],
     });
 
     return animals;
   }
 
   async findAllByHabitat(habitatId: number) {
-    const foundAnimals = this.animalRepo.find({
+    const animals = this.animalRepo.find({
       where: { habitat: { id: habitatId } },
-      relations: [
-        'animalImage',
-        'breed',
-        'habitat',
-        'vetReports',
-        'foodReports',
-      ],
+      relations: ['animalImage', 'breed', 'habitat', 'vetReports'],
     });
-    
-    return foundAnimals;
+
+    return animals;
   }
 
   async update(
@@ -98,13 +94,7 @@ export class AnimalService {
   ): Promise<Animal> {
     const animal = await this.animalRepo.findOne({
       where: { id },
-      relations: [
-        'animalImage',
-        'breed',
-        'habitat',
-        'vetReports',
-        'foodReports',
-      ],
+      relations: ['animalImage', 'breed', 'habitat', 'vetReports'],
     });
 
     if (!animal) {

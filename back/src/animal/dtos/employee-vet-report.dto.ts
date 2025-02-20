@@ -1,7 +1,7 @@
 import { BaseDto } from "src/shared/base.dto";
 
-export class VetReportDto extends BaseDto {
+export class EmployeeVetReportDto extends BaseDto {
+  date: Date;
   food: string;
   foodWeight: number;
-  status: string;
 }

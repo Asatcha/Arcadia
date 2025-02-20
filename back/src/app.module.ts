@@ -6,7 +6,6 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { HabitatModule } from './habitat/habitat.module';
 import { AnimalModule } from './animal/animal.module';
-import { VetModule } from './vet/vet.module';
 import { ServiceModule } from './service/service.module';
 import { TypeOrmConfigService } from './config/typeorm-config.service';
 import { ServeStaticModule } from '@nestjs/serve-static';
@@ -31,7 +30,6 @@ import { RatingModule } from './rating/rating.module';
     UserModule,
     HabitatModule,
     AnimalModule,
-    VetModule,
     ServiceModule,
     ContactModule,
     TimetableModule,

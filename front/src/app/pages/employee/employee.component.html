@@ -5,10 +5,11 @@
         <mat-spinner></mat-spinner>
       </div>
     } @else {
-      <arcadia-food-report-creation
+      <arcadia-employee-vet-report-creation
         [animals]="animals$()"
         [animalNames]="animalNames$()"
-      ></arcadia-food-report-creation>
+        (reloadAnimals)="loadAllAnimals()"
+      ></arcadia-employee-vet-report-creation>
     }
   </mat-tab>
 

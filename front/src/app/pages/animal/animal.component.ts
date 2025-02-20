@@ -37,9 +37,9 @@ export class AnimalComponent {
 
   dialog = inject(MatDialog);
 
-  animals$ = signal<Animal[]>([]);
+  animalsWithLatestVetReport$ = signal<Animal[]>([]);
   habitatName$ = signal<string>('Les animaux');
-  isLoadingAnimals$ = signal(true);
+  isLoadingAnimalsWithLatestVetReport$ = signal(true);
 
   ngOnInit() {
     this.route.queryParams.subscribe((params) => {
@@ -47,15 +47,17 @@ export class AnimalComponent {
       if (habitatId) {
         this.loadHabitat(habitatId);
       } else {
-        this.loadAllAnimals();
+        this.loadAllAnimalsWithLatestVetReport();
       }
     });
   }
 
-  loadAllAnimals() {
-    this.animalService.findAllAnimals().subscribe((animals) => {
-      this.animals$.set(animals);
-      this.isLoadingAnimals$.set(false);
+  loadAllAnimalsWithLatestVetReport() {
+    this.animalService.findAllAnimalsWithLatestVetReport().subscribe({
+      next: (animalsWithLatestVetReport) => {
+        this.animalsWithLatestVetReport$.set(animalsWithLatestVetReport);
+        this.isLoadingAnimalsWithLatestVetReport$.set(false);
+      },
     });
   }
 
@@ -72,8 +74,8 @@ export class AnimalComponent {
 
   loadAnimalsByHabitat(habitatId: number) {
     this.animalService.findAnimalsByHabitat(habitatId).subscribe((animals) => {
-      this.animals$.set(animals);
-      this.isLoadingAnimals$.set(false);
+      this.animalsWithLatestVetReport$.set(animals);
+      this.isLoadingAnimalsWithLatestVetReport$.set(false);
     });
   }
 
